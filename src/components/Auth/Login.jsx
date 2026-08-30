@@ -20,6 +20,7 @@ const Login = () => {
           password,
         },
       );
+
       console.log("LOGIN RESPONSE:", response.data);
 
       const { token, user } = response.data;
@@ -32,13 +33,15 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify(user));
 
       alert("Login successful!");
-      navigate("/");
+
+      navigate("/profile");
     } catch (error) {
       console.log("Login error:", error);
 
       alert(
         error.response?.data?.message ||
-          "Login failed. Please check your credentials."
+          error.message ||
+          "Login failed. Please check your credentials.",
       );
     }
   };
@@ -53,6 +56,7 @@ const Login = () => {
         <form className="login-form" onSubmit={handleLogin}>
           <div className="form-group">
             <label>Email</label>
+
             <input
               type="email"
               placeholder="Enter your email"
@@ -64,6 +68,7 @@ const Login = () => {
 
           <div className="form-group">
             <label>Password</label>
+
             <input
               type="password"
               placeholder="Enter your password"
@@ -79,8 +84,7 @@ const Login = () => {
         </form>
 
         <p className="auth-switch">
-          Don't have an account?{" "}
-          <Link to="/signup">Sign Up</Link>
+          Don't have an account? <Link to="/signup">Sign Up</Link>
         </p>
       </div>
     </main>

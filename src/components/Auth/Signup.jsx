@@ -29,14 +29,17 @@ const Signup = () => {
 
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
+
       alert("Account created successfully!");
-      navigate("/");
+
+      navigate("/profile");
     } catch (error) {
       console.log("Signup error:", error);
 
       alert(
         error.response?.data?.message ||
-          "Signup failed. Please try again."
+          error.message ||
+          "Signup failed. Please try again.",
       );
     }
   };
@@ -106,8 +109,7 @@ const Signup = () => {
         </form>
 
         <p className="auth-switch">
-          Already have an account?{" "}
-          <Link to="/login">Login</Link>
+          Already have an account? <Link to="/login">Login</Link>
         </p>
       </div>
     </main>
