@@ -1,0 +1,79 @@
+:root {
+  /* =========================
+     PREMIUM COLOR PALETTE
+  ========================= */
+
+  --navy: #071A33;
+  --navy-light: #102B4D;
+
+  /* Main page background */
+  --cream: #FBF7EE;
+
+  /* Slightly deeper surface for navbar/cards */
+  --cream-dark: #F3EBDD;
+
+  /* Alternate section background */
+  --cream-section: #F7F0E2;
+
+  /* Gold accents */
+  --gold: #C39232;
+  --gold-dark: #9A6B1F;
+  --gold-light: #D8B15A;
+
+  /* Text */
+  --text-dark: #111C2D;
+  --text-muted: #665F55;
+
+  --white: #FFFFFF;
+
+  /* Borders */
+  --border-light: rgba(154, 107, 31, 0.22);
+}
+
+
+/* =========================
+   GLOBAL RESET
+========================= */
+
+html,
+body,
+#root {
+  min-height: 100%;
+  width: 100%;
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+
+body {
+  margin: 0;
+
+  font-family: Arial, sans-serif;
+
+  background: var(--cream);
+
+  color: var(--text-dark);
+
+  overflow-x: hidden;
+}
+
+
+/* =========================
+   LINKS
+========================= */
+
+a {
+  color: inherit;
+}
+
+
+/* =========================
+   BUTTON RESET
+========================= */
+
+button {
+  font-family: inherit;
+}

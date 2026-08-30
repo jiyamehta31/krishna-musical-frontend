@@ -1,0 +1,83 @@
+.profile-page {
+  min-height: calc(100vh - 150px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  background: var(--cream);
+}
+
+.profile-card {
+  width: 100%;
+  max-width: 450px;
+  padding: 40px;
+  background: white;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.profile-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--navy);
+  color: var(--cream);
+
+  border-radius: 50%;
+  font-size: 32px;
+}
+
+.profile-card h1 {
+  margin-bottom: 30px;
+  color: var(--navy);
+}
+
+.profile-info {
+  text-align: left;
+  margin-bottom: 30px;
+}
+
+.profile-info div {
+  padding: 15px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.profile-info span {
+  display: block;
+  margin-bottom: 5px;
+  color: #777;
+  font-size: 13px;
+}
+
+.profile-info p {
+  margin: 0;
+  color: var(--navy);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.logout-button {
+  width: 100%;
+  border: none;
+  padding: 13px;
+  border-radius: 6px;
+
+  background: var(--navy);
+  color: var(--cream);
+
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: background 0.2s ease;
+}
+
+.logout-button:hover {
+  background: #333;
+}

@@ -1,0 +1,1012 @@
+/* =====================================================
+   HOME PAGE
+===================================================== */
+
+.home {
+  width: 100%;
+  background: var(--cream);
+  color: var(--navy);
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #050505;
+}
+
+.hero-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+
+/*
+   The button printed inside the hero image cannot
+   itself be a React Link because it is part of the image.
+
+   This invisible link sits exactly over that button.
+*/
+
+.hero-image-button {
+  position: absolute;
+
+  left: 17.7%;
+  top: 76.5%;
+
+  width: 18.7%;
+  height: 10%;
+
+  display: block;
+
+  color: transparent;
+  background: transparent;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  z-index: 2;
+}
+
+
+/* =====================================================
+   LEGACY STATS
+===================================================== */
+
+.legacy-stats {
+  width: 100%;
+  max-width: 1400px;
+
+  margin: 0 auto;
+
+  padding: 35px 6%;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  background: var(--cream);
+
+  border-bottom: 1px solid
+    rgba(181, 138, 58, 0.25);
+}
+
+.stat {
+  min-height: 105px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 25px;
+
+  padding: 10px 30px;
+
+  border-right: 1px solid
+    rgba(181, 138, 58, 0.25);
+}
+
+.stat:last-child {
+  border-right: none;
+}
+
+.stat-icon {
+  flex-shrink: 0;
+
+  width: 75px;
+  height: 75px;
+
+  border: 1.5px solid var(--gold);
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--gold-dark);
+
+  font-size: 30px;
+}
+
+.stat h2 {
+  margin: 0 0 8px;
+
+  color: var(--navy);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 21px;
+
+  line-height: 1.25;
+
+  font-weight: 500;
+}
+
+.stat p {
+  margin: 0;
+
+  color: var(--text-muted);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+
+/* =====================================================
+   COMMON SECTION LABEL
+===================================================== */
+
+.section-label {
+  margin: 0 0 14px;
+
+  color: var(--gold-dark);
+
+  font-size: 13px;
+
+  letter-spacing: 3px;
+
+  font-weight: 600;
+
+  text-transform: uppercase;
+}
+
+
+/* =====================================================
+   OUR LEGACY
+===================================================== */
+
+.about-section {
+  width: 90%;
+  max-width: 900px;
+
+  margin: 0 auto;
+
+  padding: 100px 20px;
+
+  text-align: center;
+}
+
+.about-content {
+  max-width: 760px;
+
+  margin: 0 auto;
+}
+
+.about-content h2 {
+  margin: 0 0 25px;
+
+  color: var(--navy);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 42px;
+
+  line-height: 1.2;
+
+  font-weight: 500;
+}
+
+.about-content p:not(.section-label) {
+  margin: 0 0 17px;
+
+  color: var(--text-muted);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 16px;
+
+  line-height: 1.8;
+}
+
+
+/* =====================================================
+   HIGHLIGHT
+===================================================== */
+
+.highlight-section {
+  width: 90%;
+  max-width: 1250px;
+
+  margin: 10px auto 100px;
+
+  display: grid;
+
+  grid-template-columns: 1.05fr 1fr;
+
+  min-height: 480px;
+
+  background: var(--navy);
+
+  overflow: hidden;
+
+  box-shadow:
+    0 18px 45px
+    rgba(7, 24, 47, 0.12);
+}
+
+.highlight-image {
+  width: 100%;
+  min-height: 480px;
+
+  background: #fdfaf3;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px;
+}
+
+.highlight-image img {
+  width: 100%;
+  max-width: 400px;
+
+  max-height: 390px;
+
+  height: auto;
+
+  object-fit: contain;
+}
+
+.highlight-content {
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  padding: 70px;
+}
+
+.highlight-content .section-label {
+  color: var(--gold);
+}
+
+.highlight-content h2 {
+  margin: 0 0 22px;
+
+  color: var(--cream);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 40px;
+
+  line-height: 1.2;
+
+  font-weight: 500;
+}
+
+.highlight-content p:not(.section-label) {
+  margin: 0 0 32px;
+
+  color: rgba(247, 240, 226, 0.78);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 16px;
+
+  line-height: 1.8;
+}
+
+.highlight-button {
+  align-self: flex-start;
+
+  padding: 13px 25px;
+
+  background: var(--gold);
+
+  border: 1px solid var(--gold);
+
+  color: var(--navy);
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  transition: all 0.25s ease;
+}
+
+.highlight-button:hover {
+  background: var(--cream);
+
+  border-color: var(--cream);
+}
+
+.highlight-controls {
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+
+  margin-top: 35px;
+}
+
+.highlight-controls > button {
+  width: 36px;
+  height: 36px;
+
+  padding: 0;
+
+  border: 1px solid
+    rgba(247, 240, 226, 0.3);
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: var(--cream);
+
+  cursor: pointer;
+
+  font-size: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.2s ease;
+}
+
+.highlight-controls > button:hover {
+  border-color: var(--gold);
+
+  color: var(--gold);
+}
+
+.highlight-dots {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.highlight-dots button {
+  width: 7px;
+  height: 7px;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background:
+    rgba(247, 240, 226, 0.35);
+
+  cursor: pointer;
+}
+
+.highlight-dots button.active {
+  background: var(--gold);
+}
+
+
+/* =====================================================
+   FEATURED INSTRUMENTS
+===================================================== */
+
+.featured-section {
+  width: 90%;
+  max-width: 1250px;
+
+  margin: 0 auto;
+
+  padding: 30px 0 100px;
+}
+
+.featured-heading {
+  max-width: 750px;
+
+  margin: 0 auto 55px;
+
+  text-align: center;
+}
+
+.featured-heading .section-label {
+  position: relative;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+.featured-heading .section-label::before,
+.featured-heading .section-label::after {
+  content: "";
+
+  width: 45px;
+  height: 1px;
+
+  background: var(--gold);
+}
+
+.featured-heading h2 {
+  margin: 0 0 15px;
+
+  color: var(--navy);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 42px;
+
+  line-height: 1.2;
+
+  font-weight: 500;
+}
+
+.featured-heading p:not(.section-label) {
+  margin: 0;
+
+  color: var(--text-muted);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 16px;
+
+  line-height: 1.7;
+}
+
+.featured-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 28px;
+}
+
+.featured-card {
+  background: var(--white);
+
+  border: 1px solid
+    rgba(181, 138, 58, 0.2);
+
+  overflow: hidden;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.featured-card:hover {
+  transform: translateY(-7px);
+
+  box-shadow:
+    0 18px 35px
+    rgba(7, 24, 47, 0.12);
+}
+
+.featured-image {
+  height: 300px;
+
+  background: #fff;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 28px;
+}
+
+.featured-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+}
+
+.featured-info {
+  padding: 25px;
+}
+
+.featured-category {
+  margin: 0 0 8px;
+
+  color: var(--gold-dark);
+
+  font-size: 11px;
+
+  letter-spacing: 1.7px;
+
+  text-transform: uppercase;
+}
+
+.featured-info h3 {
+  margin: 0 0 7px;
+
+  color: var(--navy);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 23px;
+
+  font-weight: 500;
+}
+
+.featured-brand {
+  margin: 0 0 20px;
+
+  color: var(--text-muted);
+
+  font-size: 14px;
+}
+
+.featured-link {
+  color: var(--gold-dark);
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  transition: color 0.2s ease;
+}
+
+.featured-link:hover {
+  color: var(--navy);
+}
+
+.featured-action {
+  margin-top: 45px;
+
+  text-align: center;
+}
+
+.section-button {
+  display: inline-block;
+
+  padding: 13px 26px;
+
+  background: var(--navy);
+
+  border: 1px solid var(--navy);
+
+  color: var(--cream);
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  transition: all 0.25s ease;
+}
+
+.section-button:hover {
+  background: var(--gold);
+
+  border-color: var(--gold);
+
+  color: var(--navy);
+}
+
+
+/* =====================================================
+   WHY CHOOSE US
+===================================================== */
+
+.why-section {
+  width: 90%;
+  max-width: 1250px;
+
+  margin: 0 auto;
+
+  padding: 30px 0 100px;
+}
+
+.why-heading {
+  max-width: 700px;
+
+  margin: 0 auto 55px;
+
+  text-align: center;
+}
+
+.why-heading h2 {
+  margin: 0 0 18px;
+
+  color: var(--navy);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 42px;
+
+  line-height: 1.2;
+
+  font-weight: 500;
+}
+
+.why-heading p:not(.section-label) {
+  margin: 0;
+
+  color: var(--text-muted);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  line-height: 1.7;
+}
+
+.why-grid {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 22px;
+}
+
+.why-card {
+  padding: 38px 25px;
+
+  background: var(--white);
+
+  border: 1px solid
+    rgba(181, 138, 58, 0.2);
+
+  text-align: center;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.why-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 15px 30px
+    rgba(7, 24, 47, 0.08);
+}
+
+.why-icon {
+  width: 65px;
+  height: 65px;
+
+  margin: 0 auto 22px;
+
+  border: 1px solid var(--gold);
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: var(--gold-dark);
+
+  font-size: 27px;
+}
+
+.why-card h3 {
+  margin: 0 0 12px;
+
+  color: var(--navy);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 19px;
+
+  font-weight: 500;
+}
+
+.why-card p {
+  margin: 0;
+
+  color: var(--text-muted);
+
+  line-height: 1.65;
+
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   SPECIAL OFFERS
+===================================================== */
+
+.offers-section {
+  width: 90%;
+  max-width: 1250px;
+
+  margin: 0 auto 90px;
+
+  min-height: 360px;
+
+  padding: 70px 30px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  background: var(--navy);
+
+  box-shadow:
+    0 18px 40px
+    rgba(7, 24, 47, 0.12);
+}
+
+.offers-content {
+  max-width: 750px;
+}
+
+.offers-content .section-label {
+  color: var(--gold);
+}
+
+.offers-content h2 {
+  margin: 0 0 20px;
+
+  color: var(--cream);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 42px;
+
+  line-height: 1.2;
+
+  font-weight: 500;
+}
+
+.offers-content p:not(.section-label) {
+  margin: 0 0 30px;
+
+  color:
+    rgba(247, 240, 226, 0.76);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  line-height: 1.8;
+}
+
+.offers-button {
+  display: inline-block;
+
+  padding: 13px 27px;
+
+  background: var(--gold);
+
+  border: 1px solid var(--gold);
+
+  color: var(--navy);
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  transition: all 0.25s ease;
+}
+
+.offers-button:hover {
+  background: var(--cream);
+
+  border-color: var(--cream);
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1000px) {
+
+  .legacy-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stat:nth-child(2) {
+    border-right: none;
+  }
+
+  .stat:nth-child(1),
+  .stat:nth-child(2) {
+    border-bottom: 1px solid
+      rgba(181, 138, 58, 0.25);
+
+    padding-bottom: 25px;
+  }
+
+  .stat:nth-child(3),
+  .stat:nth-child(4) {
+    padding-top: 25px;
+  }
+
+  .highlight-content {
+    padding: 50px;
+  }
+
+  .featured-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .why-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+  /*
+     Hero image keeps its original proportions.
+     The clickable overlay scales with it.
+  */
+
+  .hero-image-button {
+    left: 17.7%;
+    top: 76%;
+
+    width: 18.7%;
+    height: 10%;
+  }
+
+
+  .legacy-stats {
+    width: 100%;
+
+    padding: 25px 20px;
+
+    grid-template-columns: 1fr;
+  }
+
+  .stat {
+    border-right: none !important;
+
+    border-bottom: 1px solid
+      rgba(181, 138, 58, 0.25);
+
+    padding: 20px 10px !important;
+  }
+
+  .stat:last-child {
+    border-bottom: none;
+  }
+
+  .stat-icon {
+    width: 65px;
+    height: 65px;
+
+    font-size: 25px;
+  }
+
+  .about-section {
+    padding: 70px 20px;
+  }
+
+  .about-content h2 {
+    font-size: 32px;
+  }
+
+  .highlight-section {
+    width: 92%;
+
+    grid-template-columns: 1fr;
+
+    margin-bottom: 70px;
+  }
+
+  .highlight-image {
+    min-height: 320px;
+
+    padding: 30px;
+  }
+
+  .highlight-content {
+    padding: 45px 30px;
+  }
+
+  .highlight-content h2 {
+    font-size: 32px;
+  }
+
+  .featured-section {
+    padding-bottom: 70px;
+  }
+
+  .featured-heading h2 {
+    font-size: 32px;
+  }
+
+  .featured-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .why-section {
+    padding-bottom: 70px;
+  }
+
+  .why-heading h2 {
+    font-size: 32px;
+  }
+
+  .why-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .offers-section {
+    width: 92%;
+
+    margin-bottom: 60px;
+
+    min-height: 320px;
+
+    padding: 50px 25px;
+  }
+
+  .offers-content h2 {
+    font-size: 32px;
+  }
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+  .hero-image-button {
+    /*
+       Still follows the image's original button position.
+    */
+    left: 17.7%;
+    top: 76%;
+
+    width: 18.7%;
+    height: 10%;
+  }
+
+  .stat {
+    gap: 18px;
+  }
+
+  .stat h2 {
+    font-size: 19px;
+  }
+
+  .stat p {
+    font-size: 13px;
+  }
+
+  .about-content h2,
+  .highlight-content h2,
+  .featured-heading h2,
+  .why-heading h2,
+  .offers-content h2 {
+    font-size: 29px;
+  }
+
+  .why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .highlight-content {
+    padding: 40px 25px;
+  }
+}

@@ -1,0 +1,257 @@
+/* =========================
+   PRODUCT DETAILS
+========================= */
+
+.product-details {
+  width: 90%;
+  max-width: 1200px;
+  margin: 70px auto;
+}
+
+.product-gallery {
+  width: 100%;
+}
+
+.main-image-container {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  background: var(--white);
+  border: 1px solid rgba(181, 138, 58, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.main-image-container img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+}
+
+
+/* =========================
+   THUMBNAILS
+========================= */
+
+.product-thumbnails {
+  display: flex;
+  gap: 12px;
+  margin-top: 15px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+}
+
+.product-thumbnails img {
+  width: 78px;
+  height: 78px;
+  flex-shrink: 0;
+  object-fit: contain;
+  background: var(--white);
+  border: 2px solid transparent;
+  padding: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, opacity 0.2s ease;
+  opacity: 0.65;
+}
+
+.product-thumbnails img:hover {
+  opacity: 1;
+  border-color: rgba(181, 138, 58, 0.5);
+}
+
+.product-thumbnails img.active {
+  opacity: 1;
+  border-color: var(--gold);
+}
+
+
+/* =========================
+   CAROUSEL BUTTONS
+========================= */
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(181, 138, 58, 0.4);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--navy);
+  cursor: pointer;
+  font-size: 18px;
+  z-index: 2;
+}
+
+.carousel-btn:hover {
+  background: var(--navy);
+  color: var(--cream);
+}
+
+.carousel-btn.prev {
+  left: 15px;
+}
+
+.carousel-btn.next {
+  right: 15px;
+}
+
+
+/* =========================
+   PRODUCT INFO
+========================= */
+
+.product-details-info {
+  padding: 15px 0;
+}
+
+.product-category {
+  margin: 0 0 12px;
+  color: var(--gold-dark);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.product-details-info h1 {
+  margin: 0 0 20px;
+  color: var(--navy);
+  font-size: 42px;
+  line-height: 1.15;
+}
+
+.product-description {
+  margin: 0 0 35px;
+  color: var(--text-muted);
+  line-height: 1.8;
+  font-size: 16px;
+}
+
+
+/* =========================
+   BRAND
+========================= */
+
+.product-meta {
+  margin-top: 35px;
+}
+
+.product-brand {
+  padding: 20px 0;
+  margin-bottom: 35px;
+  border-top: 1px solid rgba(181, 138, 58, 0.2);
+  border-bottom: 1px solid rgba(181, 138, 58, 0.2);
+}
+
+.product-brand h3,
+.product-specifications h3 {
+  margin: 0 0 12px;
+  color: var(--navy);
+  font-size: 18px;
+}
+
+.product-brand p {
+  margin: 0;
+  color: #555;
+}
+
+
+/* =========================
+   SPECIFICATIONS
+========================= */
+
+.product-specifications {
+  margin-top: 25px;
+}
+
+.specifications-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #ddd;
+}
+
+.specification-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 14px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.specification-item span:first-child {
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.specification-item span:last-child {
+  color: #666;
+  font-size: 14px;
+  text-align: right;
+}
+
+
+/* =========================
+   ENQUIRY
+========================= */
+
+.product-enquiry {
+  margin-top: 35px;
+  padding: 25px;
+  background: var(--navy);
+  color: var(--cream);
+}
+
+.product-enquiry h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.product-enquiry p {
+  margin: 0 0 20px;
+  color: rgba(247, 240, 226, 0.75);
+  line-height: 1.6;
+}
+
+.enquiry-btn {
+  padding: 12px 20px;
+  border: none;
+  background: var(--gold);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.enquiry-btn:hover {
+  background: var(--gold-dark);
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .product-details {
+    margin: 50px auto;
+  }
+
+  .main-image-container {
+    height: 400px;
+  }
+
+  .product-details-info h1 {
+    font-size: 34px;
+  }
+
+  .specification-item {
+    gap: 15px;
+  }
+}

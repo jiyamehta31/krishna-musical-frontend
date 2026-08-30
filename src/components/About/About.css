@@ -1,0 +1,217 @@
+/* =========================
+   ABOUT PAGE
+========================= */
+
+.about-page {
+  min-height: 100vh;
+}
+
+
+/* =========================
+   PAGE HEADER
+========================= */
+
+.about-page-header {
+  width: 90%;
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 80px 20px 70px;
+  text-align: center;
+}
+
+.about-page-header h1 {
+  margin: 0 0 20px;
+  color: var(--navy);
+  font-size: 46px;
+  line-height: 1.2;
+}
+
+.about-page-header > p:not(.section-label) {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+
+/* =========================
+   LEGACY
+========================= */
+
+.about-legacy {
+  width: 90%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 80px 20px;
+  text-align: center;
+  border-top: 1px solid rgba(181, 138, 58, 0.2);
+  border-bottom: 1px solid rgba(181, 138, 58, 0.2);
+}
+
+.about-legacy-content {
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.about-legacy h2 {
+  margin: 0 0 25px;
+  color: var(--navy);
+  font-size: 38px;
+  line-height: 1.2;
+}
+
+.about-legacy p:not(.section-label) {
+  margin: 0 0 15px;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+
+/* =========================
+   VALUES
+========================= */
+
+.about-values {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 90px 0;
+}
+
+.about-section-heading {
+  max-width: 650px;
+  margin: 0 auto 50px;
+  text-align: center;
+}
+
+.about-section-heading h2 {
+  margin: 0 0 20px;
+  color: var(--navy);
+  font-size: 38px;
+  line-height: 1.2;
+}
+
+.about-section-heading p:not(.section-label) {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.about-values-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.about-value-card {
+  padding: 35px 25px;
+  background: var(--white);
+  border: 1px solid rgba(181, 138, 58, 0.2);
+  text-align: center;
+}
+
+.about-value-card h3 {
+  margin: 0 0 12px;
+  color: var(--navy);
+  font-size: 18px;
+}
+
+.about-value-card p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+
+/* =========================
+   DEALERSHIP / REACH
+========================= */
+
+.about-dealership {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto 90px;
+  min-height: 320px;
+  padding: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--navy);
+}
+
+.about-dealership-content {
+  max-width: 750px;
+}
+
+.about-dealership .section-label {
+  color: var(--gold);
+}
+
+.about-dealership h2 {
+  margin: 0 0 20px;
+  color: var(--cream);
+  font-size: 38px;
+  line-height: 1.2;
+}
+
+.about-dealership p:not(.section-label) {
+  margin: 0;
+  color: rgba(247, 240, 226, 0.75);
+  line-height: 1.7;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .about-values-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-page-header {
+    padding: 55px 20px;
+  }
+
+  .about-page-header h1 {
+    font-size: 34px;
+  }
+
+  .about-legacy {
+    padding: 65px 20px;
+  }
+
+  .about-legacy h2 {
+    font-size: 30px;
+  }
+
+  .about-values {
+    padding: 65px 0;
+  }
+
+  .about-section-heading h2 {
+    font-size: 30px;
+  }
+
+  .about-dealership {
+    margin-bottom: 65px;
+    min-height: 300px;
+    padding: 50px 25px;
+  }
+
+  .about-dealership h2 {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 600px) {
+  .about-values-grid {
+    grid-template-columns: 1fr;
+  }
+}

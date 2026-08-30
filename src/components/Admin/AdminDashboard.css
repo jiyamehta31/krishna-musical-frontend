@@ -1,0 +1,146 @@
+.admin-dashboard {
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.admin-header {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 70px 0 45px;
+}
+
+.admin-header h1 {
+  margin: 0 0 15px;
+  color: var(--navy);
+  font-size: 44px;
+  line-height: 1.2;
+}
+
+.admin-header p:not(.section-label) {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+.admin-stats {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.admin-stat-card {
+  padding: 28px 25px;
+  background: var(--white);
+  border: 1px solid rgba(181, 138, 58, 0.2);
+}
+
+.admin-stat-card span {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.admin-stat-card h2 {
+  margin: 12px 0 5px;
+  color: var(--navy);
+  font-size: 36px;
+}
+
+.admin-stat-card p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+
+/* =========================
+   QUICK ACTIONS
+========================= */
+
+.admin-actions {
+  width: 90%;
+  max-width: 1200px;
+  margin: 70px auto 0;
+}
+
+.admin-actions h2 {
+  margin: 0 0 25px;
+  color: var(--navy);
+  font-size: 28px;
+}
+
+.admin-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.admin-actions-grid button {
+  padding: 22px 20px;
+  border: 1px solid rgba(181, 138, 58, 0.3);
+  background: var(--white);
+  color: var(--navy);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.admin-actions-grid button:hover {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--cream);
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .admin-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .admin-actions-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-header {
+    padding: 55px 0 35px;
+  }
+
+  .admin-header h1 {
+    font-size: 34px;
+  }
+
+  .admin-actions {
+    margin-top: 50px;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-actions-grid {
+    grid-template-columns: 1fr;
+  }
+}
