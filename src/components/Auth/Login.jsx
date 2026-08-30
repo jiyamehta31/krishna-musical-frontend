@@ -21,7 +21,9 @@ const Login = () => {
         },
       );
 
-      console.log("LOGIN RESPONSE:", response.data);
+     console.log("LOGIN RESPONSE:", response);
+     console.log("LOGIN DATA:", response.data);
+     console.log("LOGIN STATUS:", response.status);
 
       const { token, user } = response.data;
 
