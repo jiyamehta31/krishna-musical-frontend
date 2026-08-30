@@ -10,12 +10,12 @@ const ProductDetails = () => {
   const [activeImage, setActiveImage] = useState(0);
 
   const getImageUrl = (imageUrl) => {
-    return `https://krishna-musical-backend.onrender.com/${imageUrl.replace("../", "")}`;
+    return `https://krishna-musical-backend-1.onrender.com/${imageUrl.replace("../", "")}`;
   };
 
   useEffect(() => {
     axios
-      .get(`https://krishna-musical-backend.onrender.com/api/products/${id}`)
+      .get(`https://krishna-musical-backend-1.onrender.com/api/products/${id}`)
       .then((response) => {
         setProduct(response.data.data);
       })

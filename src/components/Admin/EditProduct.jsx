@@ -21,7 +21,9 @@ const EditProduct = () => {
 
   useEffect(() => {
     axios
-      .get(`https://krishna-musical-backend.onrender.com/api/products/${id}`)
+      .get(
+        `https://krishna-musical-backend-1.onrender.com/api/products/${id}`,
+      )
       .then((response) => {
         const product = response.data.data;
 
@@ -50,7 +52,7 @@ const EditProduct = () => {
 
     try {
       const response = await axios.put(
-        `https://krishna-musical-backend.onrender.com/api/products/${id}`,
+        `https://krishna-musical-backend-1.onrender.com/api/products/${id}`,
         formData,
         {
           headers: {
@@ -209,4 +211,3 @@ const EditProduct = () => {
 };
 
 export default EditProduct;
-

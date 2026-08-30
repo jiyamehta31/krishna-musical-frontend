@@ -11,7 +11,7 @@ const Products = () => {
 
   useEffect(() => {
     axios
-      .get("https://krishna-musical-backend.onrender.com/api/products")
+      .get("https://krishna-musical-backend-1.onrender.com/api/products")
       .then((response) => {
         console.log("Products received:", response.data);
         setProducts(response.data.data);

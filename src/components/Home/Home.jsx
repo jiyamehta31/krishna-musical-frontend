@@ -9,7 +9,7 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get("https://krishna-musical-backend.onrender.com/api/products")
+      .get("https://krishna-musical-backend-1.onrender.com/api/products")
       .then((response) => {
         setProducts(response.data.data);
       })
@@ -24,7 +24,7 @@ const Home = () => {
       title: "Discover Our Harmoniums",
       description:
         "Explore our collection of harmoniums, selected with care for musicians who value quality, craftsmanship, and musical expression.",
-      image: "https://krishna-musical-backend.onrender.com/uploads/images/amritHarmonium.png",
+      image: "https://krishna-musical-backend-1.onrender.com/uploads/images/amritHarmonium.png",
       button: "Explore Harmoniums",
     },
     {
@@ -32,7 +32,7 @@ const Home = () => {
       title: "Made With Generations of Experience",
       description:
         "Our journey combines traditional craftsmanship with decades of experience to bring musicians instruments they can rely on.",
-      image: "https://krishna-musical-backend.onrender.com/uploads/images/chang3.jpg",
+      image: "https://krishna-musical-backend-1.onrender.com/uploads/images/chang3.jpg",
       button: "Explore Instruments",
     },
     {
@@ -40,7 +40,7 @@ const Home = () => {
       title: "Four Generations of Musical Tradition",
       description:
         "Since 1960, our passion for music has been carried forward through four generations while preserving the values that built our journey.",
-      image: "https://krishna-musical-backend.onrender.com/uploads/images/drumset.png",
+      image: "https://krishna-musical-backend-1.onrender.com/uploads/images/drumset.png",
       button: "Discover Our Story",
     },
   ];
@@ -235,7 +235,7 @@ const Home = () => {
             <div className="featured-card" key={product._id}>
               <div className="featured-image">
                 <img
-                  src={`https://krishna-musical-backend.onrender.com/${product.images?.[0]?.url}`}
+                  src={`https://krishna-musical-backend-1.onrender.com/${product.images?.[0]?.url}`}
                   alt={product.images?.[0]?.alt || product.name}
                 />
               </div>

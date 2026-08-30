@@ -36,7 +36,7 @@ const AddProduct = () => {
 
     try {
       const response = await axios.post(
-        "https://krishna-musical-backend.onrender.com/api/products",
+        "https://krishna-musical-backend-1.onrender.com/api/products",
         data,
         {
           headers: {

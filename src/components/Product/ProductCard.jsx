@@ -5,7 +5,7 @@ const ProductCard = ({ product }) => {
 
   const navigate = useNavigate();
   const getImageUrl = (imageUrl) => {
-    return `https://krishna-musical-backend.onrender.com/${imageUrl.replace("../", "")}`;
+    return `https://krishna-musical-backend-1.onrender.com/${imageUrl.replace("../", "")}`;
   };
 
   return (

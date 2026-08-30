@@ -11,7 +11,7 @@ const AdminProducts = () => {
 
   useEffect(() => {
     axios
-      .get("https://krishna-musical-backend.onrender.com/api/products")
+      .get("https://krishna-musical-backend-1.onrender.com/api/products")
       .then((response) => {
         setProducts(response.data.data);
         setLoading(false);
@@ -35,7 +35,7 @@ const AdminProducts = () => {
     try {
       const token = localStorage.getItem("token");
 
-      await axios.delete(`https://krishna-musical-backend.onrender.com/api/products/${id}`, {
+      await axios.delete(`https://krishna-musical-backend-1.onrender.com/api/products/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -94,7 +94,7 @@ const AdminProducts = () => {
                 <div className="admin-product-image">
                   {product.images?.length > 0 && (
                     <img
-                      src={`https://krishna-musical-backend.onrender.com/${product.images[0].url}`}
+                      src={`https://krishna-musical-backend-1.onrender.com/${product.images[0].url}`}
                       alt={product.images[0].alt || product.name}
                     />
                   )}
