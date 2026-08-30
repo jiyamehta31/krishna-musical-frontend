@@ -23,9 +23,12 @@ const Signup = () => {
 
       const { token, user } = response.data;
 
+      if (!token || !user) {
+        throw new Error("Invalid signup response from server");
+      }
+
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-
       alert("Account created successfully!");
       navigate("/");
     } catch (error) {
