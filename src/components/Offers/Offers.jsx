@@ -3,6 +3,7 @@
 ========================= */
 
 import "./Offers.css";
+import { Link } from "react-router-dom";
 
 const Offers = () => {
   const offers = [
@@ -64,9 +65,9 @@ const Offers = () => {
             offers.
           </p>
 
-          <a href="/contact" className="offers-page-button">
+          <Link to="/contact" className="offers-page-button">
             Contact Us
-          </a>
+          </Link>
         </div>
       </section>
     </main>

@@ -5,7 +5,8 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
+  const user =
+    storedUser && storedUser !== "undefined" ? JSON.parse(storedUser) : null;
 
   const handleLogout = () => {
     localStorage.removeItem("token");

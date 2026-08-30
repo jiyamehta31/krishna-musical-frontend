@@ -4,8 +4,9 @@ import { Link, NavLink } from "react-router-dom";import "./Navbar.css";
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
+ const storedUser = localStorage.getItem("user");
+ const user =
+   storedUser && storedUser !== "undefined" ? JSON.parse(storedUser) : null;
 
   return (
     <>
