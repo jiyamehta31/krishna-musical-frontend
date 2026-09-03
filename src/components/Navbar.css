@@ -271,7 +271,7 @@
   left: 50%;
   transform: translateX(-50%) translateY(10px);
   min-width: 210px;
-  background: var(--white, #ffffff);
+  background: #ffffff;
   border: 1px solid rgba(181, 138, 58, 0.3);
   border-radius: 6px;
   box-shadow: 0 14px 35px rgba(7, 24, 47, 0.12);
@@ -342,117 +342,53 @@
   color: var(--navy);
 }
 
-.login-nav-btn {
-  padding: 8px 18px;
-  background: var(--navy);
-  color: var(--cream);
-  border: 1px solid var(--navy);
-  border-radius: 4px;
-  font-size: 13.5px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.login-nav-btn:hover {
-  background: var(--gold);
-  border-color: var(--gold);
-  color: var(--navy);
-}
-
+/* Profile Icon (Cleaned & Unified Outline Silhouette) */
 .profile-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--navy);
-  border: 1.5px solid var(--gold);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 36px;
+  height: 36px;
+  position: relative;
+  display: block;
+  background: transparent;
+  border: none;
   text-decoration: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
 .profile-icon:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(181, 138, 58, 0.35);
+  transform: scale(1.08);
 }
-
-.profile-initial {
-  color: var(--cream);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1;
-}
-.profile-icon {
-  width: 36px !important;
-  height: 40px !important;
-
-  position: relative;
-
-  display: block;
-
-  background: transparent !important;
-
-  border: none !important;
-  border-radius: 0 !important;
-
-  text-decoration: none;
-
-  flex-shrink: 0;
-
-  overflow: visible;
-}
-
-
-/* Head */
 
 .profile-head {
   position: absolute;
-
-  width: 13px;
-  height: 13px;
-
-  border: 2px solid #111;
-
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--navy);
   border-radius: 50%;
-
-  top: 1px;
-  left: 11px;
-
-  background: transparent !important;
+  top: 3px;
+  left: 12px;
+  background: transparent;
+  transition: border-color 0.2s ease;
 }
-
-
-/* Body */
 
 .profile-body {
   position: absolute;
-
-  width: 23px;
-  height: 13px;
-
-  border: 2px solid #111;
-
-  border-radius: 14px 14px 0 0;
-
+  width: 22px;
+  height: 12px;
+  border: 2px solid var(--navy);
+  border-radius: 12px 12px 0 0;
   border-bottom: none;
-
   bottom: 4px;
-  left: 6px;
-
-  background: transparent !important;
+  left: 7px;
+  background: transparent;
+  transition: border-color 0.2s ease;
 }
-
-
-/* Hover */
 
 .profile-icon:hover .profile-head,
 .profile-icon:hover .profile-body {
   border-color: var(--gold-dark);
 }
-
 
 /* =========================================================
    MOBILE MENU & BACKDROP
@@ -682,8 +618,9 @@
     font-weight: 600;
   }
 
+  /* Hide desktop actions on mobile screens so they don't collide with the menu button */
   .navbar-actions .desktop-user-menu,
-  .navbar-actions .login-nav-btn {
+  .navbar-actions .profile-icon {
     display: none;
   }
 

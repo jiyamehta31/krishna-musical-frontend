@@ -17,7 +17,7 @@ const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const location = useLocation();
 
-  // 1. Reset menu states during render when the route changes (React-recommended pattern)
+  // Reset menu states on route change
   const currentPath = location.pathname + location.search;
   const [prevPath, setPrevPath] = useState(currentPath);
 
@@ -27,7 +27,7 @@ const Navbar = () => {
     setDropdownOpen(false);
   }
 
-  // 2. Derive user session directly during render — no useState or useEffect required
+  // Derive user session directly during render
   const getStoredUser = () => {
     try {
       const stored = localStorage.getItem("user");
@@ -116,7 +116,9 @@ const Navbar = () => {
 
             {/* Instruments Link with Interactive Category Dropdown */}
             <div
-              className={`nav-dropdown-wrapper ${dropdownOpen ? "dropdown-active" : ""}`}
+              className={`nav-dropdown-wrapper ${
+                dropdownOpen ? "dropdown-active" : ""
+              }`}
               onMouseEnter={() => setDropdownOpen(true)}
               onMouseLeave={() => setDropdownOpen(false)}
             >
@@ -196,31 +198,23 @@ const Navbar = () => {
                 <Link
                   to="/profile"
                   className="profile-icon"
-                  title="My Account"
+                  title={`My Account (${user.username || "User"})`}
                   aria-label="View Account"
                 >
-                  <span className="profile-initial">
-                    {user.username
-                      ? user.username.charAt(0).toUpperCase()
-                      : "U"}
-                  </span>
+                  <span className="profile-head"></span>
+                  <span className="profile-body"></span>
                 </Link>
               </div>
             ) : (
-              /* DESKTOP PROFILE */
-          <div className="navbar-actions">
-            {user ? (
-              <Link to="/profile" className="profile-icon">
+              <Link
+                to="/login"
+                className="profile-icon"
+                title="Login / Sign Up"
+                aria-label="Login"
+              >
                 <span className="profile-head"></span>
                 <span className="profile-body"></span>
               </Link>
-            ) : (
-              <Link to="/login" className="profile-icon">
-                <span className="profile-head"></span>
-                <span className="profile-body"></span>
-              </Link>
-            )}
-          </div>
             )}
 
             {/* Mobile Menu Toggle */}
@@ -237,7 +231,7 @@ const Navbar = () => {
         </div>
       </header>
 
-      {/* Backdrop overlay to dismiss mobile drawer */}
+      {/* Backdrop overlay for mobile drawer */}
       {menuOpen && (
         <div
           className="navbar-backdrop"
