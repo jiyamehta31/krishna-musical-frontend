@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import "./Signup.css";
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://krishna-musical-backend-1.onrender.com";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -9,38 +13,78 @@ const Signup = () => {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
+  // Redirect if already authenticated
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.title = "Create Account | Krishna Musicals";
+
+    const token = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+
+    if (token && storedUser) {
+      navigate("/profile", { replace: true });
+    }
+  }, [navigate]);
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
   const handleSignup = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
+
+    const username = formData.username.trim();
+    const email = formData.email.trim().toLowerCase();
+    const password = formData.password;
+
+    // Client-side schema alignment
+    if (username.length < 3) {
+      setErrorMessage("Username must be at least 3 characters long.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setErrorMessage("Password must be at least 6 characters long.");
+      return;
+    }
+
+    setLoading(true);
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/signup`,
-        formData,
-      );
+      const response = await axios.post(`${API_BASE_URL}/api/auth/signup`, {
+        username,
+        email,
+        password,
+      });
 
       const { token, user } = response.data;
 
       if (!token || !user) {
-        throw new Error("Invalid signup response from server");
+        throw new Error("Invalid response structure from server.");
       }
 
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
-      alert("Account created successfully!");
-
-      navigate("/profile");
+      navigate("/profile", { replace: true });
     } catch (error) {
-      console.log("Signup error:", error);
-
-      alert(
+      console.error("Signup error:", error);
+      const serverMsg =
         error.response?.data?.message ||
-          error.message ||
-          "Signup failed. Please try again.",
-      );
+        error.message ||
+        "Registration failed. Please check your details or try a different email.";
+      setErrorMessage(serverMsg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -48,63 +92,64 @@ const Signup = () => {
     <main className="signup-page">
       <div className="signup-container">
         <h1>Create Account</h1>
+        <p className="signup-subtitle">Join the Krishna Musicals community</p>
 
-        <p>Sign up to create your account</p>
+        {errorMessage && (
+          <div className="signup-error-banner" role="alert">
+            {errorMessage}
+          </div>
+        )}
 
         <form className="signup-form" onSubmit={handleSignup}>
           <div className="form-group">
-            <label>Username</label>
-
+            <label htmlFor="signup-username">Full Name or Username *</label>
             <input
+              id="signup-username"
               type="text"
-              placeholder="Enter your username"
+              name="username"
+              autoComplete="username"
+              placeholder="e.g. Rahul Sharma"
               value={formData.username}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  username: e.target.value,
-                })
-              }
+              onChange={handleChange}
+              disabled={loading}
               required
             />
           </div>
 
           <div className="form-group">
-            <label>Email</label>
-
+            <label htmlFor="signup-email">Email Address *</label>
             <input
+              id="signup-email"
               type="email"
-              placeholder="Enter your email"
+              name="email"
+              autoComplete="email"
+              placeholder="name@example.com"
               value={formData.email}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  email: e.target.value,
-                })
-              }
+              onChange={handleChange}
+              disabled={loading}
               required
             />
           </div>
 
           <div className="form-group">
-            <label>Password</label>
-
+            <label htmlFor="signup-password">
+              Password (min. 6 characters) *
+            </label>
             <input
+              id="signup-password"
               type="password"
-              placeholder="Create a password"
+              name="password"
+              autoComplete="new-password"
+              placeholder="Create a secure password"
               value={formData.password}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  password: e.target.value,
-                })
-              }
+              onChange={handleChange}
+              disabled={loading}
               required
             />
           </div>
 
-          <button type="submit" className="signup-button">
-            Create Account
+          <button type="submit" className="signup-button" disabled={loading}>
+            {loading ? "Creating Account..." : "Create Account"}
           </button>
         </form>
 

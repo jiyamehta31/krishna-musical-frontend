@@ -1,26 +1,125 @@
+/* =========================================================
+   ADMIN LOGIN PAGE BASE & CENTERING
+========================================================= */
+
+.admin-login-page,
 .admin-login {
-  min-height: calc(100vh - 150px);
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 60px 20px;
-  background: var(--cream);
+  padding: 40px 20px;
+  background: var(--cream, #fbf7ee);
+  box-sizing: border-box;
 }
 
-.admin-login-container {
+.admin-login-page *,
+.admin-login-page *::before,
+.admin-login-page *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   ADMIN LOGIN CARD
+========================================================= */
+
+.admin-login-container,
+.login-container {
+  position: relative;
   width: 100%;
-  max-width: 420px;
-  background: white;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  max-width: 440px;
+  background: var(--white, #ffffff);
+  padding: 44px 38px 36px;
+  border-radius: 8px;
+  border: 1px solid rgba(195, 146, 50, 0.25);
+  box-shadow: 0 16px 36px rgba(7, 26, 51, 0.08);
+  overflow: hidden;
 }
 
-.admin-login-container h1 {
-  margin: 0 0 30px;
-  text-align: center;
-  color: var(--navy);
+/* Heritage gold accent top border */
+.admin-login-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--gold, #c39232),
+    #e2c686,
+    var(--gold, #c39232)
+  );
 }
+
+/* =========================================================
+   HEADER & PORTAL BADGE
+========================================================= */
+
+.admin-login-header {
+  text-align: center;
+  margin-bottom: 26px;
+}
+
+.admin-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  background: rgba(195, 146, 50, 0.12);
+  border: 1px solid rgba(195, 146, 50, 0.35);
+  border-radius: 20px;
+  color: var(--gold-dark, #9a6b1f);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.admin-login-header h1 {
+  margin: 0 0 6px;
+  color: var(--navy, #071a33);
+  font-family: var(--font-serif, "Playfair Display", Georgia, serif);
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.admin-login-header p {
+  margin: 0;
+  color: var(--text-muted, #665f55);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   ERROR BANNER
+========================================================= */
+
+.login-error-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background-color: var(--danger-bg, #fef2f2);
+  border: 1px solid #fecaca;
+  color: var(--danger, #b91c1c);
+  padding: 12px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.error-icon {
+  font-size: 15px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* =========================================================
+   FORM & INPUT CONTROLS
+========================================================= */
 
 .admin-login-form {
   display: flex;
@@ -28,31 +127,120 @@
   gap: 18px;
 }
 
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.form-group label {
+  color: var(--navy, #071a33);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
 .admin-login-form input {
   width: 100%;
-  padding: 13px 14px;
-  border: 1px solid #ddd;
+  height: 46px;
+  padding: 0 14px;
+  border: 1px solid #d1d5db;
   border-radius: 6px;
-  font-size: 15px;
+  background: #ffffff;
+  color: var(--text-dark, #111c2d);
+  font-family: inherit;
+  font-size: 14.5px;
   outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .admin-login-form input:focus {
-  border-color: var(--gold);
+  border-color: var(--gold, #c39232);
+  box-shadow: 0 0 0 3px rgba(195, 146, 50, 0.2);
 }
 
-.admin-login-form button {
-  border: none;
-  padding: 13px;
+.admin-login-form input::placeholder {
+  color: #9ca3af;
+  font-size: 13.5px;
+}
+
+.admin-login-form input:disabled {
+  background-color: #f8fafc;
+  border-color: #e2e8f0;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   SUBMIT ACTION
+========================================================= */
+
+.admin-submit-btn,
+.login-submit-btn {
+  width: 100%;
+  height: 46px;
+  margin-top: 6px;
+  border: 1px solid var(--gold, #c39232);
   border-radius: 6px;
-  background: var(--gold);
-  color: var(--navy);
-  font-size: 15px;
-  font-weight: 600;
+  background: var(--gold, #c39232);
+  color: var(--navy, #071a33);
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
 }
 
-.admin-login-form button:hover {
-  background: #e0c36a;
+.admin-submit-btn:hover:not(:disabled),
+.login-submit-btn:hover:not(:disabled) {
+  background: var(--gold-dark, #9a6b1f);
+  border-color: var(--gold-dark, #9a6b1f);
+  color: #ffffff;
+}
+
+.admin-submit-btn:disabled,
+.login-submit-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   FOOTER & RETURN LINK
+========================================================= */
+
+.admin-login-footer {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(195, 146, 50, 0.18);
+  text-align: center;
+}
+
+.back-store-link {
+  color: var(--text-muted, #665f55);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.back-store-link:hover {
+  color: var(--navy, #071a33);
+  text-decoration: underline;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 480px) {
+  .admin-login-container,
+  .login-container {
+    padding: 34px 20px 28px;
+  }
+
+  .admin-login-header h1 {
+    font-size: 24px;
+  }
 }

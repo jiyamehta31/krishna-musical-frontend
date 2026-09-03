@@ -4,8 +4,14 @@
 
 .offers-page {
   min-height: 100vh;
+  box-sizing: border-box;
 }
 
+.offers-page *,
+.offers-page *::before,
+.offers-page *::after {
+  box-sizing: border-box;
+}
 
 /* =========================
    HEADER
@@ -15,27 +21,37 @@
   width: 90%;
   max-width: 800px;
   margin: 0 auto;
-  padding: 80px 20px 60px;
+  padding: 80px 20px 50px;
   text-align: center;
 }
 
+.section-label {
+  margin: 0 0 12px;
+  color: var(--gold-dark, #8f6b24);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
 .offers-page-header h1 {
-  margin: 0 0 20px;
-  color: var(--navy);
-  font-size: 46px;
+  margin: 0 0 16px;
+  color: var(--navy, #0f172a);
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-size: clamp(34px, 4.5vw, 46px);
   line-height: 1.2;
 }
 
 .offers-page-header > p:not(.section-label) {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 16px;
+  margin: 0 auto;
+  max-width: 620px;
+  color: var(--text-muted, #64748b);
+  font-size: 15.5px;
   line-height: 1.7;
 }
 
-
 /* =========================
-   OFFERS LIST
+   OFFERS GRID
 ========================= */
 
 .offers-list {
@@ -45,61 +61,105 @@
   padding: 20px 0 90px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
+  gap: 26px;
 }
 
 .offer-card {
-  padding: 35px 30px;
-  background: var(--white);
-  border: 1px solid rgba(181, 138, 58, 0.2);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 34px 28px;
+  background: var(--white, #ffffff);
+  border: 1px solid rgba(181, 138, 58, 0.25);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .offer-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(7, 24, 47, 0.08);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+}
+
+/* Top bar: Number & Badge */
+.offer-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .offer-number {
-  margin: 0 0 25px;
-  color: var(--gold-dark);
+  margin: 0;
+  color: var(--gold-dark, #8f6b24);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 2px;
 }
 
-.offer-card h2 {
-  margin: 0 0 15px;
-  color: var(--navy);
-  font-size: 23px;
+.offer-badge {
+  background: rgba(181, 138, 58, 0.12);
+  color: var(--gold-dark, #8f6b24);
+  border: 1px solid rgba(181, 138, 58, 0.3);
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
 }
 
-.offer-card > p:not(.offer-number) {
-  margin: 0 0 25px;
-  color: var(--text-muted);
+/* Offer Details */
+.offer-card h2 {
+  margin: 0 0 10px;
+  color: var(--navy, #0f172a);
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.offer-highlight {
+  margin: 0 0 14px;
+  color: var(--gold-dark, #8f6b24);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.offer-description {
+  margin: 0 0 26px;
+  color: var(--text-muted, #64748b);
   line-height: 1.7;
   font-size: 14px;
 }
 
-.offer-link {
+/* Unified Link / Button Action */
+.offer-link-btn {
+  margin-top: auto;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 10px 18px;
-  border: 1px solid var(--navy);
+  border: 1px solid var(--navy, #0f172a);
+  border-radius: 4px;
   background: transparent;
-  color: var(--navy);
-  font-size: 14px;
+  color: var(--navy, #0f172a);
+  font-family: inherit;
+  font-size: 13.5px;
   font-weight: 600;
+  text-decoration: none;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.offer-link:hover {
-  background: var(--navy);
-  color: var(--cream);
+.offer-link-btn:hover {
+  background: var(--navy, #0f172a);
+  color: var(--cream, #f7f3eb);
 }
 
-
 /* =========================
-   CTA
+   CTA BANNER
 ========================= */
 
 .offers-page-cta {
@@ -107,12 +167,14 @@
   max-width: 1200px;
   margin: 0 auto 90px;
   min-height: 320px;
-  padding: 60px;
+  padding: 65px 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: var(--navy);
+  background: var(--navy, #0f172a);
+  border-radius: 8px;
+  box-shadow: 0 18px 40px rgba(7, 24, 47, 0.12);
 }
 
 .offers-page-cta-content {
@@ -120,76 +182,78 @@
 }
 
 .offers-page-cta .section-label {
-  color: var(--gold);
+  color: var(--gold, #b58a3a);
 }
 
 .offers-page-cta h2 {
-  margin: 0 0 20px;
-  color: var(--cream);
-  font-size: 38px;
-  line-height: 1.2;
+  margin: 0 0 18px;
+  color: var(--cream, #f7f3eb);
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-size: clamp(28px, 3.5vw, 38px);
+  line-height: 1.25;
 }
 
 .offers-page-cta p:not(.section-label) {
-  margin: 0 0 30px;
-  color: rgba(247, 240, 226, 0.75);
+  margin: 0 0 28px;
+  color: rgba(247, 240, 226, 0.8);
+  font-size: 15px;
   line-height: 1.7;
 }
 
 .offers-page-button {
   display: inline-block;
-  padding: 13px 24px;
-  background: var(--gold);
-  color: var(--navy);
-  border: 1px solid var(--gold);
+  padding: 13px 28px;
+  background: var(--gold, #b58a3a);
+  color: var(--navy, #0f172a);
+  border: 1px solid var(--gold, #b58a3a);
+  border-radius: 4px;
   text-decoration: none;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   transition: all 0.2s ease;
 }
 
 .offers-page-button:hover {
-  background: var(--cream);
-  border-color: var(--cream);
+  background: var(--cream, #f7f3eb);
+  border-color: var(--cream, #f7f3eb);
 }
-
 
 /* =========================
    RESPONSIVE
 ========================= */
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
   .offers-list {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .offers-page-header {
-    padding: 55px 20px;
-  }
-
-  .offers-page-header h1 {
-    font-size: 34px;
+    padding: 60px 20px 35px;
   }
 
   .offers-list {
-    padding-bottom: 65px;
+    padding-bottom: 60px;
   }
 
   .offers-page-cta {
-    margin-bottom: 65px;
-    min-height: 300px;
-    padding: 50px 25px;
-  }
-
-  .offers-page-cta h2 {
-    font-size: 30px;
+    margin-bottom: 60px;
+    padding: 45px 20px;
   }
 }
 
 @media (max-width: 600px) {
   .offers-list {
     grid-template-columns: 1fr;
+  }
+
+  .offer-card {
+    padding: 28px 22px;
+  }
+
+  .offer-link-btn {
+    width: 100%;
+    justify-content: center;
   }
 }

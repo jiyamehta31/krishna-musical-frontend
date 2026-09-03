@@ -1,39 +1,78 @@
+/* =========================================================
+   WEB FONTS
+   - Playfair Display: Heritage serif for titles & brands
+   - Plus Jakarta Sans: Clean geometric sans-serif for UI
+========================================================= */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
+
 :root {
-  /* =========================
-     PREMIUM COLOR PALETTE
-  ========================= */
+  /* =======================================================
+     COLOR PALETTE - KRISHNA MUSICALS
+  ======================================================= */
+  --navy: #071a33;
+  --navy-light: #102b4d;
+  --navy-dark: #040e1c;
 
-  --navy: #071A33;
-  --navy-light: #102B4D;
+  /* Surfaces */
+  --cream: #fbf7ee;
+  --cream-dark: #f3ebdd;
+  --cream-section: #f7f0e2;
+  --white: #ffffff;
 
-  /* Main page background */
-  --cream: #FBF7EE;
+  /* Gold & Brass Accents */
+  --gold: #c39232;
+  --gold-dark: #9a6b1f;
+  --gold-light: #d8b15a;
+  --gold-tint: rgba(195, 146, 50, 0.12);
 
-  /* Slightly deeper surface for navbar/cards */
-  --cream-dark: #F3EBDD;
+  /* Typography Colors */
+  --text-dark: #111c2d;
+  --text-muted: #665f55;
+  --text-light: #94a3b8;
 
-  /* Alternate section background */
-  --cream-section: #F7F0E2;
-
-  /* Gold accents */
-  --gold: #C39232;
-  --gold-dark: #9A6B1F;
-  --gold-light: #D8B15A;
-
-  /* Text */
-  --text-dark: #111C2D;
-  --text-muted: #665F55;
-
-  --white: #FFFFFF;
-
-  /* Borders */
+  /* Borders & Dividers */
   --border-light: rgba(154, 107, 31, 0.22);
+  --border-focus: rgba(195, 146, 50, 0.45);
+
+  /* Status Colors */
+  --success: #15803d;
+  --success-bg: #f0fdf4;
+  --danger: #b91c1c;
+  --danger-bg: #fef2f2;
+  --warning: #b45309;
+  --warning-bg: #fffbeb;
+
+  /* Typography Stacks */
+  --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+
+  /* Elevation & Shadows */
+  --shadow-sm: 0 2px 6px rgba(7, 26, 51, 0.05);
+  --shadow-md: 0 8px 20px rgba(7, 26, 51, 0.08);
+  --shadow-lg: 0 16px 36px rgba(7, 26, 51, 0.12);
+  --shadow-gold: 0 4px 16px rgba(195, 146, 50, 0.25);
+
+  /* Transitions */
+  --ease-base: 0.2s ease;
+  --ease-smooth: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* =========================================================
+   GLOBAL RESET & BOX SIZING
+========================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-/* =========================
-   GLOBAL RESET
-========================= */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
 
 html,
 body,
@@ -42,38 +81,98 @@ body,
   width: 100%;
 }
 
-
-* {
-  box-sizing: border-box;
-}
-
-
 body {
   margin: 0;
-
-  font-family: Arial, sans-serif;
-
-  background: var(--cream);
-
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  background-color: var(--cream);
   color: var(--text-dark);
-
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-
-/* =========================
-   LINKS
-========================= */
-
-a {
-  color: inherit;
+/* =========================================================
+   MEDIA RESETS
+========================================================= */
+img,
+picture,
+svg,
+video {
+  max-width: 100%;
+  display: block;
 }
 
-
-/* =========================
-   BUTTON RESET
-========================= */
-
-button {
+/* =========================================================
+   FORM ELEMENTS & BUTTON TYPOGRAPHY
+========================================================= */
+input,
+button,
+textarea,
+select {
   font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================================
+   ACCESSIBILITY & FOCUS OUTLINES
+========================================================= */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   LINKS & HEADINGS
+========================================================= */
+a {
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+  color: var(--navy);
+  margin-top: 0;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+/* =========================================================
+   CUSTOM SCROLLBAR (DESKTOP)
+========================================================= */
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cream-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(154, 107, 31, 0.4);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}
+
+/* =========================================================
+   TEXT SELECTION
+========================================================= */
+::selection {
+  background-color: var(--navy);
+  color: var(--cream);
 }

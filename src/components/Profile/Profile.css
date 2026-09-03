@@ -1,83 +1,264 @@
+/* =========================================================
+   PROFILE PAGE BASE & WRAPPER
+========================================================= */
+
 .profile-page {
-  min-height: calc(100vh - 150px);
+  min-height: calc(100vh - 120px);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   padding: 60px 20px;
-  background: var(--cream);
+  background: var(--cream, #f7f3eb);
+  box-sizing: border-box;
 }
+
+.profile-page *,
+.profile-page *::before,
+.profile-page *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   PROFILE CARD
+========================================================= */
 
 .profile-card {
+  position: relative;
   width: 100%;
-  max-width: 450px;
-  padding: 40px;
-  background: white;
-  border-radius: 12px;
+  max-width: 460px;
+  padding: 48px 40px 42px;
+  background: var(--white, #ffffff);
+  border-radius: 8px;
+  border: 1px solid rgba(181, 138, 58, 0.22);
+  box-shadow:
+    0 4px 6px -1px rgba(15, 23, 42, 0.04),
+    0 20px 35px -10px rgba(15, 23, 42, 0.1);
   text-align: center;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
 }
 
-.profile-icon {
-  width: 70px;
-  height: 70px;
-  margin: 0 auto 20px;
+/* Heritage gold crown accent */
+.profile-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--gold, #b58a3a),
+    #e2c686,
+    var(--gold, #b58a3a)
+  );
+}
 
+/* =========================================================
+   AVATAR BADGE
+========================================================= */
+
+.profile-avatar-badge {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: var(--navy, #0f172a);
+  border: 2px solid var(--gold, #b58a3a);
   display: flex;
   align-items: center;
   justify-content: center;
-
-  background: var(--navy);
-  color: var(--cream);
-
-  border-radius: 50%;
-  font-size: 32px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
 }
+
+.profile-avatar-text {
+  color: var(--cream, #f7f3eb);
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* =========================================================
+   TITLES & SUBTITLE
+========================================================= */
 
 .profile-card h1 {
-  margin-bottom: 30px;
-  color: var(--navy);
-}
-
-.profile-info {
-  text-align: left;
-  margin-bottom: 30px;
-}
-
-.profile-info div {
-  padding: 15px 0;
-  border-bottom: 1px solid #ddd;
-}
-
-.profile-info span {
-  display: block;
-  margin-bottom: 5px;
-  color: #777;
-  font-size: 13px;
-}
-
-.profile-info p {
-  margin: 0;
-  color: var(--navy);
-  font-size: 16px;
+  margin: 0 0 6px;
+  color: var(--navy, #0f172a);
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-size: 30px;
   font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.profile-subtitle {
+  margin: 0 0 28px;
+  color: var(--text-muted, #64748b);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   USER DETAILS LIST
+========================================================= */
+
+.profile-details-list {
+  text-align: left;
+  border-top: 1px solid rgba(181, 138, 58, 0.18);
+  border-bottom: 1px solid rgba(181, 138, 58, 0.18);
+  padding: 8px 0;
+  margin-bottom: 24px;
+}
+
+.profile-detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px 4px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.profile-detail-item:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  color: var(--text-muted, #64748b);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.detail-value {
+  margin: 0;
+  color: var(--navy, #0f172a);
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   ROLE BADGES
+========================================================= */
+
+.role-badge {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.role-badge.role-admin {
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+.role-badge.role-customer {
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+/* =========================================================
+   ADMIN PORTAL CTA
+========================================================= */
+
+.profile-admin-cta {
+  margin-bottom: 22px;
+}
+
+.admin-portal-link {
+  display: block;
+  padding: 11px 16px;
+  border-radius: 6px;
+  background: #f8fafc;
+  border: 1px dashed var(--gold, #b58a3a);
+  color: var(--gold-dark, #8f6b24);
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.admin-portal-link:hover {
+  background: #fdfaf3;
+  color: var(--navy, #0f172a);
+  border-style: solid;
+}
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.continue-shopping-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 46px;
+  width: 100%;
+  border: 1px solid var(--navy, #0f172a);
+  border-radius: 6px;
+  background: var(--navy, #0f172a);
+  color: var(--cream, #f7f3eb);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.continue-shopping-btn:hover {
+  background: var(--gold, #b58a3a);
+  border-color: var(--gold, #b58a3a);
+  color: var(--navy, #0f172a);
 }
 
 .logout-button {
   width: 100%;
-  border: none;
-  padding: 13px;
+  height: 44px;
+  border: 1px solid #fecaca;
   border-radius: 6px;
-
-  background: var(--navy);
-  color: var(--cream);
-
-  font-size: 15px;
+  background: #fef2f2;
+  color: #991b1b;
+  font-family: inherit;
+  font-size: 13.5px;
   font-weight: 600;
   cursor: pointer;
-
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .logout-button:hover {
-  background: #333;
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #7f1d1d;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 480px) {
+  .profile-page {
+    padding: 35px 16px;
+  }
+
+  .profile-card {
+    padding: 36px 20px 30px;
+  }
+
+  .profile-card h1 {
+    font-size: 26px;
+  }
+
+  .profile-detail-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
 }

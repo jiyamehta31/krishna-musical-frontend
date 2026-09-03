@@ -10,76 +10,78 @@
   --text-dark: #111827;
 }
 
-
 /* =========================================================
    TOP INFORMATION BAR
 ========================================================= */
 
 .top-bar {
   width: 100%;
-  height: 46px;
+  min-height: 44px;
   background: var(--navy);
   color: var(--cream);
-
-  overflow: hidden;
+  border-bottom: 1px solid rgba(198, 146, 46, 0.3);
+  box-sizing: border-box;
 }
 
 .top-bar-container {
   width: min(94%, 1500px);
-  height: 100%;
+  min-height: 44px;
   margin: 0 auto;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  gap: 30px;
-
+  gap: 25px;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .top-item {
   display: flex;
   align-items: center;
   gap: 8px;
-
   white-space: nowrap;
+}
+
+.top-item a {
+  color: var(--cream);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.top-item a:hover {
+  color: var(--gold);
 }
 
 .top-icon {
   color: var(--gold);
-  font-size: 20px;
+  font-size: 16px;
   line-height: 1;
 }
 
 .top-divider {
-  margin: 0 10px;
-  opacity: 0.55;
+  margin: 0 8px;
+  opacity: 0.45;
 }
 
 .top-whatsapp {
   display: flex;
   align-items: center;
-  gap: 9px;
-
+  gap: 8px;
   color: var(--cream);
   text-decoration: none;
-
+  font-weight: 500;
   white-space: nowrap;
-
-  transition: color 0.25s ease;
+  transition: color 0.2s ease;
 }
 
-.top-whatsapp span {
+.whatsapp-dot {
   color: #25d366;
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .top-whatsapp:hover {
   color: var(--gold);
 }
-
 
 /* =========================================================
    MAIN NAVBAR
@@ -87,36 +89,29 @@
 
 .navbar {
   width: 100%;
-  height: 190px;
-
+  height: 150px;
   background: var(--cream);
-
   border-bottom: 1px solid rgba(166, 119, 34, 0.28);
-
   position: relative;
   z-index: 100;
+  box-sizing: border-box;
+}
 
-  overflow: visible;
+.navbar *,
+.navbar *::before,
+.navbar *::after {
+  box-sizing: border-box;
 }
 
 .navbar-container {
   width: min(94%, 1500px);
   height: 100%;
   margin: 0 auto;
-
   display: flex;
   align-items: center;
-
-  /*
-    IMPORTANT:
-    Prevents children from forcing the navbar wider
-    than the viewport.
-  */
-  min-width: 0;
-
-  gap: 25px;
+  justify-content: space-between;
+  gap: 20px;
 }
-
 
 /* =========================================================
    BRAND
@@ -125,280 +120,271 @@
 .brand {
   display: flex;
   align-items: center;
-
   text-decoration: none;
-
-  flex: 0 1 560px;
-  min-width: 0;
-
-  overflow: visible;
+  flex-shrink: 0;
 }
 
-
-/* =========================================================
-   CIRCULAR LOGO
-========================================================= */
-
 .brand-logo {
-  width: 150px;
-  height: 150px;
-
-  min-width: 150px;
-  min-height: 150px;
-
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
-
-  border: 3px solid var(--gold);
-
+  border: 2.5px solid var(--gold);
   display: flex;
   align-items: center;
   justify-content: center;
-
   overflow: hidden;
-
   background: var(--navy);
-
   flex-shrink: 0;
-
   position: relative;
-
   box-shadow:
-    0 0 0 4px var(--cream),
-    0 0 0 6px rgba(181, 138, 58, 0.45);
+    0 0 0 3px var(--cream),
+    0 0 0 5px rgba(181, 138, 58, 0.4);
 }
 
 .brand-logo img {
   width: 100%;
   height: 100%;
-
   object-fit: cover;
-
   border-radius: 50%;
-
   display: block;
 }
 
-
-/* Decorative inner circle */
-
-.brand-logo::before {
-  content: "";
-
-  position: absolute;
-
-  width: 118px;
-  height: 118px;
-
-  border-radius: 50%;
-
-  border: 1px solid rgba(198, 146, 46, 0.65);
-
-  pointer-events: none;
-
-  z-index: 2;
-}
-
-
-/* =========================================================
-   BRAND TEXT
-========================================================= */
-
 .brand-text {
-  margin-left: 24px;
-
+  margin-left: 20px;
   text-align: center;
-
-  min-width: 0;
 }
 
 .brand-name {
+  display: block;
   color: var(--navy);
-
   font-family: Georgia, "Times New Roman", serif;
-
-  font-size: 37px;
+  font-size: 28px;
   line-height: 1;
-
   letter-spacing: 1px;
-
-  font-weight: 500;
-
+  font-weight: 600;
   white-space: nowrap;
 }
 
 .brand-group {
-  margin-top: 10px;
-
+  margin-top: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  gap: 12px;
-
+  gap: 10px;
   color: var(--gold-dark);
-
   font-family: Georgia, "Times New Roman", serif;
-
-  font-size: 22px;
-
-  letter-spacing: 9px;
-
+  font-size: 16px;
+  letter-spacing: 6px;
   white-space: nowrap;
 }
 
-.brand-group span {
-  width: 55px;
+.group-line {
+  width: 35px;
   height: 1px;
-
   background: var(--gold);
-
   flex-shrink: 0;
 }
 
 .brand-tagline {
-  margin-top: 13px;
-
+  display: block;
+  margin-top: 7px;
   color: var(--navy);
-
   font-family: Georgia, "Times New Roman", serif;
-
-  font-size: 20px;
-
+  font-size: 14.5px;
   font-style: italic;
-
   white-space: nowrap;
 }
 
-
 /* =========================================================
-   NAVIGATION LINKS
+   NAVIGATION LINKS & DROPDOWN
 ========================================================= */
 
 .navbar-links {
   height: 100%;
-
   display: flex;
   align-items: center;
-
   justify-content: flex-end;
-
-  gap: clamp(22px, 2.6vw, 42px);
-
+  gap: clamp(18px, 2.2vw, 36px);
   margin-left: auto;
-
-  min-width: 0;
-
-  flex-shrink: 1;
 }
 
-.navbar-links > a {
+.navbar-links > a,
+.nav-dropdown-wrapper > .nav-link {
   position: relative;
-
   display: flex;
   align-items: center;
-
   height: 100%;
-
   text-decoration: none;
-
-  color: #111;
-
+  color: var(--navy);
   font-family: Georgia, "Times New Roman", serif;
-
-  font-size: 16px;
-
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   white-space: nowrap;
-
-  transition:
-    color 0.25s ease,
-    transform 0.25s ease;
+  transition: color 0.2s ease;
 }
 
-.navbar-links > a:hover {
+.navbar-links > a:hover,
+.nav-dropdown-wrapper:hover > .nav-link {
   color: var(--gold-dark);
 }
 
-
-/* =========================================================
-   ACTIVE LINK
-========================================================= */
-
-/*
-   IMPORTANT:
-   Do NOT hard-code className="active" on Home.
-
-   React Router should decide which link is active.
-*/
-
-.navbar-links > a.active {
+.navbar-links > a.active,
+.nav-dropdown-wrapper > .nav-link.active {
   color: var(--gold-dark);
 }
 
-.navbar-links > a.active::after {
+.navbar-links > a.active::after,
+.nav-dropdown-wrapper > .nav-link.active::after {
   content: "";
-
   position: absolute;
-
   left: 0;
   right: 0;
-
-  bottom: 61px;
-
+  bottom: 48px;
   height: 2px;
-
   background: var(--gold);
-
   border-radius: 2px;
 }
 
-
-/* =========================================================
-   INSTRUMENT DROPDOWN ARROW
-========================================================= */
-
-.dropdown-arrow {
-  font-size: 17px;
-
-  line-height: 1;
-
-  margin-left: 5px;
-  margin-top: -3px;
-
-  color: inherit;
+/* Category Dropdown Wrapper */
+.nav-dropdown-wrapper {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
+.dropdown-arrow {
+  font-size: 13px;
+  margin-left: 5px;
+  transition: transform 0.2s ease;
+}
+
+.nav-dropdown-wrapper:hover .dropdown-arrow,
+.nav-dropdown-wrapper.dropdown-active .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% - 30px);
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  min-width: 210px;
+  background: var(--white, #ffffff);
+  border: 1px solid rgba(181, 138, 58, 0.3);
+  border-radius: 6px;
+  box-shadow: 0 14px 35px rgba(7, 24, 47, 0.12);
+  padding: 8px 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  z-index: 110;
+}
+
+.nav-dropdown-wrapper:hover .nav-dropdown-menu,
+.nav-dropdown-wrapper.dropdown-active .nav-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.dropdown-item {
+  display: block;
+  padding: 10px 20px;
+  color: var(--navy);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: #fdfaf3;
+  color: var(--gold-dark);
+  padding-left: 24px;
+}
 
 /* =========================================================
-   PROFILE ICON
+   ACTIONS: LOGIN, ADMIN & USER PROFILE
 ========================================================= */
 
 .navbar-actions {
   display: flex;
   align-items: center;
-  justify-content: center;
-
-  flex: 0 0 40px;
-
-  width: 40px;
-  height: 100%;
-
-  margin-left: 5px;
-
-  min-width: 40px;
-
-  /*
-    Prevent another global .profile-icon style
-    from creating the giant blue circle.
-  */
-  background: transparent !important;
+  gap: 12px;
+  margin-left: 10px;
+  flex-shrink: 0;
 }
 
+.desktop-user-menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-/*
-   VERY IMPORTANT:
-   The profile icon itself must NOT have a background.
-*/
+.admin-chip-btn {
+  padding: 4px 10px;
+  background: rgba(181, 138, 58, 0.14);
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  color: var(--gold-dark);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
 
+.admin-chip-btn:hover {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+.login-nav-btn {
+  padding: 8px 18px;
+  background: var(--navy);
+  color: var(--cream);
+  border: 1px solid var(--navy);
+  border-radius: 4px;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.login-nav-btn:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--navy);
+}
+
+.profile-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--navy);
+  border: 1.5px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-icon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(181, 138, 58, 0.35);
+}
+
+.profile-initial {
+  color: var(--cream);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+}
 .profile-icon {
   width: 36px !important;
   height: 40px !important;
@@ -469,184 +455,83 @@
 
 
 /* =========================================================
-   MOBILE PROFILE
+   MOBILE MENU & BACKDROP
 ========================================================= */
 
 .mobile-profile {
   display: none;
 }
 
-
-/* =========================================================
-   MOBILE MENU BUTTON
-========================================================= */
-
 .menu-button {
   display: none;
-
   border: none;
-
   background: transparent;
-
   color: var(--navy);
-
-  font-size: 28px;
-
+  font-size: 26px;
   cursor: pointer;
-
-  padding: 5px;
-
-  flex-shrink: 0;
+  padding: 6px;
 }
 
-
-/* =========================================================
-   LARGE LAPTOP / TABLET
-========================================================= */
-
-@media (max-width: 1250px) {
-
-  .navbar-container {
-    width: 95%;
-    gap: 18px;
-  }
-
-  .brand {
-    flex: 0 1 500px;
-  }
-
-  .brand-logo {
-    width: 125px;
-    height: 125px;
-
-    min-width: 125px;
-    min-height: 125px;
-  }
-
-  .brand-logo::before {
-    width: 98px;
-    height: 98px;
-  }
-
-  .brand-text {
-    margin-left: 18px;
-  }
-
-  .brand-name {
-    font-size: 35px;
-  }
-
-  .brand-group {
-    font-size: 19px;
-    letter-spacing: 7px;
-  }
-
-  .brand-group span {
-    width: 42px;
-  }
-
-  .brand-tagline {
-    font-size: 16px;
-  }
-
-  .navbar-links {
-    gap: 20px;
-  }
-
-  .navbar-links > a {
-    font-size: 14px;
-  }
+.navbar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 24, 47, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 90;
 }
 
-
 /* =========================================================
-   TABLET
+   RESPONSIVE: LAPTOP / TABLET
 ========================================================= */
 
-@media (max-width: 1000px) {
-
+@media (max-width: 1200px) {
   .navbar {
-    height: 120px;
-  }
-
-  .navbar-container {
-    width: 92%;
-  }
-
-  .brand {
-    flex: 1;
+    height: 125px;
   }
 
   .brand-logo {
     width: 90px;
     height: 90px;
-
-    min-width: 90px;
-    min-height: 90px;
-  }
-
-  .brand-logo::before {
-    width: 70px;
-    height: 70px;
   }
 
   .brand-name {
-    font-size: 28px;
+    font-size: 24px;
   }
 
   .brand-group {
-    font-size: 16px;
-    letter-spacing: 5px;
-    margin-top: 6px;
-  }
-
-  .brand-group span {
-    width: 30px;
+    font-size: 14px;
+    letter-spacing: 4px;
   }
 
   .brand-tagline {
-    font-size: 13px;
-    margin-top: 7px;
+    font-size: 12.5px;
   }
 
   .navbar-links {
-    gap: 14px;
+    gap: 18px;
   }
 
-  .navbar-links > a {
-    font-size: 13px;
+  .navbar-links > a,
+  .nav-dropdown-wrapper > .nav-link {
+    font-size: 14px;
   }
 
-  .navbar-actions {
-    flex-basis: 35px;
-    width: 35px;
-    min-width: 35px;
+  .navbar-links > a.active::after,
+  .nav-dropdown-wrapper > .nav-link.active::after {
+    bottom: 38px;
   }
 }
 
-
 /* =========================================================
-   MOBILE
+   RESPONSIVE: MOBILE DRAWER (≤ 860px)
 ========================================================= */
 
-@media (max-width: 800px) {
-
-  .top-bar {
-    height: auto;
-    min-height: 42px;
-  }
-
+@media (max-width: 860px) {
   .top-bar-container {
-    width: 92%;
-
-    padding: 8px 0;
-
+    padding: 6px 0;
     flex-wrap: wrap;
-
     justify-content: center;
-
-    gap: 6px 18px;
-
+    gap: 6px 16px;
     font-size: 12px;
   }
 
@@ -654,183 +539,17 @@
     display: none;
   }
 
-
-  /* Main navbar */
-
   .navbar {
-    height: 90px;
-  }
-
-  .navbar-container {
-    width: 92%;
-  }
-
-
-  /* Brand */
-
-  .brand {
-    flex: 1;
-
-    min-width: 0;
+    height: 85px;
   }
 
   .brand-logo {
-    width: 65px;
-    height: 65px;
-
-    min-width: 65px;
-    min-height: 65px;
-
-    border-width: 2px;
-  }
-
-  .brand-logo::before {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
   }
 
   .brand-text {
     margin-left: 12px;
-  }
-
-  .brand-name {
-    font-size: 21px;
-  }
-
-  .brand-group {
-    font-size: 13px;
-
-    letter-spacing: 4px;
-
-    margin-top: 4px;
-
-    gap: 5px;
-  }
-
-  .brand-group span {
-    width: 20px;
-  }
-
-  .brand-tagline {
-    font-size: 10px;
-
-    margin-top: 5px;
-  }
-
-
-  /* Hide desktop navigation */
-
-  .navbar-links {
-    display: none;
-
-    position: absolute;
-
-    top: 100%;
-
-    left: 0;
-
-    width: 100%;
-
-    height: auto;
-
-    padding: 25px 20px;
-
-    background: var(--cream);
-
-    border-top: 1px solid var(--gold);
-
-    box-shadow:
-      0 10px 25px rgba(7, 24, 47, 0.15);
-
-    flex-direction: column;
-
-    align-items: center;
-
-    gap: 20px;
-
-    z-index: 1000;
-
-    margin: 0;
-  }
-
-  .navbar-links.open {
-    display: flex;
-  }
-
-  .navbar-links > a {
-    height: auto;
-
-    font-size: 15px;
-  }
-
-  .navbar-links > a.active::after {
-    display: none;
-  }
-
-
-  /* Mobile profile */
-
-  .mobile-profile {
-    display: block;
-  }
-
-  .mobile-profile a {
-    color: var(--navy);
-
-    text-decoration: none;
-
-    font-family: Georgia, "Times New Roman", serif;
-  }
-
-
-  /* Hide desktop profile */
-
-  .navbar-actions {
-    display: none;
-  }
-
-
-  /* Hamburger */
-
-  .menu-button {
-    display: block;
-  }
-}
-
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media (max-width: 480px) {
-
-  .top-whatsapp {
-    display: none;
-  }
-
-  .top-bar-container {
-    justify-content: flex-start;
-  }
-
-  .navbar {
-    height: 82px;
-  }
-
-  .brand-logo {
-    width: 58px;
-    height: 58px;
-
-    min-width: 58px;
-    min-height: 58px;
-  }
-
-  .brand-logo::before {
-    width: 44px;
-    height: 44px;
-  }
-
-  .brand-text {
-    margin-left: 9px;
   }
 
   .brand-name {
@@ -840,17 +559,153 @@
   .brand-group {
     font-size: 11px;
     letter-spacing: 3px;
+    margin-top: 3px;
   }
 
-  .brand-group span {
-    width: 15px;
+  .group-line {
+    width: 18px;
   }
 
   .brand-tagline {
-    font-size: 8px;
+    font-size: 9.5px;
+    margin-top: 3px;
+  }
+
+  /* Slide-down Mobile Drawer */
+  .navbar-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: auto;
+    max-height: calc(100vh - 130px);
+    overflow-y: auto;
+    padding: 24px 20px;
+    background: var(--cream);
+    border-top: 2px solid var(--gold);
+    box-shadow: 0 16px 35px rgba(7, 24, 47, 0.2);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    z-index: 1000;
+  }
+
+  .navbar-links.open {
+    display: flex;
+  }
+
+  .navbar-links > a,
+  .nav-dropdown-wrapper > .nav-link {
+    height: auto;
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 15px;
+  }
+
+  .navbar-links > a.active::after,
+  .nav-dropdown-wrapper > .nav-link.active::after {
+    display: none;
+  }
+
+  .navbar-links > a.active,
+  .nav-dropdown-wrapper > .nav-link.active {
+    background: rgba(181, 138, 58, 0.15);
+  }
+
+  /* Inline dropdown presentation for touch */
+  .nav-dropdown-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+  }
+
+  .nav-dropdown-menu {
+    position: static;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    background: rgba(181, 138, 58, 0.08);
+    border-radius: 4px;
+    margin-top: 6px;
+    padding: 6px 0;
+    opacity: 1;
+    visibility: visible;
+    display: none;
+  }
+
+  .nav-dropdown-wrapper.dropdown-active .nav-dropdown-menu,
+  .nav-dropdown-wrapper:hover .nav-dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-item {
+    padding: 9px 24px;
+    font-size: 13.5px;
+  }
+
+  /* Mobile Profile & Actions Section */
+  .mobile-profile {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(181, 138, 58, 0.3);
+  }
+
+  .mobile-profile-link,
+  .mobile-login-link {
+    display: block;
+    text-align: center;
+    padding: 12px;
+    border-radius: 4px;
+    background: var(--navy);
+    color: var(--cream) !important;
+    text-decoration: none;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .mobile-admin-link {
+    display: block;
+    text-align: center;
+    padding: 11px;
+    border-radius: 4px;
+    background: #fdfaf3;
+    border: 1px dashed var(--gold);
+    color: var(--gold-dark) !important;
+    text-decoration: none;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+
+  .navbar-actions .desktop-user-menu,
+  .navbar-actions .login-nav-btn {
+    display: none;
   }
 
   .menu-button {
-    font-size: 25px;
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-whatsapp {
+    display: none;
+  }
+
+  .top-bar-container {
+    justify-content: center;
+  }
+
+  .brand-name {
+    font-size: 16px;
+  }
+
+  .brand-tagline {
+    display: none;
   }
 }

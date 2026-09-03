@@ -1,39 +1,93 @@
 import { useNavigate } from "react-router-dom";
 import "./ProductCard.css";
 
-const ProductCard = ({ product }) => {
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://krishna-musical-backend-1.onrender.com";
 
+const ProductCard = ({ product }) => {
   const navigate = useNavigate();
-  const getImageUrl = (imageUrl) => {
-    return `https://krishna-musical-backend-1.onrender.com/${imageUrl.replace("../", "")}`;
+
+  const getImageUrl = () => {
+    if (!product?.images || product.images.length === 0) return null;
+
+    const primaryImg =
+      product.images.find((img) => img.isPrimary) || product.images[0];
+    if (!primaryImg?.url) return null;
+
+    if (
+      primaryImg.url.startsWith("http://") ||
+      primaryImg.url.startsWith("https://")
+    ) {
+      return primaryImg.url;
+    }
+
+    const cleanPath = primaryImg.url.replace("../", "").replace(/^\/+/, "");
+    return `${API_BASE_URL}/${cleanPath}`;
   };
 
+  const imageUrl = getImageUrl();
+
   return (
-    <div className="product-card">
-      {product.images?.length > 0 && (
-        <div className="product-image-container">
+    <article
+      className="product-card"
+      onClick={() => navigate(`/products/${product._id}`)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          navigate(`/products/${product._id}`);
+        }
+      }}
+    >
+      <div className="product-image-container">
+        {imageUrl ? (
           <img
-            src={getImageUrl(product.images[0].url)}
-            alt={product.images[0].alt || product.name}
+            src={imageUrl}
+            alt={product.images?.[0]?.alt || product.name}
+            loading="lazy"
           />
-        </div>
-      )}
+        ) : (
+          <div className="product-image-placeholder">No Image Available</div>
+        )}
+      </div>
 
       <div className="product-info">
-        <p className="product-category">{product.category}</p>
+        <div className="product-meta">
+          <span className="product-category">{product.category}</span>
+          {product.brand && (
+            <span className="product-brand">{product.brand}</span>
+          )}
+        </div>
 
-        <h2>{product.name}</h2>
+        <h3 className="product-title">{product.name}</h3>
 
-        <p className="product-description">{product.description}</p>
+        {product.description && (
+          <p className="product-description">{product.description}</p>
+        )}
 
-        <button
-          className="view-details"
-          onClick={() => navigate(`/products/${product._id}`)}
-        >
-          View Details
-        </button>
+        <div className="product-card-footer">
+          {product.price > 0 ? (
+            <span className="product-price">
+              ₹{Number(product.price).toLocaleString("en-IN")}
+            </span>
+          ) : (
+            <span className="product-price-inquire">Price on Request</span>
+          )}
+
+          <button
+            type="button"
+            className="view-details"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/products/${product._id}`);
+            }}
+          >
+            View Details →
+          </button>
+        </div>
       </div>
-    </div>
+    </article>
   );
 };
 

@@ -1,71 +1,247 @@
-/* =========================
-   FOOTER
-========================= */
+/* =========================================================
+   FOOTER BASE & WRAPPER
+========================================================= */
 
 .footer {
-  margin-top: 60px;
-  background: var(--navy);
-  color: var(--white);
+  margin-top: 80px;
+  background: var(--navy, #0f172a);
+  color: var(--cream, #f7f3eb);
+  border-top: 1px solid rgba(181, 138, 58, 0.25);
+  box-sizing: border-box;
 }
+
+.footer *,
+.footer *::before,
+.footer *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   FOOTER GRID CONTAINER (4 COLUMNS)
+========================================================= */
 
 .footer-container {
   width: 90%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 50px 0;
-
+  padding: 65px 0 50px;
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 60px;
+  grid-template-columns: 2fr 1fr 1.1fr 1.3fr;
+  gap: 45px;
 }
 
-.footer-brand h2 {
-  margin: 0 0 15px;
-  font-size: 24px;
-}
+/* =========================================================
+   BRAND COLUMN
+========================================================= */
 
-.footer-brand p {
-  max-width: 400px;
-  color: #bbb;
-  line-height: 1.6;
-}
-
-.footer h3 {
-  margin: 0 0 18px;
-  font-size: 16px;
-}
-
-.footer-links {
+.footer-brand {
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
-.footer-links a {
+.footer-brand-title {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: var(--cream, #f7f3eb);
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
   text-decoration: none;
-  color: #bbb;
-  font-size: 14px;
   transition: color 0.2s ease;
 }
 
-.footer-links a:hover {
-  color: var(--white);
+.footer-brand-title:hover {
+  color: var(--gold, #b58a3a);
 }
 
-.footer-contact p {
-  margin: 0 0 10px;
-  color: #bbb;
-  font-size: 14px;
+.footer-brand-tagline {
+  margin: 0 0 20px;
+  max-width: 360px;
+  color: rgba(247, 240, 226, 0.72);
+  font-size: 13.5px;
+  line-height: 1.7;
 }
+
+.footer-hours {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid rgba(181, 138, 58, 0.18);
+}
+
+.footer-hours span {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gold, #b58a3a);
+  margin-bottom: 4px;
+}
+
+.footer-hours p {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(247, 240, 226, 0.85);
+}
+
+/* =========================================================
+   NAVIGATION LINKS & HEADINGS
+========================================================= */
+
+.footer h3 {
+  margin: 0 0 18px;
+  color: var(--cream, #f7f3eb);
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.footer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.footer-nav a {
+  text-decoration: none;
+  color: rgba(247, 240, 226, 0.72);
+  font-size: 13.5px;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.footer-nav a:hover {
+  color: var(--gold, #b58a3a);
+  transform: translateX(3px);
+}
+
+/* =========================================================
+   WORKSHOP & ADDRESS DETAILS
+========================================================= */
+
+.footer-address {
+  font-style: normal;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.footer-address p {
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: rgba(247, 240, 226, 0.72);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.contact-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.footer-address a {
+  color: rgba(247, 240, 226, 0.72);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-address a:hover {
+  color: var(--gold, #b58a3a);
+}
+
+.whatsapp-quick-link {
+  color: var(--gold, #b58a3a) !important;
+  font-weight: 600;
+}
+
+.whatsapp-quick-link:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   BOTTOM UTILITY BAR
+========================================================= */
 
 .footer-bottom {
-  border-top: 1px solid #444;
-  text-align: center;
-  padding: 18px 0;
+  border-top: 1px solid rgba(181, 138, 58, 0.2);
+  background: rgba(7, 20, 36, 0.5);
+  padding: 20px 0;
 }
 
-.footer-bottom p {
+.footer-bottom-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-bottom-container p {
   margin: 0;
-  color: #999;
+  color: rgba(247, 240, 226, 0.6);
   font-size: 13px;
+}
+
+.footer-bottom-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: rgba(247, 240, 226, 0.6);
+}
+
+.separator {
+  color: rgba(181, 138, 58, 0.4);
+}
+
+.admin-login-link {
+  color: rgba(247, 240, 226, 0.6);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.admin-login-link:hover {
+  color: var(--gold, #b58a3a);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1024px) {
+  .footer-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    padding: 50px 0 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer {
+    margin-top: 60px;
+  }
+
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 35px;
+    padding: 45px 0 35px;
+  }
+
+  .footer-brand-tagline {
+    max-width: 100%;
+  }
+
+  .footer-bottom-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
 }

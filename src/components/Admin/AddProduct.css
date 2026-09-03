@@ -1,103 +1,464 @@
+/* =========================================================
+   ADD PRODUCT BASE & WRAPPER
+========================================================= */
+
 .add-product-page {
   min-height: 100vh;
-  padding: 60px 8%;
-  background: #f7f7f7;
+  padding: 50px 20px 90px;
+  background: var(--cream, #fbf7ee);
+  box-sizing: border-box;
+}
+
+.add-product-page *,
+.add-product-page *::before,
+.add-product-page *::after {
+  box-sizing: border-box;
 }
 
 .add-product-container {
-  max-width: 800px;
+  max-width: 860px;
   margin: 0 auto;
-  background: #fff;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
-.add-product-container h1 {
-  margin: 0 0 30px;
-  font-size: 32px;
+/* =========================================================
+   HEADER & BREADCRUMBS
+========================================================= */
+
+.add-product-header {
+  margin-bottom: 28px;
 }
+
+.admin-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted, #665f55);
+}
+
+.admin-breadcrumbs a {
+  color: var(--gold-dark, #9a6b1f);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.admin-breadcrumbs a:hover {
+  color: var(--navy, #071a33);
+}
+
+.add-product-header h1 {
+  margin: 0 0 8px;
+  color: var(--navy, #071a33);
+  font-family: var(--font-serif, "Playfair Display", Georgia, serif);
+  font-size: clamp(26px, 3.8vw, 36px);
+  line-height: 1.2;
+}
+
+.add-product-header p {
+  margin: 0;
+  color: var(--text-muted, #665f55);
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   ALERT NOTIFICATIONS
+========================================================= */
+
+.form-alert {
+  padding: 13px 18px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.error-banner {
+  background-color: var(--danger-bg, #fef2f2);
+  border: 1px solid #fecaca;
+  color: var(--danger, #b91c1c);
+}
+
+.success-banner {
+  background-color: var(--success-bg, #f0fdf4);
+  border: 1px solid #bbf7d0;
+  color: var(--success, #15803d);
+}
+
+/* =========================================================
+   MODULAR FORM CARDS
+========================================================= */
 
 .add-product-form {
   display: flex;
   flex-direction: column;
+  gap: 24px;
+}
+
+.form-card {
+  background: var(--white, #ffffff);
+  border: 1px solid rgba(195, 146, 50, 0.22);
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(7, 26, 51, 0.04);
+}
+
+.form-card h2 {
+  margin: 0 0 20px;
+  color: var(--navy, #071a33);
+  font-family: var(--font-serif, "Playfair Display", Georgia, serif);
+  font-size: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(195, 146, 50, 0.16);
+}
+
+.form-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.form-card-header h2 {
+  margin: 0;
+  padding: 0;
+  border-bottom: none;
+}
+
+.image-counter {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--gold-dark, #9a6b1f);
+  background: rgba(195, 146, 50, 0.12);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+/* =========================================================
+   FORM CONTROLS & GRIDS
+========================================================= */
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
+  margin-bottom: 18px;
+}
+
+.form-row.three-col {
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.form-row .form-group {
+  margin-bottom: 0;
 }
 
 .form-group label {
+  font-size: 13.5px;
   font-weight: 600;
-  font-size: 14px;
+  color: var(--navy, #071a33);
 }
 
 .form-group input,
 .form-group textarea,
 .form-group select {
   width: 100%;
-  padding: 12px 14px;
-  border: 1px solid #ddd;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #d1d5db;
   border-radius: 6px;
-  font-size: 15px;
+  font-size: 14px;
   font-family: inherit;
+  color: var(--text-dark, #111c2d);
+  background: #ffffff;
   outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-  border-color: #333;
+  border-color: var(--gold, #c39232);
+  box-shadow: 0 0 0 3px rgba(195, 146, 50, 0.18);
 }
 
 .form-group textarea {
+  height: auto;
   min-height: 120px;
+  padding: 12px 14px;
   resize: vertical;
+  line-height: 1.5;
 }
+
+.form-group input:disabled,
+.form-group textarea:disabled,
+.form-group select:disabled {
+  background-color: #f8fafc;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   FILE UPLOAD DROPZONE
+========================================================= */
 
 .image-upload-info {
+  margin: 0 0 16px;
+  color: var(--text-muted, #665f55);
   font-size: 13px;
-  color: #666;
-  margin: 0;
+  line-height: 1.5;
 }
 
-.selected-images {
-  margin-top: 5px;
-  padding: 12px;
-  background: #f7f7f7;
-  border-radius: 6px;
+.image-upload-info strong {
+  color: var(--navy, #071a33);
 }
 
-.selected-images p {
-  margin: 5px 0;
+.upload-dropzone {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.file-input-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.file-upload-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+  border: 2px dashed rgba(195, 146, 50, 0.4);
+  border-radius: 8px;
+  background: #fdfaf3;
+  cursor: pointer;
+  text-align: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.file-upload-trigger:hover {
+  border-color: var(--gold, #c39232);
+  background: #fbf5e7;
+}
+
+.upload-icon {
+  font-size: 32px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.file-upload-trigger span:nth-child(2) {
   font-size: 14px;
+  font-weight: 600;
+  color: var(--navy, #071a33);
 }
 
-.add-product-button {
-  margin-top: 10px;
-  padding: 13px 20px;
-  border: none;
+.upload-sub {
+  font-size: 12px;
+  color: var(--text-muted, #665f55);
+}
+
+/* =========================================================
+   THUMBNAIL PREVIEW GALLERY
+========================================================= */
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 14px;
+}
+
+.preview-card {
+  position: relative;
+  aspect-ratio: 1;
   border-radius: 6px;
-  background: #111;
-  color: white;
-  font-size: 15px;
+  overflow: hidden;
+  border: 1px solid rgba(195, 146, 50, 0.3);
+  background: var(--cream, #fbf7ee);
+  box-shadow: 0 2px 6px rgba(7, 26, 51, 0.05);
+}
+
+.preview-card.is-cover {
+  border: 2px solid var(--gold, #c39232);
+  box-shadow: 0 0 0 2px rgba(195, 146, 50, 0.25);
+}
+
+.preview-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(7, 26, 51, 0.6) 0%,
+    transparent 40%,
+    rgba(7, 26, 51, 0.75) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 8px;
+}
+
+.cover-badge {
+  align-self: flex-start;
+  padding: 3px 8px;
+  background: var(--gold, #c39232);
+  color: var(--navy, #071a33);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.set-cover-btn {
+  align-self: flex-start;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  border-radius: 4px;
+  color: var(--navy, #071a33);
+  font-size: 11px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-.add-product-button:hover {
-  background: #333;
+.set-cover-btn:hover {
+  background: #ffffff;
 }
 
-@media (max-width: 600px) {
+.remove-btn {
+  align-self: flex-end;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(239, 68, 68, 0.9);
+  color: #ffffff;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.remove-btn:hover {
+  transform: scale(1.1);
+  background: #dc2626;
+}
+
+/* =========================================================
+   FORM ACTIONS FOOTER
+========================================================= */
+
+.form-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  padding-top: 10px;
+}
+
+.cancel-btn {
+  padding: 12px 24px;
+  border: 1px solid rgba(7, 26, 51, 0.2);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted, #665f55);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: var(--navy, #071a33);
+}
+
+.submit-btn {
+  padding: 12px 28px;
+  border: 1px solid var(--navy, #071a33);
+  border-radius: 6px;
+  background: var(--navy, #071a33);
+  color: var(--cream, #fbf7ee);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: var(--gold, #c39232);
+  border-color: var(--gold, #c39232);
+  color: var(--navy, #071a33);
+}
+
+.cancel-btn:disabled,
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
   .add-product-page {
-    padding: 30px 5%;
+    padding: 35px 16px 70px;
   }
 
-  .add-product-container {
-    padding: 25px;
+  .form-card {
+    padding: 22px 18px;
+  }
+
+  .form-row,
+  .form-row.three-col {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .form-row .form-group {
+    margin-bottom: 18px;
+  }
+
+  .form-actions-bar {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  .cancel-btn,
+  .submit-btn {
+    width: 100%;
+    text-align: center;
   }
 }
