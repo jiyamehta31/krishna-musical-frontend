@@ -3,18 +3,36 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import "./AddProduct.css";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://krishna-musical-backend-1.onrender.com";
+
 const MAX_IMAGES = 5;
 const MAX_FILE_SIZE_MB = 5;
 
 const STANDARD_CATEGORIES = [
   "Harmonium",
-  "Classical Sitar",
-  "Tabla Pair",
+  "Sitar",
+  "Tabla",
   "Tanpura",
-  "Flute / Bansuri",
-  "Dholak",
-  "Santoor",
-  "Strings & Accessories",
+  "Guitars",
+  "Keyboards & Pianos",
+  "Drums & Percussion",
+  "Wind & Brass",
+  "Indian Classical",
+  "School Items",
+  "Other Instruments",
+  "Accessories",
+];
+
+const SPEC_PRESETS = [
+  "Wood Type",
+  "Tuning Pitch",
+  "Reed Setup",
+  "Bellows Count",
+  "Scale / Keys",
+  "Material",
+  "Included Accessories",
 ];
 
 const AddProduct = () => {
@@ -31,7 +49,12 @@ const AddProduct = () => {
     status: "active",
   });
 
-  // Array of { file: File, previewUrl: string, id: string }
+  // Dynamic specifications state
+  const [specs, setSpecs] = useState([
+    { key: "Wood Type", value: "" },
+    { key: "Tuning Pitch", value: "A440Hz" },
+  ]);
+
   const [images, setImages] = useState([]);
   const [coverIndex, setCoverIndex] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -43,12 +66,25 @@ const AddProduct = () => {
     document.title = "Add Instrument | Krishna Musicals Admin";
   }, []);
 
-  // Clean up object URLs on unmount to prevent browser memory leaks
   useEffect(() => {
     return () => {
       images.forEach((img) => URL.revokeObjectURL(img.previewUrl));
     };
   }, [images]);
+
+  const handleSpecChange = (index, field, val) => {
+    const updated = [...specs];
+    updated[index][field] = val;
+    setSpecs(updated);
+  };
+
+  const addSpecRow = (presetKey = "") => {
+    setSpecs((prev) => [...prev, { key: presetKey, value: "" }]);
+  };
+
+  const removeSpecRow = (indexToRemove) => {
+    setSpecs((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
 
   const handleImageChange = (e) => {
     setErrorMessage("");
@@ -75,7 +111,6 @@ const AddProduct = () => {
       return;
     }
 
-    // Generate local preview URLs
     const newImages = selectedFiles.map((file) => ({
       file,
       previewUrl: URL.createObjectURL(file),
@@ -116,31 +151,50 @@ const AddProduct = () => {
       return;
     }
 
+    if (!formData.category.trim()) {
+      setErrorMessage("Please select or enter a valid category.");
+      return;
+    }
+
     setLoading(true);
 
-    // Order images so the selected cover image is appended first
     const reorderedImages = [...images];
     if (coverIndex > 0 && coverIndex < reorderedImages.length) {
       const [coverItem] = reorderedImages.splice(coverIndex, 1);
       reorderedImages.unshift(coverItem);
     }
 
+    // Convert dynamic rows into a key-value object
+    const cleanSpecifications = {};
+    specs.forEach((item) => {
+      if (item.key.trim() && item.value.trim()) {
+        cleanSpecifications[item.key.trim()] = item.value.trim();
+      }
+    });
+
     const data = new FormData();
     data.append("name", formData.name.trim());
     data.append("category", formData.category.trim());
     data.append("brand", formData.brand.trim());
     data.append("description", formData.description.trim());
-    data.append("price", Number(formData.price) || 0);
+    data.append("price", formData.price ? Number(formData.price) : 0);
     data.append("stock", Number(formData.stock) || 0);
     data.append("status", formData.status);
+    data.append("specifications", JSON.stringify(cleanSpecifications));
 
     reorderedImages.forEach((imgObj) => {
       data.append("images", imgObj.file);
     });
 
+    const token = localStorage.getItem("token");
+
     try {
-      // Axios interceptor handles BaseURL and Bearer Authorization automatically
-      await axios.post("/api/products", data);
+      await axios.post(`${API_BASE_URL}/api/products`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
 
       setSuccessMessage(
         "Instrument added to catalog successfully! Redirecting...",
@@ -151,11 +205,17 @@ const AddProduct = () => {
       }, 1200);
     } catch (error) {
       console.error("Error adding product:", error);
-      setErrorMessage(
+
+      const serverMsg =
         error.response?.data?.message ||
-          error.response?.data?.error ||
-          "Failed to save instrument. Please verify all required fields.",
-      );
+        error.response?.data?.error ||
+        (error.response?.status === 404
+          ? "API Endpoint not found. Please verify the backend URL."
+          : error.response?.status === 401 || error.response?.status === 403
+            ? "Unauthorized. Please log into admin again."
+            : "Failed to save instrument. Please verify all fields.");
+
+      setErrorMessage(serverMsg);
       setLoading(false);
     }
   };
@@ -163,7 +223,6 @@ const AddProduct = () => {
   return (
     <main className="add-product-page">
       <div className="add-product-container">
-        {/* Navigation Breadcrumb & Header */}
         <header className="add-product-header">
           <div className="admin-breadcrumbs">
             <Link to="/admin">Dashboard</Link>
@@ -179,7 +238,6 @@ const AddProduct = () => {
           </p>
         </header>
 
-        {/* Feedback Banners */}
         {errorMessage && (
           <div className="form-alert error-banner" role="alert">
             {errorMessage}
@@ -192,7 +250,7 @@ const AddProduct = () => {
         )}
 
         <form className="add-product-form" onSubmit={handleSubmit}>
-          {/* Instrument Identification */}
+          {/* Basic Information */}
           <div className="form-card">
             <h2>Basic Information</h2>
 
@@ -266,25 +324,96 @@ const AddProduct = () => {
             </div>
           </div>
 
-          {/* Pricing, Inventory & Visibility */}
+          {/* Technical Specifications */}
+          <div className="form-card">
+            <div className="form-card-header">
+              <h2>Technical Specifications</h2>
+              <button
+                type="button"
+                className="add-spec-btn"
+                onClick={() => addSpecRow()}
+                disabled={loading}
+              >
+                + Add Spec Field
+              </button>
+            </div>
+
+            <p className="image-upload-info">
+              Add key-value details shown in the technical specifications table
+              on the product page.
+            </p>
+
+            <div className="spec-presets-row">
+              <span className="preset-label">Quick suggestions:</span>
+              {SPEC_PRESETS.map((preset) => (
+                <button
+                  key={preset}
+                  type="button"
+                  className="preset-chip"
+                  onClick={() => addSpecRow(preset)}
+                  disabled={loading}
+                >
+                  + {preset}
+                </button>
+              ))}
+            </div>
+
+            <div className="specifications-builder">
+              {specs.map((spec, idx) => (
+                <div className="spec-row" key={idx}>
+                  <input
+                    type="text"
+                    placeholder="Attribute (e.g. Wood Type)"
+                    value={spec.key}
+                    onChange={(e) =>
+                      handleSpecChange(idx, "key", e.target.value)
+                    }
+                    className="spec-key-input"
+                    disabled={loading}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Value (e.g. Seasoned Teak)"
+                    value={spec.value}
+                    onChange={(e) =>
+                      handleSpecChange(idx, "value", e.target.value)
+                    }
+                    className="spec-val-input"
+                    disabled={loading}
+                  />
+                  <button
+                    type="button"
+                    className="remove-spec-btn"
+                    onClick={() => removeSpecRow(idx)}
+                    title="Remove specification"
+                    aria-label="Remove specification"
+                    disabled={loading}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Inventory & Pricing */}
           <div className="form-card">
             <h2>Inventory & Pricing</h2>
 
             <div className="form-row three-col">
               <div className="form-group">
-                <label htmlFor="product-price">Price (₹ INR) *</label>
+                <label htmlFor="product-price">Price (₹ INR)</label>
                 <input
                   id="product-price"
                   type="number"
                   min="0"
                   step="1"
-                  placeholder="24500"
+                  placeholder="Leave empty for 'Price on Request'"
                   value={formData.price}
                   onChange={(e) =>
                     setFormData({ ...formData, price: e.target.value })
                   }
                   disabled={loading}
-                  required
                 />
               </div>
 
@@ -322,7 +451,7 @@ const AddProduct = () => {
             </div>
           </div>
 
-          {/* Image Uploads with Visual Previews */}
+          {/* Images */}
           <div className="form-card">
             <div className="form-card-header">
               <h2>Instrument Photographs *</h2>
@@ -357,7 +486,6 @@ const AddProduct = () => {
               </label>
             </div>
 
-            {/* Thumbnail Preview Grid */}
             {images.length > 0 && (
               <div className="preview-grid">
                 {images.map((img, index) => {

@@ -1,31 +1,35 @@
 import { useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import "./Navbar.css";
 
 const WHATSAPP_PRIMARY = "918829906454";
 
 const CATEGORIES = [
   { name: "All Instruments", path: "/products" },
+  { name: "School & Band Items", path: "/products?category=School+Items" },
   { name: "Harmoniums", path: "/products?category=Harmonium" },
   { name: "Classical Sitars", path: "/products?category=Sitar" },
   { name: "Tabla Sets", path: "/products?category=Tabla" },
+  { name: "Guitars", path: "/products?category=Guitars" },
+  {
+    name: "Keyboards & Pianos",
+    path: "/products?category=Keyboards+%26+Pianos",
+  },
   { name: "Tanpuras", path: "/products?category=Tanpura" },
 ];
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const location = useLocation();
 
-  // Reset menu states on route change
-  const currentPath = location.pathname + location.search;
-  const [prevPath, setPrevPath] = useState(currentPath);
-
-  if (currentPath !== prevPath) {
-    setPrevPath(currentPath);
-    setMenuOpen(false);
-    setDropdownOpen(false);
-  }
+  // Close menus when any link inside the navigation is clicked
+  const handleNavClick = (e) => {
+    // If the click is on an anchor or inside an anchor tag, close all overlays
+    if (e.target.closest("a")) {
+      setMenuOpen(false);
+      setDropdownOpen(false);
+    }
+  };
 
   // Derive user session directly during render
   const getStoredUser = () => {
@@ -55,14 +59,14 @@ const Navbar = () => {
         <div className="top-bar-container">
           <div className="top-item">
             <span className="top-icon">📍</span>
-            <span>Gandhi Murti, Pali, Rajasthan, India</span>
+            <span>16, Meera Marg, Gandhi Murti, Pali, Rajasthan</span>
           </div>
 
           <div className="top-item">
             <span className="top-icon">📞</span>
-            <a href="tel:+918829906454">+91 88299 06454</a>
-            <span className="top-divider">|</span>
             <a href="tel:+919414592216">+91 94145 92216</a>
+            <span className="top-divider">|</span>
+            <a href="tel:+918829906454">+91 88299 06454</a>
           </div>
 
           <a
@@ -83,7 +87,14 @@ const Navbar = () => {
       <header className="navbar">
         <div className="navbar-container">
           {/* Brand Logo & Heritage Title */}
-          <Link to="/" className="brand" onClick={() => setMenuOpen(false)}>
+          <Link
+            to="/"
+            className="brand"
+            onClick={() => {
+              setMenuOpen(false);
+              setDropdownOpen(false);
+            }}
+          >
             <div className="brand-logo">
               <img
                 src="/shree-krishna-logo.png"
@@ -109,6 +120,7 @@ const Navbar = () => {
           <nav
             className={`navbar-links ${menuOpen ? "open" : ""}`}
             aria-label="Main navigation"
+            onClick={handleNavClick}
           >
             <NavLink to="/" end>
               HOME
@@ -116,9 +128,7 @@ const Navbar = () => {
 
             {/* Instruments Link with Interactive Category Dropdown */}
             <div
-              className={`nav-dropdown-wrapper ${
-                dropdownOpen ? "dropdown-active" : ""
-              }`}
+              className={`nav-dropdown-wrapper ${dropdownOpen ? "dropdown-active" : ""}`}
               onMouseEnter={() => setDropdownOpen(true)}
               onMouseLeave={() => setDropdownOpen(false)}
             >
@@ -127,7 +137,12 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   isActive ? "nav-link active" : "nav-link"
                 }
-                onClick={() => setDropdownOpen(false)}
+                onClick={() => {
+                  // If clicked on mobile, toggle the dropdown menu
+                  if (window.innerWidth <= 900) {
+                    setDropdownOpen(!dropdownOpen);
+                  }
+                }}
               >
                 INSTRUMENTS
                 <span className="dropdown-arrow">▾</span>
@@ -135,15 +150,7 @@ const Navbar = () => {
 
               <div className="nav-dropdown-menu">
                 {CATEGORIES.map((cat) => (
-                  <Link
-                    key={cat.name}
-                    to={cat.path}
-                    className="dropdown-item"
-                    onClick={() => {
-                      setDropdownOpen(false);
-                      setMenuOpen(false);
-                    }}
-                  >
+                  <Link key={cat.name} to={cat.path} className="dropdown-item">
                     {cat.name}
                   </Link>
                 ))}
@@ -151,35 +158,24 @@ const Navbar = () => {
             </div>
 
             <NavLink to="/offers">OFFERS</NavLink>
-            <NavLink to="/contact">CONTACT US</NavLink>
+            <NavLink to="/about">ABOUT US</NavLink>
+            <NavLink to="/contact">VISIT SHOWROOM</NavLink>
 
             {/* Mobile Profile & Admin Portal Controls */}
             <div className="mobile-profile">
               {user ? (
                 <>
-                  <Link
-                    to="/profile"
-                    className="mobile-profile-link"
-                    onClick={() => setMenuOpen(false)}
-                  >
+                  <Link to="/profile" className="mobile-profile-link">
                     MY ACCOUNT ({user.username})
                   </Link>
                   {user.role === "admin" && (
-                    <Link
-                      to="/admin"
-                      className="mobile-admin-link"
-                      onClick={() => setMenuOpen(false)}
-                    >
+                    <Link to="/admin" className="mobile-admin-link">
                       ADMIN DASHBOARD
                     </Link>
                   )}
                 </>
               ) : (
-                <Link
-                  to="/login"
-                  className="mobile-login-link"
-                  onClick={() => setMenuOpen(false)}
-                >
+                <Link to="/login" className="mobile-login-link">
                   LOGIN / SIGN UP
                 </Link>
               )}
@@ -235,7 +231,10 @@ const Navbar = () => {
       {menuOpen && (
         <div
           className="navbar-backdrop"
-          onClick={() => setMenuOpen(false)}
+          onClick={() => {
+            setMenuOpen(false);
+            setDropdownOpen(false);
+          }}
           aria-hidden="true"
         />
       )}

@@ -2,11 +2,30 @@ import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import ProductCard from "./ProductCard";
+import { transformInstagramPostToProduct } from "../../utils/instagramAdapter";
 import "./Products.css";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_URL ||
   "https://krishna-musical-backend-1.onrender.com";
+
+// Behold.so JSON endpoint
+const INSTAGRAM_FEED_URL =
+  import.meta.env.VITE_INSTAGRAM_FEED_URL ||
+  "https://feeds.behold.so/xzK6rxt0HtOb3FvyCdHg";
+
+// Default catalog categories aligned with your Product model
+const DEFAULT_CATEGORIES = [
+  "All",
+  "Guitars",
+  "Keyboards & Pianos",
+  "Drums & Percussion",
+  "Wind & Brass",
+  "Indian Classical",
+  "School Items",
+  "Other Instruments", // Auto-feed live Instagram items land here
+  "Accessories",
+];
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,12 +34,9 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Sync state with URL params so direct links work (e.g., /products?category=Harmonium)
-  const categoryParam = searchParams.get("category") || "All";
-  const searchParam = searchParams.get("search") || "";
-
-  const [selectedCategory, setSelectedCategory] = useState(categoryParam);
-  const [searchTerm, setSearchTerm] = useState(searchParam);
+  // Derive directly from URL params - Single Source of Truth
+  const selectedCategory = searchParams.get("category") || "All";
+  const searchTerm = searchParams.get("search") || "";
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -28,26 +44,71 @@ const Products = () => {
 
     let isMounted = true;
 
-    axios
+    // 1. Fetch backend database products via Axios
+    const catalogPromise = axios
       .get(`${API_BASE_URL}/api/products`)
-      .then((response) => {
+      .then((res) => {
+        const rawProducts = Array.isArray(res.data?.data)
+          ? res.data.data
+          : Array.isArray(res.data?.products)
+            ? res.data.products
+            : [];
+        return rawProducts.filter((item) => item.status !== "inactive");
+      });
+
+    // 2. Fetch Behold feed via native fetch() to bypass Axios defaults/interceptors
+    const instagramPromise = INSTAGRAM_FEED_URL
+      ? fetch(INSTAGRAM_FEED_URL)
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(`Behold HTTP error: ${res.status}`);
+            }
+            return res.json();
+          })
+          .then((data) => {
+            const rawPosts = Array.isArray(data)
+              ? data
+              : Array.isArray(data?.posts)
+                ? data.posts
+                : [];
+            return rawPosts.map(transformInstagramPostToProduct);
+          })
+          .catch((err) => {
+            console.warn(
+              "Instagram feed temporarily unavailable:",
+              err.message,
+            );
+            return [];
+          })
+      : Promise.resolve([]);
+
+    // Parallel fetch with resilient error boundaries
+    Promise.allSettled([catalogPromise, instagramPromise])
+      .then(([catalogResult, igResult]) => {
         if (!isMounted) return;
-        const rawProducts = Array.isArray(response.data?.data)
-          ? response.data.data
-          : [];
 
-        // Guard: customer catalog should only display active instruments
-        const activeOnly = rawProducts.filter(
-          (item) => item.status !== "inactive",
-        );
+        let dbItems = [];
+        let igItems = [];
 
-        setProducts(activeOnly);
+        if (catalogResult.status === "fulfilled") {
+          dbItems = catalogResult.value;
+        } else {
+          console.error("Catalog fetch failed:", catalogResult.reason);
+          setError("Failed to load instruments. Please check your connection.");
+        }
+
+        if (igResult.status === "fulfilled") {
+          igItems = igResult.value;
+        }
+
+        // Merge both streams
+        setProducts([...dbItems, ...igItems]);
         setLoading(false);
       })
       .catch((err) => {
         if (!isMounted) return;
-        console.error("Error fetching catalog products:", err);
-        setError("Failed to load instruments. Please check your connection.");
+        console.error("Unexpected catalog error:", err);
+        setError("Unable to display collection at this time.");
         setLoading(false);
       });
 
@@ -56,9 +117,7 @@ const Products = () => {
     };
   }, []);
 
-  // Update query params when filters change
   const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
     const newParams = new URLSearchParams(searchParams);
     if (category === "All") {
       newParams.delete("category");
@@ -69,7 +128,6 @@ const Products = () => {
   };
 
   const handleSearchChange = (value) => {
-    setSearchTerm(value);
     const newParams = new URLSearchParams(searchParams);
     if (!value.trim()) {
       newParams.delete("search");
@@ -80,20 +138,22 @@ const Products = () => {
   };
 
   const handleResetFilters = () => {
-    setSelectedCategory("All");
-    setSearchTerm("");
     setSearchParams(new URLSearchParams());
   };
 
-  // Derive unique categories dynamically
+  // Merge default categories with any dynamic categories present in products
   const categories = useMemo(() => {
-    const unique = new Set(
-      products.map((item) => item.category?.trim()).filter(Boolean),
+    const fromProducts = products
+      .map((item) => item.category?.trim())
+      .filter(Boolean);
+
+    const combined = Array.from(
+      new Set([...DEFAULT_CATEGORIES, ...fromProducts]),
     );
-    return ["All", ...Array.from(unique)];
+    return combined;
   }, [products]);
 
-  // Filter products by category, name, and brand safely
+  // Filter products by category, name, brand, description, and subcategory
   const filteredProducts = useMemo(() => {
     const cleanSearch = searchTerm.trim().toLowerCase();
 
@@ -112,9 +172,12 @@ const Products = () => {
       const descMatch = (product.description || "")
         .toLowerCase()
         .includes(cleanSearch);
+      const subCatMatch = (product.subCategory || "")
+        .toLowerCase()
+        .includes(cleanSearch);
 
       const matchesSearch =
-        !cleanSearch || nameMatch || brandMatch || descMatch;
+        !cleanSearch || nameMatch || brandMatch || descMatch || subCatMatch;
 
       return matchesCategory && matchesSearch;
     });
@@ -125,10 +188,10 @@ const Products = () => {
       {/* Header */}
       <section className="products-header">
         <p className="section-label">OUR COLLECTION</p>
-        <h1>Handcrafted & Branded Instruments</h1>
+        <h1>Handcrafted &amp; Branded Instruments</h1>
         <p>
-          Explore concert harmoniums, sitars, tablas, and acoustic gear tested
-          and tuned by four generations of master craftsmen.
+          Explore concert harmoniums, sitars, marching band gear, keyboards, and
+          acoustic instruments tested and tuned for performers and institutions.
         </p>
       </section>
 
@@ -137,7 +200,7 @@ const Products = () => {
         <div className="products-search">
           <input
             type="text"
-            placeholder="Search by instrument name, brand, or model..."
+            placeholder="Search by instrument, brand, or category..."
             value={searchTerm}
             onChange={(e) => handleSearchChange(e.target.value)}
           />
@@ -159,11 +222,25 @@ const Products = () => {
               key={category}
               type="button"
               className={`category-pill ${
-                selectedCategory === category ? "active" : ""
+                selectedCategory.toLowerCase() === category.toLowerCase()
+                  ? "active"
+                  : ""
               }`}
               onClick={() => handleCategoryChange(category)}
             >
               {category}
+              {category === "Other Instruments" && (
+                <span
+                  style={{
+                    fontSize: "11px",
+                    marginLeft: "5px",
+                    verticalAlign: "middle",
+                  }}
+                  title="Live Instagram Showcase"
+                >
+                  📸
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -196,7 +273,7 @@ const Products = () => {
           <div className="products-message-card">
             <p>Loading catalog collection...</p>
           </div>
-        ) : error ? (
+        ) : error && products.length === 0 ? (
           <div className="products-message-card error">
             <p>{error}</p>
             <button
@@ -211,8 +288,8 @@ const Products = () => {
           <div className="products-message-card empty">
             <h3>No Instruments Found</h3>
             <p>
-              We couldn't find any instruments matching your criteria. Try
-              broadening your search terms or view another category.
+              We couldn&apos;t find any instruments in &quot;{selectedCategory}
+              &quot; matching your criteria.
             </p>
             <button
               type="button"

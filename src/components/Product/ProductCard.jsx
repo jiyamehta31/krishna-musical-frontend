@@ -28,15 +28,28 @@ const ProductCard = ({ product }) => {
 
   const imageUrl = getImageUrl();
 
+  const avgRating = Number(product?.averageRating) || 0;
+  const reviewCount =
+    Number(product?.numReviews) || product?.reviews?.length || 0;
+
+  const handleCardClick = () => {
+    navigate(`/products/${product._id}`);
+    // if (product.isInstagram && product.instagramUrl) {
+    //   window.open(product.instagramUrl, "_blank", "noopener,noreferrer");
+    //   return;
+    // }
+    navigate(`/products/${product._id}`);
+  };
+
   return (
     <article
       className="product-card"
-      onClick={() => navigate(`/products/${product._id}`)}
+      onClick={handleCardClick}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
-          navigate(`/products/${product._id}`);
+          handleCardClick();
         }
       }}
     >
@@ -46,6 +59,9 @@ const ProductCard = ({ product }) => {
             src={imageUrl}
             alt={product.images?.[0]?.alt || product.name}
             loading="lazy"
+            onError={(e) => {
+              e.currentTarget.src = "/images/placeholder-instrument.jpg";
+            }}
           />
         ) : (
           <div className="product-image-placeholder">No Image Available</div>
@@ -61,6 +77,23 @@ const ProductCard = ({ product }) => {
         </div>
 
         <h3 className="product-title">{product.name}</h3>
+
+        {/* Social Proof Rating Row */}
+        <div className="product-card-rating">
+          <span
+            className="card-stars"
+            aria-label={`Rated ${avgRating} out of 5 stars`}
+          >
+            {"★".repeat(Math.round(avgRating))}
+            {"☆".repeat(5 - Math.round(avgRating))}
+          </span>
+          <span className="card-rating-score">
+            {avgRating > 0 ? avgRating.toFixed(1) : "New"}
+          </span>
+          {reviewCount > 0 && (
+            <span className="card-review-count">({reviewCount})</span>
+          )}
+        </div>
 
         {product.description && (
           <p className="product-description">{product.description}</p>
@@ -80,7 +113,7 @@ const ProductCard = ({ product }) => {
             className="view-details"
             onClick={(e) => {
               e.stopPropagation();
-              navigate(`/products/${product._id}`);
+              handleCardClick();
             }}
           >
             View Details →

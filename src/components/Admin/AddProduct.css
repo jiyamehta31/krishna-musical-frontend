@@ -427,6 +427,100 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+.spec-presets-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.preset-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.preset-chip {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  border-radius: 16px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.preset-chip:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+.specifications-builder {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.spec-row {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.spec-key-input,
+.spec-val-input {
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.spec-key-input:focus,
+.spec-val-input:focus {
+  outline: none;
+  border-color: #0f172a;
+}
+
+.remove-spec-btn {
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.remove-spec-btn:hover {
+  background: #fee2e2;
+}
+
+.add-spec-btn {
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-spec-btn:hover {
+  background: #334155;
+}
+
+@media (max-width: 600px) {
+  .spec-row {
+    grid-template-columns: 1fr 1fr auto;
+    gap: 6px;
+  }
+}
 
 /* =========================================================
    RESPONSIVE
@@ -460,5 +554,9 @@
   .submit-btn {
     width: 100%;
     text-align: center;
+  }
+  .spec-row {
+    grid-template-columns: 1fr 1fr auto;
+    gap: 6px;
   }
 }

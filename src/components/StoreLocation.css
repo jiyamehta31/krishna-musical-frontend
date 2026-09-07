@@ -1,0 +1,96 @@
+.store-location-section {
+  padding: 60px 20px;
+  background-color: #f8fafc;
+}
+
+.location-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 32px;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+}
+
+.location-info-card {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.location-badge {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #c89d5c;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+.location-info-card h2 {
+  font-size: 28px;
+  color: #0c1f34;
+  margin-bottom: 12px;
+}
+
+.location-desc {
+  font-size: 15px;
+  color: #64748b;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.info-item {
+  margin-bottom: 16px;
+}
+
+.info-item strong {
+  display: block;
+  font-size: 13px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-item p {
+  margin: 4px 0 0;
+  font-size: 16px;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.directions-btn {
+  margin-top: 16px;
+  display: inline-block;
+  text-align: center;
+  padding: 12px 24px;
+  background-color: #0c1f34;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.directions-btn:hover {
+  background-color: #c89d5c;
+}
+
+.map-frame-wrapper {
+  min-height: 420px;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .location-container {
+    grid-template-columns: 1fr;
+  }
+  .map-frame-wrapper {
+    min-height: 350px;
+  }
+}

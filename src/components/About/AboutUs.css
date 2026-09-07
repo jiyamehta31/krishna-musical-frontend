@@ -1,0 +1,717 @@
+/* =========================================
+   PAGE BASE & DESIGN TOKENS
+========================================= */
+
+:root {
+  --navy-primary: #0c1f34;
+  --navy-dark: #081524;
+  --gold-primary: #c89d5c;
+  --gold-hover: #dfb36e;
+  --gold-subtle: rgba(200, 157, 92, 0.15);
+  --cream-bg: #f8f3e8;
+  --cream-surface: #faf6ed;
+  --cream-card: #f4ecdc;
+  --cream-border: #d9cdb9;
+  --text-primary: #0c1f34;
+  --text-muted: #6e695f;
+  --text-light: #ddd8cf;
+}
+
+.about-page {
+  background-color: var(--cream-bg);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* =========================================
+   HERO BANNER
+========================================= */
+
+.about-hero {
+  min-height: 420px;
+  background-color: var(--navy-primary);
+  border-bottom: 1px solid rgba(200, 157, 92, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.about-hero-overlay {
+  color: #ffffff;
+  padding: 50px 20px;
+  max-width: 820px;
+}
+
+.about-eyebrow {
+  color: var(--gold-primary);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  margin: 0 0 16px;
+  text-transform: uppercase;
+}
+
+.about-hero h1 {
+  font-family: Georgia, serif;
+  font-size: clamp(42px, 6vw, 70px);
+  font-weight: 500;
+  line-height: 1.1;
+  margin: 0 0 16px;
+  color: #ffffff;
+}
+
+.about-hero p:not(.about-eyebrow) {
+  font-family: Georgia, serif;
+  font-size: clamp(18px, 2.5vw, 22px);
+  margin: 0 0 20px;
+  color: #d7d5d0;
+  font-weight: 400;
+}
+
+.about-hero span {
+  display: inline-block;
+  color: var(--gold-primary);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* =========================================
+   SECTION HEADINGS & LABELS
+========================================= */
+
+.about-section-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: var(--gold-primary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.about-section-label span {
+  display: block;
+  width: 32px;
+  height: 1px;
+  background-color: var(--gold-primary);
+}
+
+.about-section-label.left {
+  justify-content: flex-start;
+}
+
+.about-section-label.light {
+  color: #d9b86c;
+}
+
+.about-section-label.light span {
+  background-color: #d9b86c;
+}
+
+/* =========================================
+   INTRODUCTION & YEAR BADGE
+========================================= */
+
+.about-intro {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 100px 40px;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 70px;
+  align-items: center;
+}
+
+.about-intro-content {
+  max-width: 760px;
+}
+
+.about-intro h2,
+.about-craft-content h2,
+.about-section-heading h2 {
+  font-family: Georgia, serif;
+  font-size: clamp(32px, 4vw, 46px);
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 20px 0 24px;
+  color: var(--navy-primary);
+}
+
+.about-intro h2 em,
+.about-craft-content h2 em,
+.about-section-heading h2 em {
+  color: var(--gold-primary);
+  font-style: normal;
+}
+
+.about-intro p,
+.about-craft-content p,
+.about-section-heading p {
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.85;
+  margin: 0 0 16px;
+}
+
+.about-year-card {
+  min-height: 320px;
+  border: 1px solid var(--cream-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: var(--cream-card);
+  padding: 30px;
+  text-align: center;
+}
+
+.about-year-card::before,
+.about-year-card::after {
+  content: "";
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  border-color: var(--gold-primary);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.about-year-card::before {
+  top: 16px;
+  left: 16px;
+  border-width: 1px 0 0 1px;
+}
+
+.about-year-card::after {
+  bottom: 16px;
+  right: 16px;
+  border-width: 0 1px 1px 0;
+}
+
+.about-year-card span {
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: #777064;
+  font-weight: 600;
+}
+
+.about-year-card strong {
+  font-family: Georgia, serif;
+  font-size: 72px;
+  font-weight: 500;
+  color: var(--navy-primary);
+  margin: 6px 0;
+  line-height: 1;
+}
+
+.about-year-card p {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #777064;
+  text-transform: uppercase;
+}
+
+/* =========================================
+   HERITAGE STATS BANNER
+========================================= */
+
+.about-stats {
+  background-color: var(--navy-primary);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 60px max(30px, calc((100% - 1200px) / 2));
+}
+
+.about-stat {
+  text-align: center;
+  color: #ffffff;
+  padding: 10px 24px;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.about-stat:last-child {
+  border-right: none;
+}
+
+.about-stat strong {
+  display: block;
+  color: var(--gold-primary);
+  font-family: Georgia, serif;
+  font-size: 46px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  line-height: 1;
+}
+
+.about-stat span {
+  color: var(--text-light);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 500;
+}
+
+/* =========================================
+   CRAFTSMANSHIP SHOWCASE
+========================================= */
+
+.about-craftsmanship {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 110px 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 75px;
+  align-items: center;
+}
+
+.about-craft-image {
+  min-height: 480px;
+  background:
+    linear-gradient(
+      rgba(13, 31, 51, 0.65),
+      rgba(13, 31, 51, 0.65)
+    ),
+    url("/images/craftsmanship.jpg") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 30px;
+}
+
+.craft-image-content {
+  color: #ffffff;
+}
+
+.craft-image-content span {
+  color: var(--gold-primary);
+  font-size: 12px;
+  letter-spacing: 4px;
+  font-weight: 600;
+}
+
+.craft-image-content h2 {
+  font-family: Georgia, serif;
+  font-size: 42px;
+  font-weight: 500;
+  margin: 10px 0 0;
+  color: #ffffff;
+}
+
+/* =========================================
+   SERVICES GRID & SVG ICONS
+========================================= */
+
+.about-services {
+  background-color: #f0e8d8;
+  padding: 100px 40px;
+}
+
+.about-section-heading {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 55px;
+}
+
+.about-service-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.about-service-card {
+  background-color: var(--cream-surface);
+  border: 1px solid #dfd4c2;
+  padding: 35px;
+  min-height: 240px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.about-service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 28px rgba(12, 31, 52, 0.08);
+}
+
+.service-number {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  color: #cfc4b3;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.service-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--navy-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+  flex-shrink: 0;
+}
+
+.service-icon svg {
+  display: block;
+  stroke: var(--gold-primary);
+  width: 22px;
+  height: 22px;
+}
+
+.about-service-card h3 {
+  font-family: Georgia, serif;
+  font-size: 21px;
+  font-weight: 500;
+  margin: 0 0 12px;
+  color: var(--navy-primary);
+}
+
+.about-service-card p {
+  color: #716b61;
+  font-size: 14.5px;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* =========================================
+   FOUR GENERATIONS TIMELINE
+========================================= */
+
+.about-generations {
+  background-color: var(--navy-primary);
+  color: #ffffff;
+  padding: 110px 40px;
+}
+
+.generations-content {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.generations-content h2 {
+  font-family: Georgia, serif;
+  font-size: clamp(34px, 4vw, 48px);
+  font-weight: 500;
+  margin: 20px 0 16px;
+  color: #ffffff;
+}
+
+.generations-content > p {
+  max-width: 680px;
+  margin: 0 auto;
+  color: #d7d5d0;
+  line-height: 1.8;
+  font-size: 15.5px;
+}
+
+.generation-line {
+  margin-top: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.generation-item {
+  min-width: 170px;
+}
+
+.generation-item span {
+  display: block;
+  color: var(--gold-primary);
+  font-family: Georgia, serif;
+  font-size: 34px;
+  margin-bottom: 6px;
+  line-height: 1;
+}
+
+.generation-item p {
+  margin: 0;
+  color: #d6d2ca;
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.generation-line-bar {
+  width: 160px;
+  height: 1px;
+  background-color: var(--gold-primary);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.generation-line-bar::before,
+.generation-line-bar::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: var(--gold-primary);
+}
+
+.generation-line-bar::before {
+  left: 0;
+}
+
+.generation-line-bar::after {
+  right: 0;
+}
+
+/* =========================================
+   WHY US (2x2 GRID)
+========================================= */
+
+.about-why {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 40px;
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-bottom: 1px solid var(--cream-border);
+}
+
+.why-item {
+  padding: 36px 30px;
+  border-top: 1px solid var(--cream-border);
+}
+
+.why-item:nth-child(odd) {
+  border-right: 1px solid var(--cream-border);
+}
+
+.why-item strong {
+  display: block;
+  color: var(--gold-primary);
+  font-size: 12px;
+  letter-spacing: 2.5px;
+  margin-bottom: 8px;
+}
+
+.why-item h3 {
+  font-family: Georgia, serif;
+  font-size: 22px;
+  font-weight: 500;
+  margin: 0 0 10px;
+  color: var(--navy-primary);
+}
+
+.why-item p {
+  color: #716b61;
+  font-size: 14.5px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* =========================================
+   CALL TO ACTION (CTA)
+========================================= */
+
+.about-cta {
+  background-color: var(--navy-primary);
+  border-top: 1px solid rgba(200, 157, 92, 0.2);
+  padding: 100px 30px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.about-cta-content > p {
+  color: var(--gold-primary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.about-cta h2 {
+  font-family: Georgia, serif;
+  font-size: clamp(34px, 5vw, 52px);
+  font-weight: 500;
+  line-height: 1.25;
+  margin: 18px 0 35px;
+  color: #ffffff;
+}
+
+.about-cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.about-primary-btn,
+.about-secondary-btn {
+  text-decoration: none;
+  padding: 14px 30px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-primary-btn {
+  background-color: var(--gold-primary);
+  color: var(--navy-primary);
+  border: 1px solid var(--gold-primary);
+}
+
+.about-primary-btn:hover {
+  background-color: var(--gold-hover);
+  border-color: var(--gold-hover);
+}
+
+.about-secondary-btn {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  background-color: transparent;
+}
+
+.about-secondary-btn:hover {
+  background-color: #ffffff;
+  color: var(--navy-primary);
+  border-color: #ffffff;
+}
+
+/* =========================================
+   RESPONSIVE BREAKPOINTS
+========================================= */
+
+@media (max-width: 960px) {
+  .about-intro {
+    grid-template-columns: 1fr;
+    gap: 45px;
+    padding: 75px 30px;
+  }
+
+  .about-year-card {
+    min-height: 240px;
+    max-width: 420px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .about-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px 0;
+    padding: 50px 20px;
+  }
+
+  .about-stat {
+    border-right: none;
+  }
+
+  .about-stat:nth-child(odd) {
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .about-craftsmanship {
+    grid-template-columns: 1fr;
+    gap: 45px;
+    padding: 80px 30px;
+  }
+
+  .about-craft-image {
+    min-height: 380px;
+  }
+}
+
+@media (max-width: 640px) {
+  .about-hero {
+    min-height: 350px;
+  }
+
+  .about-intro,
+  .about-craftsmanship,
+  .about-why,
+  .about-services,
+  .about-generations {
+    padding: 60px 20px;
+  }
+
+  .about-stats {
+    grid-template-columns: 1fr;
+    padding: 40px 20px;
+    gap: 0;
+  }
+
+  .about-stat {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 20px 0;
+  }
+
+  .about-stat:last-child {
+    border-bottom: none;
+  }
+
+  .why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .why-item {
+    border-right: none !important;
+    padding: 26px 10px;
+  }
+
+  .generation-line {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .generation-line-bar {
+    width: 1px;
+    height: 60px;
+  }
+
+  .generation-line-bar::before,
+  .generation-line-bar::after {
+    left: -4px;
+  }
+
+  .generation-line-bar::before {
+    top: 0;
+  }
+
+  .generation-line-bar::after {
+    top: auto;
+    bottom: 0;
+  }
+
+  .about-cta-buttons {
+    flex-direction: column;
+    max-width: 280px;
+    margin: 0 auto;
+    gap: 12px;
+  }
+
+  .about-primary-btn,
+  .about-secondary-btn {
+    width: 100%;
+    padding: 13px 20px;
+  }
+}

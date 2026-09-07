@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 import "./Contact.css";
+import StoreLocation from "../StoreLocation";
+
 
 const API_BASE_URL =
   import.meta.env.VITE_API_URL ||
@@ -227,7 +229,9 @@ ${formData.message.trim()}`;
           </form>
         </div>
       </section>
-    </main>
+
+      <StoreLocation />
+      </main>
   );
 };
 

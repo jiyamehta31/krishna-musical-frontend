@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import Home from "./components/Home/Home";
 import Products from "./components/Product/Products";
 import ProductDetails from "./components/Product/ProductDetails";
-import About from "./components/About/About";
+import AboutUs from "./components/About/AboutUs";
 import Contact from "./components/Contact/Contact";
 import Offers from "./components/Offers/Offers";
 import Profile from "./components/Profile/Profile";
@@ -30,6 +30,7 @@ import AdminLogin from "./components/Admin/AdminLogin";
 import ProtectedRoute from "./components/Admin/ProtectedRoute";
 import AddProduct from "./components/Admin/AddProduct";
 import EditProduct from "./components/Admin/EditProduct";
+import FloatingProducts from "./components/Product/FloatingProducts.jsx";
 
 // 1. Global Scroll Restoration Helper
 const ScrollToTop = () => {
@@ -42,12 +43,13 @@ const ScrollToTop = () => {
   return null;
 };
 
-// 2. Client-Facing Layout (Navbar + Content + WhatsApp + Footer)
+// 2. Client-Facing Layout (Navbar + Content + Floating Widget + WhatsApp + Footer)
 const PublicLayout = () => {
   return (
     <>
       <Navbar />
       <Outlet />
+      <FloatingProducts />
       <WhatsappButton />
       <Footer />
     </>
@@ -129,7 +131,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetails />} />
-          <Route path="/about" element={<About />} />
+          <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/offers" element={<Offers />} />
           <Route path="/login" element={<Login />} />
