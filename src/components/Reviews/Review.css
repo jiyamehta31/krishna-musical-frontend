@@ -1,7 +1,3 @@
-/* =========================================
-   REVIEWS WRAPPER & BASE TOKENS
-========================================= */
-
 .reviews-component-wrapper {
   max-width: 1250px;
   margin: 60px auto 0;
@@ -9,10 +5,6 @@
   color: var(--navy-primary, #0c1f34);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
-
-/* =========================================
-   SECTION HEADERS
-========================================= */
 
 .product-reviews-section,
 .video-reviews-section {
@@ -37,14 +29,10 @@
 }
 
 .reviews-header p {
-  color: #716b61;
+  color: var(--text-muted, #6e695f);
   font-size: 15px;
   margin: 0;
 }
-
-/* =========================================
-   CUSTOMER REVIEWS LIST & CARDS
-========================================= */
 
 .reviews-list {
   display: grid;
@@ -55,7 +43,7 @@
 
 .review-card {
   background: #ffffff;
-  border: 1px solid #e5dccf;
+  border: 1px solid rgba(200, 157, 92, 0.22);
   padding: 24px;
   display: flex;
   flex-direction: column;
@@ -125,11 +113,10 @@
   margin-top: auto;
 }
 
-/* Empty placeholder */
 .no-reviews {
   grid-column: 1 / -1;
-  background: #faf6ed;
-  border: 1px dashed #d9cdb9;
+  background: var(--cream-surface, #faf6ed);
+  border: 1px dashed var(--cream-border, #d9cdb9);
   padding: 45px 20px;
   text-align: center;
   border-radius: 4px;
@@ -144,13 +131,9 @@
 }
 
 .no-reviews span {
-  color: #716b61;
+  color: var(--text-muted, #6e695f);
   font-size: 13.5px;
 }
-
-/* =========================================
-   VIDEO REVIEWS & SOUND DEMOS
-========================================= */
 
 .video-reviews-list {
   display: grid;
@@ -161,7 +144,7 @@
 
 .video-review-card {
   background: #ffffff;
-  border: 1px solid #e5dccf;
+  border: 1px solid rgba(200, 157, 92, 0.22);
   border-radius: 4px;
   overflow: hidden;
   display: flex;
@@ -203,7 +186,7 @@
 }
 
 .video-author {
-  color: #716b61;
+  color: var(--text-muted, #6e695f);
   font-size: 13px;
   margin: 0;
 }
@@ -228,12 +211,8 @@
   padding: 0 20px 18px;
 }
 
-/* =========================================
-   FORM SUBMISSION BOX
-========================================= */
-
 .add-review-box {
-  background: #faf6ed;
+  background: var(--cream-surface, #faf6ed);
   border: 1px solid var(--cream-border, #d9cdb9);
   padding: 36px 32px;
   border-radius: 4px;
@@ -248,7 +227,6 @@
   margin: 0 0 20px;
 }
 
-/* Alert Notification Bars */
 .review-alert {
   padding: 12px 16px;
   font-size: 13.5px;
@@ -268,7 +246,6 @@
   border: 1px solid #bbf7d0;
 }
 
-/* Form Controls */
 .review-form {
   display: flex;
   flex-direction: column;
@@ -298,7 +275,7 @@
   font-size: 14.5px;
   padding: 12px 14px;
   background: #ffffff;
-  border: 1px solid #cfc5b4;
+  border: 1px solid rgba(200, 157, 92, 0.35);
   border-radius: 3px;
   color: var(--navy-primary, #0c1f34);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -343,16 +320,12 @@
   cursor: not-allowed;
 }
 
-/* =========================================
-   LOGIN REQUIRED PROMPT
-========================================= */
-
 .login-review-message {
   padding: 10px 0;
 }
 
 .login-review-message p {
-  color: #716b61;
+  color: var(--text-muted, #6e695f);
   font-size: 15px;
   margin: 0 0 16px;
 }
@@ -375,10 +348,6 @@
   background: var(--navy-primary, #0c1f34);
   color: #ffffff;
 }
-
-/* =========================================
-   RESPONSIVE QUERIES
-========================================= */
 
 @media (max-width: 768px) {
   .reviews-list,

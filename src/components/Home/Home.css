@@ -1,11 +1,7 @@
-/* =====================================================
-   HOME PAGE BASE & WRAPPER
-===================================================== */
-
 .home {
   width: 100%;
-  background: var(--cream, #f7f3eb);
-  color: var(--navy, #0f172a);
+  background: var(--cream-bg, #f8f3e8);
+  color: var(--navy-primary, #0c1f34);
   box-sizing: border-box;
 }
 
@@ -14,10 +10,6 @@
 .home *::after {
   box-sizing: border-box;
 }
-
-/* =====================================================
-   HERO
-===================================================== */
 
 .hero {
   position: relative;
@@ -32,7 +24,6 @@
   height: auto;
 }
 
-/* Invisible overlay link positioned directly above hero artwork CTA */
 .hero-image-button {
   position: absolute;
   left: 17.7%;
@@ -47,10 +38,6 @@
   z-index: 2;
 }
 
-/* =====================================================
-   LEGACY STATS
-===================================================== */
-
 .legacy-stats {
   width: 100%;
   max-width: 1400px;
@@ -58,8 +45,8 @@
   padding: 35px 6%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  background: var(--cream, #f7f3eb);
-  border-bottom: 1px solid rgba(181, 138, 58, 0.25);
+  background: var(--cream-bg, #f8f3e8);
+  border-bottom: 1px solid rgba(200, 157, 92, 0.25);
 }
 
 .stat {
@@ -68,7 +55,7 @@
   align-items: center;
   gap: 25px;
   padding: 10px 30px;
-  border-right: 1px solid rgba(181, 138, 58, 0.25);
+  border-right: 1px solid rgba(200, 157, 92, 0.25);
 }
 
 .stat:last-child {
@@ -79,47 +66,39 @@
   flex-shrink: 0;
   width: 70px;
   height: 70px;
-  border: 1.5px solid var(--gold, #b58a3a);
+  border: 1.5px solid var(--gold-primary, #c89d5c);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--gold-dark, #8f6b24);
+  color: var(--gold-primary, #c89d5c);
   font-size: 28px;
 }
 
 .stat h2 {
   margin: 0 0 6px;
-  color: var(--navy, #0f172a);
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  color: var(--navy-primary, #0c1f34);
+  font-family: Georgia, serif;
   font-size: 21px;
   line-height: 1.25;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .stat p {
   margin: 0;
-  color: var(--text-muted, #64748b);
+  color: var(--text-muted, #6e695f);
   font-size: 13.5px;
   line-height: 1.5;
 }
 
-/* =====================================================
-   COMMON SECTION LABEL
-===================================================== */
-
 .section-label {
   margin: 0 0 14px;
-  color: var(--gold-dark, #8f6b24);
+  color: var(--gold-primary, #c89d5c);
   font-size: 12px;
   letter-spacing: 2.5px;
   font-weight: 700;
   text-transform: uppercase;
 }
-
-/* =====================================================
-   OUR LEGACY
-===================================================== */
 
 .about-section {
   width: 90%;
@@ -136,23 +115,19 @@
 
 .about-content h2 {
   margin: 0 0 22px;
-  color: var(--navy, #0f172a);
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  color: var(--navy-primary, #0c1f34);
+  font-family: Georgia, serif;
   font-size: clamp(30px, 4vw, 42px);
   line-height: 1.2;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .about-content p:not(.section-label) {
   margin: 0 0 18px;
-  color: var(--text-muted, #64748b);
+  color: var(--text-muted, #6e695f);
   font-size: 15.5px;
   line-height: 1.8;
 }
-
-/* =====================================================
-   HIGHLIGHT
-===================================================== */
 
 .highlight-section {
   width: 90%;
@@ -161,16 +136,16 @@
   display: grid;
   grid-template-columns: 1.05fr 1fr;
   min-height: 480px;
-  background: var(--navy, #0f172a);
+  background: var(--navy-primary, #0c1f34);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 18px 45px rgba(7, 24, 47, 0.12);
+  box-shadow: 0 18px 45px rgba(12, 31, 52, 0.12);
 }
 
 .highlight-image {
   width: 100%;
   min-height: 480px;
-  background: #fdfaf3;
+  background: var(--cream-surface, #faf6ed);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -193,21 +168,21 @@
 }
 
 .highlight-content .section-label {
-  color: var(--gold, #b58a3a);
+  color: var(--gold-primary, #c89d5c);
 }
 
 .highlight-content h2 {
   margin: 0 0 20px;
-  color: var(--cream, #f7f3eb);
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  color: #ffffff;
+  font-family: Georgia, serif;
   font-size: clamp(28px, 3.5vw, 38px);
   line-height: 1.2;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .highlight-content p:not(.section-label) {
   margin: 0 0 28px;
-  color: rgba(247, 240, 226, 0.82);
+  color: rgba(248, 243, 232, 0.82);
   font-size: 15px;
   line-height: 1.8;
 }
@@ -215,10 +190,10 @@
 .highlight-button {
   align-self: flex-start;
   padding: 13px 26px;
-  background: var(--gold, #b58a3a);
-  border: 1px solid var(--gold, #b58a3a);
+  background: var(--gold-primary, #c89d5c);
+  border: 1px solid var(--gold-primary, #c89d5c);
   border-radius: 4px;
-  color: var(--navy, #0f172a);
+  color: var(--navy-primary, #0c1f34);
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
@@ -226,8 +201,8 @@
 }
 
 .highlight-button:hover {
-  background: var(--cream, #f7f3eb);
-  border-color: var(--cream, #f7f3eb);
+  background: var(--gold-hover, #dfb36e);
+  border-color: var(--gold-hover, #dfb36e);
 }
 
 .highlight-controls {
@@ -241,10 +216,10 @@
   width: 38px;
   height: 38px;
   padding: 0;
-  border: 1px solid rgba(247, 240, 226, 0.3);
+  border: 1px solid rgba(248, 243, 232, 0.3);
   border-radius: 50%;
   background: transparent;
-  color: var(--cream, #f7f3eb);
+  color: #ffffff;
   cursor: pointer;
   font-size: 18px;
   display: flex;
@@ -254,8 +229,8 @@
 }
 
 .highlight-controls > button:hover {
-  border-color: var(--gold, #b58a3a);
-  color: var(--gold, #b58a3a);
+  border-color: var(--gold-primary, #c89d5c);
+  color: var(--gold-primary, #c89d5c);
 }
 
 .highlight-dots {
@@ -270,18 +245,14 @@
   padding: 0;
   border: none;
   border-radius: 50%;
-  background: rgba(247, 240, 226, 0.35);
+  background: rgba(248, 243, 232, 0.35);
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .highlight-dots button.active {
-  background: var(--gold, #b58a3a);
+  background: var(--gold-primary, #c89d5c);
 }
-
-/* =====================================================
-   FEATURED INSTRUMENTS
-===================================================== */
 
 .featured-section {
   width: 90%;
@@ -308,21 +279,21 @@
   content: "";
   width: 40px;
   height: 1px;
-  background: var(--gold, #b58a3a);
+  background: var(--gold-primary, #c89d5c);
 }
 
 .featured-heading h2 {
   margin: 0 0 14px;
-  color: var(--navy, #0f172a);
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  color: var(--navy-primary, #0c1f34);
+  font-family: Georgia, serif;
   font-size: clamp(30px, 4vw, 40px);
   line-height: 1.2;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .featured-heading p:not(.section-label) {
   margin: 0;
-  color: var(--text-muted, #64748b);
+  color: var(--text-muted, #6e695f);
   font-size: 15.5px;
   line-height: 1.7;
 }
@@ -337,16 +308,16 @@
   grid-column: 1 / -1;
   padding: 60px 20px;
   text-align: center;
-  color: var(--text-muted, #64748b);
+  color: var(--text-muted, #6e695f);
   font-size: 15px;
-  background: var(--white, #ffffff);
-  border: 1px dashed rgba(181, 138, 58, 0.3);
+  background: #ffffff;
+  border: 1px dashed rgba(200, 157, 92, 0.3);
   border-radius: 6px;
 }
 
 .featured-card {
-  background: var(--white, #ffffff);
-  border: 1px solid rgba(181, 138, 58, 0.2);
+  background: #ffffff;
+  border: 1px solid rgba(200, 157, 92, 0.22);
   border-radius: 6px;
   overflow: hidden;
   display: flex;
@@ -356,7 +327,7 @@
 
 .featured-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 16px 32px rgba(12, 31, 52, 0.08);
 }
 
 .featured-image {
@@ -366,7 +337,7 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
-  border-bottom: 1px solid rgba(181, 138, 58, 0.1);
+  border-bottom: 1px solid rgba(200, 157, 92, 0.16);
 }
 
 .featured-image img {
@@ -376,7 +347,7 @@
 }
 
 .featured-placeholder {
-  color: var(--text-muted, #64748b);
+  color: var(--text-muted, #6e695f);
   font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
@@ -393,7 +364,7 @@
 
 .featured-category {
   margin: 0 0 6px;
-  color: var(--gold-dark, #8f6b24);
+  color: var(--gold-primary, #c89d5c);
   font-size: 11px;
   letter-spacing: 1.5px;
   font-weight: 700;
@@ -402,22 +373,22 @@
 
 .featured-info h3 {
   margin: 0 0 6px;
-  color: var(--navy, #0f172a);
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  color: var(--navy-primary, #0c1f34);
+  font-family: Georgia, serif;
   font-size: 21px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.3;
 }
 
 .featured-brand {
   margin: 0 0 10px;
-  color: var(--text-muted, #64748b);
+  color: var(--text-muted, #6e695f);
   font-size: 13.5px;
 }
 
 .featured-price {
   margin: 0 0 16px;
-  color: var(--navy, #0f172a);
+  color: var(--navy-primary, #0c1f34);
   font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.2px;
@@ -425,7 +396,7 @@
 
 .featured-link {
   margin-top: auto;
-  color: var(--gold-dark, #8f6b24);
+  color: var(--gold-primary, #c89d5c);
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
@@ -435,7 +406,7 @@
 }
 
 .featured-link:hover {
-  color: var(--navy, #0f172a);
+  color: var(--navy-primary, #0c1f34);
 }
 
 .featured-action {
@@ -446,10 +417,10 @@
 .section-button {
   display: inline-block;
   padding: 13px 28px;
-  background: var(--navy, #0f172a);
-  border: 1px solid var(--navy, #0f172a);
+  background: var(--navy-primary, #0c1f34);
+  border: 1px solid var(--navy-primary, #0c1f34);
   border-radius: 4px;
-  color: var(--cream, #f7f3eb);
+  color: var(--cream-bg, #f8f3e8);
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
@@ -457,14 +428,10 @@
 }
 
 .section-button:hover {
-  background: var(--gold, #b58a3a);
-  border-color: var(--gold, #b58a3a);
-  color: var(--navy, #0f172a);
+  background: var(--gold-primary, #c89d5c);
+  border-color: var(--gold-primary, #c89d5c);
+  color: var(--navy-primary, #0c1f34);
 }
-
-/* =====================================================
-   WHY CHOOSE US
-===================================================== */
 
 .why-section {
   width: 90%;
@@ -481,16 +448,16 @@
 
 .why-heading h2 {
   margin: 0 0 16px;
-  color: var(--navy, #0f172a);
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  color: var(--navy-primary, #0c1f34);
+  font-family: Georgia, serif;
   font-size: clamp(30px, 4vw, 40px);
   line-height: 1.2;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .why-heading p:not(.section-label) {
   margin: 0;
-  color: var(--text-muted, #64748b);
+  color: var(--text-muted, #6e695f);
   font-size: 15.5px;
   line-height: 1.7;
 }
@@ -503,8 +470,8 @@
 
 .why-card {
   padding: 36px 24px;
-  background: var(--white, #ffffff);
-  border: 1px solid rgba(181, 138, 58, 0.2);
+  background: #ffffff;
+  border: 1px solid rgba(200, 157, 92, 0.22);
   border-radius: 6px;
   text-align: center;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -512,40 +479,36 @@
 
 .why-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 14px 28px rgba(12, 31, 52, 0.06);
 }
 
 .why-icon {
   width: 62px;
   height: 62px;
   margin: 0 auto 20px;
-  border: 1px solid var(--gold, #b58a3a);
+  border: 1px solid var(--gold-primary, #c89d5c);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--gold-dark, #8f6b24);
+  color: var(--gold-primary, #c89d5c);
   font-size: 26px;
 }
 
 .why-card h3 {
   margin: 0 0 10px;
-  color: var(--navy, #0f172a);
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  color: var(--navy-primary, #0c1f34);
+  font-family: Georgia, serif;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .why-card p {
   margin: 0;
-  color: var(--text-muted, #64748b);
+  color: var(--text-muted, #6e695f);
   line-height: 1.6;
   font-size: 13.5px;
 }
-
-/* =====================================================
-   SPECIAL OFFERS
-===================================================== */
 
 .offers-section {
   width: 90%;
@@ -557,9 +520,9 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: var(--navy, #0f172a);
+  background: var(--navy-primary, #0c1f34);
   border-radius: 8px;
-  box-shadow: 0 18px 40px rgba(7, 24, 47, 0.12);
+  box-shadow: 0 18px 40px rgba(12, 31, 52, 0.12);
 }
 
 .offers-content {
@@ -567,21 +530,21 @@
 }
 
 .offers-content .section-label {
-  color: var(--gold, #b58a3a);
+  color: var(--gold-primary, #c89d5c);
 }
 
 .offers-content h2 {
   margin: 0 0 18px;
-  color: var(--cream, #f7f3eb);
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  color: #ffffff;
+  font-family: Georgia, serif;
   font-size: clamp(30px, 4vw, 40px);
   line-height: 1.2;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .offers-content p:not(.section-label) {
   margin: 0 0 28px;
-  color: rgba(247, 240, 226, 0.82);
+  color: rgba(248, 243, 232, 0.82);
   font-size: 15.5px;
   line-height: 1.8;
 }
@@ -589,10 +552,10 @@
 .offers-button {
   display: inline-block;
   padding: 13px 28px;
-  background: var(--gold, #b58a3a);
-  border: 1px solid var(--gold, #b58a3a);
+  background: var(--gold-primary, #c89d5c);
+  border: 1px solid var(--gold-primary, #c89d5c);
   border-radius: 4px;
-  color: var(--navy, #0f172a);
+  color: var(--navy-primary, #0c1f34);
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
@@ -600,13 +563,9 @@
 }
 
 .offers-button:hover {
-  background: var(--cream, #f7f3eb);
-  border-color: var(--cream, #f7f3eb);
+  background: var(--gold-hover, #dfb36e);
+  border-color: var(--gold-hover, #dfb36e);
 }
-
-/* =====================================================
-   RESPONSIVE (TABLET & MOBILE)
-===================================================== */
 
 @media (max-width: 1000px) {
   .legacy-stats {
@@ -619,7 +578,7 @@
 
   .stat:nth-child(1),
   .stat:nth-child(2) {
-    border-bottom: 1px solid rgba(181, 138, 58, 0.25);
+    border-bottom: 1px solid rgba(200, 157, 92, 0.25);
     padding-bottom: 25px;
   }
 
@@ -649,7 +608,7 @@
 
   .stat {
     border-right: none !important;
-    border-bottom: 1px solid rgba(181, 138, 58, 0.25);
+    border-bottom: 1px solid rgba(200, 157, 92, 0.25);
     padding: 18px 10px !important;
   }
 

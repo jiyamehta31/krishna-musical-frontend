@@ -1,41 +1,24 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
-import "./AdminProducts.css";
+import API from "../../api/axios";
+import { getOptimizedImageUrl, getPrimaryImage } from "../../utils/media";
+import "./AdminProducts.css"
+;
 
-const API_BASE_URL =
-  axios.defaults.baseURL ||
-  import.meta.env.VITE_API_URL ||
-  "https://krishna-musical-backend-1.onrender.com";
+const INSTAGRAM_FEED_URL =
+  import.meta.env.VITE_INSTAGRAM_FEED_URL ||
+  "https://feeds.behold.so/xzK6rxt0HtOb3FvyCdHg";
 
-const AdminProducts = () => {
+export default function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
   const [actionError, setActionError] = useState("");
   const [actionSuccess, setActionSuccess] = useState("");
   const navigate = useNavigate();
-
-  // Safely resolve image source (absolute CDN URLs vs. backend uploads)
-  const getImageUrl = (product) => {
-    if (!product?.images || product.images.length === 0) return null;
-    const primary =
-      product.images.find((img) => img.isPrimary) || product.images[0];
-    if (!primary?.url) return null;
-
-    if (
-      primary.url.startsWith("http://") ||
-      primary.url.startsWith("https://")
-    ) {
-      return primary.url;
-    }
-    const cleanPath = primary.url.startsWith("/")
-      ? primary.url
-      : `/${primary.url}`;
-    return `${API_BASE_URL}${cleanPath}`;
-  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -43,15 +26,25 @@ const AdminProducts = () => {
 
     let isMounted = true;
 
-    axios
-      .get("/api/products")
+    API.get("/products")
       .then((res) => {
         if (!isMounted) return;
-        setProducts(Array.isArray(res.data?.data) ? res.data.data : []);
+        const payload = res.data;
+        let list = [];
+        if (Array.isArray(payload)) {
+          list = payload;
+        } else if (payload && typeof payload === "object") {
+          list =
+            payload.data ||
+            payload.products ||
+            payload.items ||
+            Object.values(payload).find(Array.isArray) ||
+            [];
+        }
+        setProducts(Array.isArray(list) ? list : []);
       })
-      .catch((err) => {
+      .catch(() => {
         if (!isMounted) return;
-        console.error("Failed to load catalog products:", err);
         setActionError("Unable to fetch product inventory from server.");
       })
       .finally(() => {
@@ -63,7 +56,90 @@ const AdminProducts = () => {
     };
   }, []);
 
-  // Derive unique categories dynamically
+  const handleSyncInstagram = async () => {
+    try {
+      setSyncing(true);
+      setActionError("");
+      setActionSuccess("");
+
+      const res = await fetch(INSTAGRAM_FEED_URL);
+      if (!res.ok) {
+        throw new Error(`Instagram feed error: ${res.status}`);
+      }
+      const data = await res.json();
+
+      const rawPosts = Array.isArray(data)
+        ? data
+        : Array.isArray(data?.posts)
+          ? data.posts
+          : [];
+
+      if (rawPosts.length === 0) {
+        setActionError("No posts found in the Instagram feed.");
+        return;
+      }
+
+      const mappedPosts = rawPosts.map((post) => {
+        const rawCaption = (post.caption || "Showroom Instrument").trim();
+        const captionFirstLine = rawCaption.split("\n")[0].slice(0, 80);
+        const imageUrl =
+          post.mediaUrl ||
+          post.thumbnailUrl ||
+          post.sizes?.large?.mediaUrl ||
+          post.sizes?.medium?.mediaUrl;
+
+        return {
+          name: captionFirstLine || "Showroom Instrument",
+          description:
+            rawCaption ||
+            "Live handcrafted instrument showcase from Krishna Musicals workshop.",
+          price: 0,
+          category: "Other Instruments",
+          subCategory: "Showroom Showcase",
+          brand: "Krishna Musicals",
+          stock: 1,
+          instagramId: String(post.id),
+          instagramUrl: post.permalink || "",
+          images: imageUrl
+            ? [
+                {
+                  url: imageUrl,
+                  alt: captionFirstLine || "Instagram Showroom Instrument",
+                  isPrimary: true,
+                },
+              ]
+            : [
+                {
+                  url: "/images/placeholder-instrument.jpg",
+                  alt: "Showroom Instrument",
+                  isPrimary: true,
+                },
+              ],
+        };
+      });
+
+      const syncRes = await API.post("/products/sync-instagram", {
+        posts: mappedPosts,
+      });
+
+      if (syncRes.data?.data) {
+        setProducts(syncRes.data.data);
+      }
+      setActionSuccess(
+        syncRes.data?.message || "Instagram posts synced successfully!",
+      );
+    } catch (err) {
+      console.error("Instagram sync error:", err);
+      setActionError(
+        err.response?.data?.message ||
+          err.message ||
+          "Failed to sync Instagram items with database.",
+      );
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   const categories = useMemo(() => {
     const set = new Set(
       products.map((p) => p.category?.trim()).filter(Boolean),
@@ -71,7 +147,6 @@ const AdminProducts = () => {
     return ["All", ...Array.from(set)];
   }, [products]);
 
-  // Filter products by search query and category
   const filteredProducts = useMemo(() => {
     const query = searchTerm.toLowerCase().trim();
 
@@ -99,12 +174,11 @@ const AdminProducts = () => {
       setActionError("");
       setActionSuccess("");
 
-      await axios.delete(`/api/products/${id}`);
+      await API.delete(`/products/${id}`);
 
       setProducts((prev) => prev.filter((p) => p._id !== id));
       setActionSuccess(`"${name}" was successfully removed.`);
     } catch (err) {
-      console.error("Delete product error:", err);
       setActionError(
         err.response?.data?.message ||
           "Failed to delete product from database.",
@@ -116,7 +190,6 @@ const AdminProducts = () => {
 
   return (
     <main className="admin-products-page">
-      {/* Page Header */}
       <header className="admin-products-header">
         <div>
           <div className="admin-breadcrumbs">
@@ -131,16 +204,39 @@ const AdminProducts = () => {
           </p>
         </div>
 
-        <button
-          type="button"
-          className="admin-add-product-btn"
-          onClick={() => navigate("/admin/products/add")}
-        >
-          + Add New Instrument
-        </button>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <button
+            type="button"
+            className="admin-sync-btn"
+            onClick={handleSyncInstagram}
+            disabled={syncing}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              padding: "10px 16px",
+              borderRadius: "8px",
+              border: "1px solid var(--gold-primary, #c89d5c)",
+              background: "transparent",
+              color: "var(--gold-primary, #c89d5c)",
+              fontWeight: "600",
+              cursor: syncing ? "not-allowed" : "pointer",
+              opacity: syncing ? 0.7 : 1,
+            }}
+          >
+            📸 {syncing ? "Syncing Feed..." : "Sync Instagram Posts"}
+          </button>
+
+          <button
+            type="button"
+            className="admin-add-product-btn"
+            onClick={() => navigate("/admin/products/add")}
+          >
+            + Add New Instrument
+          </button>
+        </div>
       </header>
 
-      {/* Notifications */}
       {actionError && (
         <div className="admin-banner error" role="alert">
           {actionError}
@@ -152,7 +248,6 @@ const AdminProducts = () => {
         </div>
       )}
 
-      {/* Filter & Search Toolbar */}
       <section className="admin-toolbar-card">
         <div className="toolbar-search">
           <input
@@ -168,7 +263,7 @@ const AdminProducts = () => {
               onClick={() => setSearchTerm("")}
               aria-label="Clear search"
             >
-              ×
+              ✕
             </button>
           )}
         </div>
@@ -192,7 +287,6 @@ const AdminProducts = () => {
         </div>
       </section>
 
-      {/* Product List / Table */}
       <section className="admin-products-container">
         {loading ? (
           <div className="admin-state-card">
@@ -234,7 +328,10 @@ const AdminProducts = () => {
               </thead>
               <tbody>
                 {filteredProducts.map((product) => {
-                  const imageUrl = getImageUrl(product);
+                  const primaryImage = getPrimaryImage(product.images);
+                  const imageUrl = primaryImage
+                    ? getOptimizedImageUrl(primaryImage.url, { width: 120 })
+                    : null;
                   const isDeleting = deletingId === product._id;
                   const isLowStock = Number(product.stock) <= 0;
 
@@ -242,19 +339,22 @@ const AdminProducts = () => {
                     <tr
                       key={product._id}
                       className={isDeleting ? "row-deleting" : ""}
+                      onClick={() => navigate(`/products/${product._id}`)}
+                      style={{ cursor: "pointer" }}
                     >
-                      {/* Product Thumbnail & Details */}
                       <td className="table-product-cell">
                         <div className="table-img-frame">
                           {imageUrl ? (
                             <img
                               src={imageUrl}
-                              alt={product.images?.[0]?.alt || product.name}
+                              alt={primaryImage?.alt || product.name}
                               loading="lazy"
                               onError={(e) => {
                                 e.currentTarget.style.display = "none";
-                                e.currentTarget.nextSibling.style.display =
-                                  "flex";
+                                if (e.currentTarget.nextSibling) {
+                                  e.currentTarget.nextSibling.style.display =
+                                    "flex";
+                                }
                               }}
                             />
                           ) : null}
@@ -266,35 +366,56 @@ const AdminProducts = () => {
                           </div>
                         </div>
                         <div className="table-product-info">
-                          <strong>{product.name}</strong>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "6px",
+                            }}
+                          >
+                            <strong>{product.name}</strong>
+                            {product.isInstagram && (
+                              <span
+                                style={{
+                                  fontSize: "11px",
+                                  padding: "2px 6px",
+                                  borderRadius: "4px",
+                                  background: "rgba(200, 157, 92, 0.15)",
+                                  color: "var(--gold-primary, #c89d5c)",
+                                  fontWeight: "700",
+                                }}
+                                title="Imported from Instagram showroom"
+                              >
+                                IG
+                              </span>
+                            )}
+                          </div>
                           <span>{product.brand || "Krishna Musicals"}</span>
                         </div>
                       </td>
 
-                      {/* Category */}
                       <td>
                         <span className="category-tag">
                           {product.category || "Uncategorized"}
                         </span>
                       </td>
 
-                      {/* Price */}
                       <td className="price-cell">
                         {product.price > 0
                           ? `₹${Number(product.price).toLocaleString("en-IN")}`
                           : "On Request"}
                       </td>
 
-                      {/* Stock Level */}
                       <td>
                         <span
-                          className={`stock-badge ${isLowStock ? "out-of-stock" : ""}`}
+                          className={`stock-badge ${
+                            isLowStock ? "out-of-stock" : ""
+                          }`}
                         >
                           {product.stock ?? "N/A"} in stock
                         </span>
                       </td>
 
-                      {/* Visibility Status */}
                       <td>
                         <span
                           className={`status-pill ${
@@ -307,8 +428,10 @@ const AdminProducts = () => {
                         </span>
                       </td>
 
-                      {/* Action Controls */}
-                      <td className="actions-col">
+                      <td
+                        className="actions-col"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <div className="actions-cluster">
                           <button
                             type="button"
@@ -342,6 +465,4 @@ const AdminProducts = () => {
       </section>
     </main>
   );
-};
-
-export default AdminProducts;
+}

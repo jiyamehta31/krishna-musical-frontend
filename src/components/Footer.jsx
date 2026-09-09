@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import "./Footer.css";
+import "./Footer.css"
+;
 
-const WHATSAPP_NUMBER = "918829906454";
+const WHATSAPP_NUMBER = "919414592216";
 
 const Footer = () => {
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
@@ -61,7 +62,7 @@ const Footer = () => {
             </p>
             <p>
               <span className="contact-icon">📞</span>
-              <a href="tel:+918829906454">+91 88299 06454</a>
+              <a href="tel:+919414592216">+91 9414592216 </a>
             </p>
             <p>
               <span className="contact-icon">💬</span>

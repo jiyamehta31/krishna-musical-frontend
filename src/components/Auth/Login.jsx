@@ -1,41 +1,49 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import API from "../../api/axios";
+import { useAuth } from "../../context/authContextDef";
 import "./Login.css";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  "https://krishna-musical-backend-1.onrender.com";
+export default function Login() {
+  const navigate = useNavigate();
+  const {
+    isAuthenticated,
+    loading: authLoading,
+    user,
+    loginWithCredentials,
+  } = useAuth();
 
-const Login = () => {
   const [formData, setFormData] = useState({
-    identifier: "", // Can be email or username
+    identifier: "",
     password: "",
   });
 
-  // Step state: "login" -> "otp" (if unverified)
   const [step, setStep] = useState("login");
   const [otp, setOtp] = useState("");
   const [unverifiedEmail, setUnverifiedEmail] = useState("");
 
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("expired") === "true"
+      ? "Your session has expired. Please sign in again."
+      : "";
+  });
   const [successMessage, setSuccessMessage] = useState("");
 
-  const navigate = useNavigate();
-
-  // Redirect if already authenticated
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Login | Krishna Musicals";
 
-    const token = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
-
-    if (token && storedUser) {
-      navigate("/profile", { replace: true });
+    // ONLY redirect if initial session loading is completely finished
+    if (!authLoading && isAuthenticated) {
+      if (user?.role === "admin") {
+        navigate("/admin", { replace: true });
+      } else {
+        navigate("/profile", { replace: true });
+      }
     }
-  }, [navigate]);
+  }, [isAuthenticated, authLoading, user, navigate]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -44,7 +52,6 @@ const Login = () => {
     }));
   };
 
-  // STEP 1: Standard Login Attempt
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -61,27 +68,27 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
+      const response = await API.post("/auth/login", {
         identifier,
         password,
       });
 
-      const { token, user } = response.data;
+      const { token, user: loggedInUser } = response.data;
 
-      if (!token || !user) {
+      if (!token || !loggedInUser) {
         throw new Error("Invalid response received from server.");
       }
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
+      loginWithCredentials(loggedInUser, token);
 
-      navigate("/profile", { replace: true });
+      if (loggedInUser.role === "admin") {
+        navigate("/admin", { replace: true });
+      } else {
+        navigate("/profile", { replace: true });
+      }
     } catch (error) {
-      console.error("Login error:", error);
-
       const serverData = error.response?.data;
 
-      // Handle unverified user state seamlessly
       if (error.response?.status === 403 && serverData?.isUnverified) {
         setUnverifiedEmail(serverData.email);
         setStep("otp");
@@ -101,7 +108,6 @@ const Login = () => {
     }
   };
 
-  // STEP 2: Verify OTP if account was unverified
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -115,28 +121,27 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}/api/auth/verify-email`,
-        {
-          email: unverifiedEmail,
-          otp: otp.trim(),
-        },
-      );
+      const response = await API.post("/auth/verify-email", {
+        email: unverifiedEmail,
+        otp: otp.trim(),
+      });
 
-      const { token, user } = response.data;
+      const { token, user: verifiedUser } = response.data;
 
-      if (!token || !user) {
+      if (!token || !verifiedUser) {
         throw new Error(
           "Verification succeeded, but no session token was received.",
         );
       }
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
+      loginWithCredentials(verifiedUser, token);
 
-      navigate("/profile", { replace: true });
+      if (verifiedUser.role === "admin") {
+        navigate("/admin", { replace: true });
+      } else {
+        navigate("/profile", { replace: true });
+      }
     } catch (error) {
-      console.error("Verification error:", error);
       setErrorMessage(
         error.response?.data?.message ||
           "Invalid or expired verification code. Please try again.",
@@ -146,14 +151,13 @@ const Login = () => {
     }
   };
 
-  // Re-request OTP if previous code expired
   const handleResendOtp = async () => {
     setErrorMessage("");
     setSuccessMessage("");
     setLoading(true);
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/auth/resend-otp`, {
+      const response = await API.post("/auth/resend-otp", {
         email: unverifiedEmail,
       });
 
@@ -162,7 +166,6 @@ const Login = () => {
           "A fresh 6-digit verification code has been dispatched to your email.",
       );
     } catch (error) {
-      console.error("Resend error:", error);
       setErrorMessage(
         error.response?.data?.message ||
           "Failed to resend code. Please try again later.",
@@ -171,6 +174,11 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  // Prevent any DOM flicker while AuthContext is verifying stored tokens
+  if (authLoading) {
+    return null;
+  }
 
   return (
     <main className="login-page">
@@ -194,7 +202,6 @@ const Login = () => {
           </div>
         )}
 
-        {/* STEP 1: Standard Login Form */}
         {step === "login" && (
           <form className="login-form" onSubmit={handleLogin}>
             <div className="form-group">
@@ -233,7 +240,6 @@ const Login = () => {
           </form>
         )}
 
-        {/* STEP 2: Unverified Account OTP Screen */}
         {step === "otp" && (
           <form className="login-form" onSubmit={handleVerifyOtp}>
             <div className="form-group">
@@ -274,7 +280,7 @@ const Login = () => {
                 style={{
                   background: "none",
                   border: "none",
-                  color: "#c89d5c",
+                  color: "var(--gold-primary, #c89d5c)",
                   cursor: "pointer",
                   textDecoration: "underline",
                   fontSize: "14px",
@@ -292,6 +298,4 @@ const Login = () => {
       </div>
     </main>
   );
-};
-
-export default Login;
+}

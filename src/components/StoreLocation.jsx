@@ -1,4 +1,5 @@
-import "./StoreLocation.css";
+import "./StoreLocation.css"
+;
 
 const StoreLocation = () => {
   const storeDetails = {
@@ -44,7 +45,7 @@ const StoreLocation = () => {
               <a
                 href={`tel:${storeDetails.phone}`}
                 style={{
-                  color: "#0c1f34",
+                  color: "var(--navy-primary, #0c1f34)",
                   textDecoration: "none",
                   fontWeight: 600,
                 }}

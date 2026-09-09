@@ -1,15 +1,19 @@
 :root {
   --navy: #07182F;
   --navy-light: #0D2545;
+  --navy-primary: #0c1f34;
 
   --cream: #F7F0E2;
+  --cream-bg: #f8f3e8;
+  --cream-surface: #faf6ed;
+  --cream-border: #d9cdb9;
 
   --gold: #B58A3A;
   --gold-dark: #8A6424;
+  --gold-primary: #c89d5c;
 
   --text-dark: #172033;
   --text-muted: #66615A;
 
   --white: #FFFFFF;
 }
-

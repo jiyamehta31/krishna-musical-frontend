@@ -1,6 +1,7 @@
-import "./WhatsappButton.css";
+import "./WhatsappButton.css"
+;
 
-const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || "918829906454";
+const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || "919414592216";
 
 const DEFAULT_MESSAGE =
   "Hello Krishna Musicals, I am browsing your website and would like to enquire about your instruments.";

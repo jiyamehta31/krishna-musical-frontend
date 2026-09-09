@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./AboutUs.css";
+import "./AboutUs.css"
+;
 
-
-// 1. Data extracted outside component to avoid recreation on every re-render
 const STATS = [
   { value: "60+", label: "Years of Experience" },
   { value: "4th", label: "Generation" },
@@ -143,10 +142,9 @@ const WHY_US = [
   },
 ];
 
-const AboutUs = () => {
-  // Ensure user lands at the top of the page when navigating via React Router
+export default function AboutUs() {
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    window.scrollTo(0, 0);
     document.title = "About Us | Krishna Musicals";
   }, []);
 
@@ -157,7 +155,7 @@ const AboutUs = () => {
         <div className="about-hero-overlay">
           <p className="about-eyebrow">KRISHNA MUSICALS</p>
           <h1>About Us</h1>
-          <p>A Legacy of Music, Craftsmanship &amp; Trust</p>
+          <p>A Legacy of Music, Craftsmanship & Trust</p>
           <span>Since 1960</span>
         </div>
       </section>
@@ -313,7 +311,7 @@ const AboutUs = () => {
           </div>
 
           <h2>
-            Built on Experience &amp; <em>Trust</em>
+            Built on Experience & <em>Trust</em>
           </h2>
         </div>
 
@@ -348,9 +346,6 @@ const AboutUs = () => {
           </div>
         </div>
       </section>
-      
     </main>
   );
-};
-
-export default AboutUs;
+}

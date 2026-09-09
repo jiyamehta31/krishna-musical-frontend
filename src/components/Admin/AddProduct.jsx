@@ -1,11 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
-import "./AddProduct.css";
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  "https://krishna-musical-backend-1.onrender.com";
+import API from "../../api/axios";
+import "./AddProduct.css"
+;
 
 const MAX_IMAGES = 5;
 const MAX_FILE_SIZE_MB = 5;
@@ -35,21 +32,25 @@ const SPEC_PRESETS = [
   "Included Accessories",
 ];
 
-const AddProduct = () => {
+export default function AddProduct() {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const errorRef = useRef(null); // Ref for error auto-scroll
 
   const [formData, setFormData] = useState({
     name: "",
     category: "",
+    subCategory: "",
     brand: "Krishna Musicals",
     description: "",
     price: "",
     stock: "1",
     status: "active",
+    instagramId: "",
+    instagramUrl: "",
+    isInstagram: false,
   });
 
-  // Dynamic specifications state
   const [specs, setSpecs] = useState([
     { key: "Wood Type", value: "" },
     { key: "Tuning Pitch", value: "A440Hz" },
@@ -57,7 +58,7 @@ const AddProduct = () => {
 
   const [images, setImages] = useState([]);
   const [coverIndex, setCoverIndex] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -65,6 +66,21 @@ const AddProduct = () => {
     window.scrollTo(0, 0);
     document.title = "Add Instrument | Krishna Musicals Admin";
   }, []);
+
+  // Auto-scroll to error and auto-dismiss after 7 seconds
+  useEffect(() => {
+    if (!errorMessage) return;
+
+    // Smooth scroll directly to the alert banner
+    errorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    // Auto-dismiss after 7 seconds
+    const timer = setTimeout(() => {
+      setErrorMessage("");
+    }, 7000);
+
+    return () => clearTimeout(timer);
+  }, [errorMessage]);
 
   useEffect(() => {
     return () => {
@@ -156,7 +172,7 @@ const AddProduct = () => {
       return;
     }
 
-    setLoading(true);
+    setSubmitting(true);
 
     const reorderedImages = [...images];
     if (coverIndex > 0 && coverIndex < reorderedImages.length) {
@@ -164,7 +180,6 @@ const AddProduct = () => {
       reorderedImages.unshift(coverItem);
     }
 
-    // Convert dynamic rows into a key-value object
     const cleanSpecifications = {};
     specs.forEach((item) => {
       if (item.key.trim() && item.value.trim()) {
@@ -175,24 +190,30 @@ const AddProduct = () => {
     const data = new FormData();
     data.append("name", formData.name.trim());
     data.append("category", formData.category.trim());
+    data.append("subCategory", formData.subCategory.trim());
     data.append("brand", formData.brand.trim());
     data.append("description", formData.description.trim());
-    data.append("price", formData.price ? Number(formData.price) : 0);
+    data.append("price", formData.price !== "" ? Number(formData.price) : 0);
     data.append("stock", Number(formData.stock) || 0);
     data.append("status", formData.status);
     data.append("specifications", JSON.stringify(cleanSpecifications));
+
+    if (formData.instagramId.trim()) {
+      data.append("instagramId", formData.instagramId.trim());
+    }
+    if (formData.instagramUrl.trim()) {
+      data.append("instagramUrl", formData.instagramUrl.trim());
+    }
+    data.append("isInstagram", String(formData.isInstagram));
 
     reorderedImages.forEach((imgObj) => {
       data.append("images", imgObj.file);
     });
 
-    const token = localStorage.getItem("token");
-
     try {
-      await axios.post(`${API_BASE_URL}/api/products`, data, {
+      await API.post("/products", data, {
         headers: {
           "Content-Type": "multipart/form-data",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
       });
 
@@ -204,19 +225,17 @@ const AddProduct = () => {
         navigate("/admin/products");
       }, 1200);
     } catch (error) {
-      console.error("Error adding product:", error);
-
       const serverMsg =
         error.response?.data?.message ||
         error.response?.data?.error ||
         (error.response?.status === 404
-          ? "API Endpoint not found. Please verify the backend URL."
+          ? "API Endpoint not found. Please verify backend routes."
           : error.response?.status === 401 || error.response?.status === 403
             ? "Unauthorized. Please log into admin again."
             : "Failed to save instrument. Please verify all fields.");
 
       setErrorMessage(serverMsg);
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -238,11 +257,21 @@ const AddProduct = () => {
           </p>
         </header>
 
+        {/* Dynamic Flash Alert with Close Button and Ref */}
         {errorMessage && (
-          <div className="form-alert error-banner" role="alert">
-            {errorMessage}
+          <div ref={errorRef} className="form-alert error-banner" role="alert">
+            <span className="alert-text">{errorMessage}</span>
+            <button
+              type="button"
+              className="alert-dismiss-btn"
+              onClick={() => setErrorMessage("")}
+              aria-label="Dismiss message"
+            >
+              ✕
+            </button>
           </div>
         )}
+
         {successMessage && (
           <div className="form-alert success-banner" role="status">
             {successMessage}
@@ -250,7 +279,6 @@ const AddProduct = () => {
         )}
 
         <form className="add-product-form" onSubmit={handleSubmit}>
-          {/* Basic Information */}
           <div className="form-card">
             <h2>Basic Information</h2>
 
@@ -264,12 +292,12 @@ const AddProduct = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                disabled={loading}
+                disabled={submitting}
                 required
               />
             </div>
 
-            <div className="form-row">
+            <div className="form-row three-col">
               <div className="form-group">
                 <label htmlFor="product-category">Category *</label>
                 <input
@@ -281,7 +309,7 @@ const AddProduct = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, category: e.target.value })
                   }
-                  disabled={loading}
+                  disabled={submitting}
                   required
                 />
                 <datalist id="category-suggestions">
@@ -289,6 +317,20 @@ const AddProduct = () => {
                     <option key={cat} value={cat} />
                   ))}
                 </datalist>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="product-subcategory">Sub-Category</label>
+                <input
+                  id="product-subcategory"
+                  type="text"
+                  placeholder="e.g. Marching Band, School Assembly"
+                  value={formData.subCategory}
+                  onChange={(e) =>
+                    setFormData({ ...formData, subCategory: e.target.value })
+                  }
+                  disabled={submitting}
+                />
               </div>
 
               <div className="form-group">
@@ -301,14 +343,14 @@ const AddProduct = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, brand: e.target.value })
                   }
-                  disabled={loading}
+                  disabled={submitting}
                 />
               </div>
             </div>
 
             <div className="form-group">
               <label htmlFor="product-description">
-                Acoustic Description & Specifications *
+                Acoustic Description &amp; Specifications *
               </label>
               <textarea
                 id="product-description"
@@ -318,13 +360,59 @@ const AddProduct = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                disabled={loading}
+                disabled={submitting}
                 required
               />
             </div>
           </div>
 
-          {/* Technical Specifications */}
+          <div className="form-card">
+            <h2>Showroom &amp; Social Integration (Optional)</h2>
+            <div className="form-row two-col">
+              <div className="form-group">
+                <label htmlFor="product-instagram-id">Instagram Post ID</label>
+                <input
+                  id="product-instagram-id"
+                  type="text"
+                  placeholder="e.g. 18023948572019483"
+                  value={formData.instagramId}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      instagramId: e.target.value,
+                      isInstagram: Boolean(
+                        e.target.value.trim() || formData.instagramUrl.trim(),
+                      ),
+                    })
+                  }
+                  disabled={submitting}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="product-instagram-url">
+                  Instagram Post Link
+                </label>
+                <input
+                  id="product-instagram-url"
+                  type="url"
+                  placeholder="https://www.instagram.com/p/..."
+                  value={formData.instagramUrl}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      instagramUrl: e.target.value,
+                      isInstagram: Boolean(
+                        e.target.value.trim() || formData.instagramId.trim(),
+                      ),
+                    })
+                  }
+                  disabled={submitting}
+                />
+              </div>
+            </div>
+          </div>
+
           <div className="form-card">
             <div className="form-card-header">
               <h2>Technical Specifications</h2>
@@ -332,7 +420,7 @@ const AddProduct = () => {
                 type="button"
                 className="add-spec-btn"
                 onClick={() => addSpecRow()}
-                disabled={loading}
+                disabled={submitting}
               >
                 + Add Spec Field
               </button>
@@ -351,7 +439,7 @@ const AddProduct = () => {
                   type="button"
                   className="preset-chip"
                   onClick={() => addSpecRow(preset)}
-                  disabled={loading}
+                  disabled={submitting}
                 >
                   + {preset}
                 </button>
@@ -369,7 +457,7 @@ const AddProduct = () => {
                       handleSpecChange(idx, "key", e.target.value)
                     }
                     className="spec-key-input"
-                    disabled={loading}
+                    disabled={submitting}
                   />
                   <input
                     type="text"
@@ -379,7 +467,7 @@ const AddProduct = () => {
                       handleSpecChange(idx, "value", e.target.value)
                     }
                     className="spec-val-input"
-                    disabled={loading}
+                    disabled={submitting}
                   />
                   <button
                     type="button"
@@ -387,7 +475,7 @@ const AddProduct = () => {
                     onClick={() => removeSpecRow(idx)}
                     title="Remove specification"
                     aria-label="Remove specification"
-                    disabled={loading}
+                    disabled={submitting}
                   >
                     ✕
                   </button>
@@ -396,9 +484,8 @@ const AddProduct = () => {
             </div>
           </div>
 
-          {/* Inventory & Pricing */}
           <div className="form-card">
-            <h2>Inventory & Pricing</h2>
+            <h2>Inventory &amp; Pricing</h2>
 
             <div className="form-row three-col">
               <div className="form-group">
@@ -413,7 +500,7 @@ const AddProduct = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, price: e.target.value })
                   }
-                  disabled={loading}
+                  disabled={submitting}
                 />
               </div>
 
@@ -430,7 +517,7 @@ const AddProduct = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, stock: e.target.value })
                   }
-                  disabled={loading}
+                  disabled={submitting}
                 />
               </div>
 
@@ -442,7 +529,7 @@ const AddProduct = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, status: e.target.value })
                   }
-                  disabled={loading}
+                  disabled={submitting}
                 >
                   <option value="active">Active (Visible in Store)</option>
                   <option value="inactive">Draft / Hidden</option>
@@ -451,7 +538,6 @@ const AddProduct = () => {
             </div>
           </div>
 
-          {/* Images */}
           <div className="form-card">
             <div className="form-card-header">
               <h2>Instrument Photographs *</h2>
@@ -474,7 +560,7 @@ const AddProduct = () => {
                 accept="image/jpeg,image/png,image/webp"
                 multiple
                 onChange={handleImageChange}
-                disabled={loading || images.length >= MAX_IMAGES}
+                disabled={submitting || images.length >= MAX_IMAGES}
                 className="file-input-hidden"
               />
               <label htmlFor="file-upload" className="file-upload-trigger">
@@ -487,13 +573,13 @@ const AddProduct = () => {
             </div>
 
             {images.length > 0 && (
-              <div className="preview-grid">
+              <div className="preview-grid" style={{ marginTop: "16px" }}>
                 {images.map((img, index) => {
                   const isCover = coverIndex === index;
                   return (
                     <div
                       key={img.id}
-                      className={`preview-card ${isCover ? "is-cover" : ""}`}
+                      className={`preview-card is-new ${isCover ? "is-cover" : ""}`}
                     >
                       <img
                         src={img.previewUrl}
@@ -528,18 +614,17 @@ const AddProduct = () => {
             )}
           </div>
 
-          {/* Form Actions */}
           <div className="form-actions-bar">
             <button
               type="button"
               className="cancel-btn"
-              disabled={loading}
+              disabled={submitting}
               onClick={() => navigate("/admin/products")}
             >
               Cancel
             </button>
-            <button type="submit" className="submit-btn" disabled={loading}>
-              {loading
+            <button type="submit" className="submit-btn" disabled={submitting}>
+              {submitting
                 ? "Registering Instrument..."
                 : "Save & Publish Instrument"}
             </button>
@@ -548,6 +633,4 @@ const AddProduct = () => {
       </div>
     </main>
   );
-};
-
-export default AddProduct;
+}

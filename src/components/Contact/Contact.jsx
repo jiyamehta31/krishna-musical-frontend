@@ -1,16 +1,12 @@
 import { useState } from "react";
-import axios from "axios";
-import "./Contact.css";
+import API from "../../api/axios";
+import "./Contact.css"
+;
 import StoreLocation from "../StoreLocation";
 
+const WHATSAPP_NUMBER = "919414592216";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  "https://krishna-musical-backend-1.onrender.com";
-
-const WHATSAPP_NUMBER = "918829906454";
-
-const Contact = () => {
+export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -35,7 +31,6 @@ const Contact = () => {
     e.preventDefault();
     setStatusFeedback({ type: "", message: "" });
 
-    // 1. Validation
     const cleanedPhone = formData.phone.replace(/\D/g, "");
     if (cleanedPhone.length < 10) {
       setStatusFeedback({
@@ -47,7 +42,6 @@ const Contact = () => {
 
     setSubmitting(true);
 
-    // 2. Format WhatsApp text
     const formattedWhatsAppMessage = `*New Website Enquiry - Krishna Musicals*
 *Name:* ${formData.name.trim()}
 *Phone:* ${formData.phone.trim()}
@@ -60,22 +54,18 @@ ${formData.message.trim()}`;
       formattedWhatsAppMessage,
     )}`;
 
-    // 3. Open WhatsApp IMMEDIATELY (synchronously within user click context)
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
 
-    // 4. Fire-and-forget backend logging in the background (non-blocking)
-    axios
-      .post(`${API_BASE_URL}/api/enquiries`, {
-        name: formData.name.trim(),
-        phone: formData.phone.trim(),
-        email: formData.email.trim(),
-        message: formData.message.trim(),
-      })
-      .catch((err) => {
-        console.warn("Could not record enquiry in database:", err);
-      });
+    // Silently log the inquiry in the database; do not block the UI if it fails
+    API.post("/enquiries", {
+      name: formData.name.trim(),
+      phone: formData.phone.trim(),
+      email: formData.email.trim(),
+      message: formData.message.trim(),
+    }).catch((err) => {
+      console.warn("Could not record enquiry in database:", err);
+    });
 
-    // 5. Clean up UI immediately
     setStatusFeedback({
       type: "success",
       message: "Opening WhatsApp... Your message is ready to send!",
@@ -93,7 +83,6 @@ ${formData.message.trim()}`;
 
   return (
     <main className="contact-page">
-      {/* Header */}
       <section className="contact-header">
         <p className="section-label">GET IN TOUCH</p>
         <h1>Contact Us</h1>
@@ -103,9 +92,7 @@ ${formData.message.trim()}`;
         </p>
       </section>
 
-      {/* Contact Content */}
       <section className="contact-content">
-        {/* Information Panel */}
         <div className="contact-info">
           <p className="section-label">LET'S CONNECT</p>
           <h2>We're Here to Help</h2>
@@ -119,7 +106,7 @@ ${formData.message.trim()}`;
             <div className="contact-detail">
               <h3>Phone & WhatsApp</h3>
               <p>
-                <a href="tel:+918829906454">+91 88299 06454</a>
+                <a href="tel:+919414592216">+91 88299 06454</a>
               </p>
             </div>
 
@@ -144,7 +131,6 @@ ${formData.message.trim()}`;
           </div>
         </div>
 
-        {/* Form Panel */}
         <div className="contact-form-wrapper">
           <form className="contact-form" onSubmit={handleSubmit}>
             <h2>Send Us a Message</h2>
@@ -231,8 +217,6 @@ ${formData.message.trim()}`;
       </section>
 
       <StoreLocation />
-      </main>
+    </main>
   );
-};
-
-export default Contact;
+}

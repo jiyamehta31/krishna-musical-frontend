@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./Review.css";
+import "./Review.css"
+;
 
 const API_BASE_URL =
   import.meta.env.VITE_API_URL ||
   "https://krishna-musical-backend-1.onrender.com";
 
-// Helper to extract YouTube video ID for embedded previews
 const getYouTubeEmbedUrl = (url) => {
   if (!url) return null;
   const regExp =
@@ -21,21 +21,18 @@ const getYouTubeEmbedUrl = (url) => {
 const Review = ({ product = {}, setProduct, productId }) => {
   const navigate = useNavigate();
 
-  // Review Form States
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState("");
   const [reviewLoading, setReviewLoading] = useState(false);
   const [reviewError, setReviewError] = useState("");
   const [reviewSuccess, setReviewSuccess] = useState("");
 
-  // Video Review Form States
   const [videoTitle, setVideoTitle] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
   const [videoLoading, setVideoLoading] = useState(false);
   const [videoError, setVideoError] = useState("");
   const [videoSuccess, setVideoSuccess] = useState("");
 
-  // Safely extract user from localStorage, checking both _id and id
   const getCurrentUser = () => {
     try {
       const rawUser = localStorage.getItem("user");
@@ -50,9 +47,6 @@ const Review = ({ product = {}, setProduct, productId }) => {
   const currentUserId = currentUser?._id || currentUser?.id;
   const token = localStorage.getItem("token");
 
-  // =========================================================
-  // 1. ADD WRITTEN REVIEW
-  // =========================================================
   const handleAddReview = async (e) => {
     e.preventDefault();
     setReviewError("");
@@ -86,7 +80,6 @@ const Review = ({ product = {}, setProduct, productId }) => {
 
       const { data: newReview, averageRating, numReviews } = response.data;
 
-      // Update parent product state including the updated summary counters
       setProduct((prev) => ({
         ...prev,
         reviews: [...(prev.reviews || []), newReview],
@@ -108,9 +101,6 @@ const Review = ({ product = {}, setProduct, productId }) => {
     }
   };
 
-  // =========================================================
-  // 2. DELETE WRITTEN REVIEW
-  // =========================================================
   const handleDeleteReview = async (reviewId) => {
     if (!token) {
       navigate("/login");
@@ -145,9 +135,6 @@ const Review = ({ product = {}, setProduct, productId }) => {
     }
   };
 
-  // =========================================================
-  // 3. ADD VIDEO REVIEW / DEMO
-  // =========================================================
   const handleAddVideoReview = async (e) => {
     e.preventDefault();
     setVideoError("");
@@ -199,9 +186,6 @@ const Review = ({ product = {}, setProduct, productId }) => {
     }
   };
 
-  // =========================================================
-  // 4. DELETE VIDEO REVIEW
-  // =========================================================
   const handleDeleteVideoReview = async (videoReviewId) => {
     if (!token) {
       navigate("/login");
@@ -237,16 +221,12 @@ const Review = ({ product = {}, setProduct, productId }) => {
 
   return (
     <div className="reviews-component-wrapper">
-      {/* =========================================
-          SECTION 1: CUSTOMER WRITTEN REVIEWS
-      ========================================= */}
       <section className="product-reviews-section">
         <div className="reviews-header">
           <h2>Customer Reviews</h2>
           <p>Read authentic feedback from artists, learners, and performers.</p>
         </div>
 
-        {/* Existing Reviews List */}
         <div className="reviews-list">
           {reviews.length > 0 ? (
             reviews.map((review) => {
@@ -319,7 +299,6 @@ const Review = ({ product = {}, setProduct, productId }) => {
           )}
         </div>
 
-        {/* Add Written Review Form */}
         <div className="add-review-box">
           <h3>Write a Review</h3>
 
@@ -383,9 +362,6 @@ const Review = ({ product = {}, setProduct, productId }) => {
         </div>
       </section>
 
-      {/* =========================================
-          SECTION 2: VIDEO REVIEWS & SOUND DEMOS
-      ========================================= */}
       <section className="video-reviews-section">
         <div className="reviews-header">
           <h2>Sound &amp; Video Demonstrations</h2>
@@ -482,7 +458,6 @@ const Review = ({ product = {}, setProduct, productId }) => {
           )}
         </div>
 
-        {/* Add Video Review Form */}
         <div className="add-review-box">
           <h3>Share a Sound Demo</h3>
 

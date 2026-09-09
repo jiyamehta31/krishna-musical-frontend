@@ -1,37 +1,14 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "./Home.css";
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  "https://krishna-musical-backend-1.onrender.com";
+import { getOptimizedImageUrl, getPrimaryImage } from "../../utils/media"; 
+import "./Home.css"
+;
 
 const Home = () => {
   const [highlightIndex, setHighlightIndex] = useState(0);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Helper to safely format product image URLs
-  const getImageUrl = (product) => {
-    if (!product?.images || product.images.length === 0) return null;
-
-    const primaryImg =
-      product.images.find((img) => img.isPrimary) || product.images[0];
-    if (!primaryImg?.url) return null;
-
-    if (
-      primaryImg.url.startsWith("http://") ||
-      primaryImg.url.startsWith("https://")
-    ) {
-      return primaryImg.url;
-    }
-
-    const cleanPath = primaryImg.url.startsWith("/")
-      ? primaryImg.url
-      : `/${primaryImg.url}`;
-    return `${API_BASE_URL}${cleanPath}`;
-  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -40,13 +17,33 @@ const Home = () => {
 
     let isMounted = true;
 
+    // Use relative path so global Axios baseURL handles the endpoint cleanly
     axios
-      .get(`${API_BASE_URL}/api/products`)
+      .get("/products")
       .then((response) => {
-        if (isMounted) {
-          setProducts(response.data?.data || []);
-          setLoading(false);
+        if (!isMounted) return;
+
+        const payload = response.data;
+        let list = [];
+
+        if (Array.isArray(payload)) {
+          list = payload;
+        } else if (payload && typeof payload === "object") {
+          list =
+            payload.data ||
+            payload.products ||
+            payload.items ||
+            Object.values(payload).find(Array.isArray) ||
+            [];
         }
+
+        // Filter out inactive/draft items
+        const activeProducts = Array.isArray(list)
+          ? list.filter((p) => p.status !== "inactive")
+          : [];
+
+        setProducts(activeProducts);
+        setLoading(false);
       })
       .catch((err) => {
         if (isMounted) {
@@ -66,7 +63,7 @@ const Home = () => {
       title: "Discover Our Harmoniums",
       description:
         "Explore our collection of harmoniums, selected with care for musicians who value tone quality, seasoned teakwood craftsmanship, and musical expression.",
-      image: `${API_BASE_URL}/uploads/images/amritHarmonium.png`,
+      image: `https://res.cloudinary.com/qdq9uyg2/image/upload/v1788879033/krishna_musicals_catalog/vuagzhomm8utxeq9q3mi.jpg`,
       button: "Explore Harmoniums",
     },
     {
@@ -74,7 +71,7 @@ const Home = () => {
       title: "Made With Generations of Experience",
       description:
         "Our journey combines traditional hand-carving techniques with decades of acoustic tuning to bring musicians instruments they can rely on for a lifetime.",
-      image: `${API_BASE_URL}/uploads/images/chang3.jpg`,
+      image: `https://res.cloudinary.com/qdq9uyg2/image/upload/v1788878977/krishna_musicals_catalog/fcwumopj21awjjlxh9yb.jpg`,
       button: "Explore Instruments",
     },
     {
@@ -82,7 +79,7 @@ const Home = () => {
       title: "Four Generations of Musical Tradition",
       description:
         "Since 1960, our passion for music has been carried forward through four generations while preserving the acoustic values and devotion that built our journey.",
-      image: `${API_BASE_URL}/uploads/images/drumset.png`,
+      image: `https://res.cloudinary.com/qdq9uyg2/image/upload/v1788878762/krishna_musicals_catalog/wnhtviy9ab4zl87rjmqm.jpg`,
       button: "Discover Our Story",
     },
   ];
@@ -260,7 +257,10 @@ const Home = () => {
             </div>
           ) : (
             products.slice(0, 3).map((product) => {
-              const imageUrl = getImageUrl(product);
+              const primaryImage = getPrimaryImage(product.images);
+              const imageUrl = primaryImage
+                ? getOptimizedImageUrl(primaryImage.url, { width: 500 })
+                : null;
 
               return (
                 <div className="featured-card" key={product._id}>
@@ -268,18 +268,28 @@ const Home = () => {
                     {imageUrl ? (
                       <img
                         src={imageUrl}
-                        alt={product.images?.[0]?.alt || product.name}
+                        alt={primaryImage?.alt || product.name}
                         loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                          if (e.currentTarget.nextSibling) {
+                            e.currentTarget.nextSibling.style.display = "flex";
+                          }
+                        }}
                       />
-                    ) : (
-                      <div className="featured-placeholder">
-                        No Image Available
-                      </div>
-                    )}
+                    ) : null}
+                    <div
+                      className="featured-placeholder"
+                      style={{ display: imageUrl ? "none" : "flex" }}
+                    >
+                      🎵 No Image Available
+                    </div>
                   </div>
 
                   <div className="featured-info">
-                    <p className="featured-category">{product.category}</p>
+                    <p className="featured-category">
+                      {product.category || "Instrument"}
+                    </p>
                     <h3>{product.name}</h3>
                     <p className="featured-brand">
                       {product.brand || "Krishna Craft"}

@@ -2,18 +2,16 @@ import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { transformInstagramPostToProduct } from "../../utils/instagramAdapter";
-import "./ProductDetails.css";
+import { getOptimizedImageUrl } from "../../utils/media";
+import "./ProductDetails.css"
+;
 import Review from "../Reviews/Review";
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  "https://krishna-musical-backend-1.onrender.com";
 
 const INSTAGRAM_FEED_URL =
   import.meta.env.VITE_INSTAGRAM_FEED_URL ||
   "https://feeds.behold.so/xzK6rxt0HtOb3FvyCdHg";
 
-const WHATSAPP_NUMBER = "918829906454";
+const WHATSAPP_NUMBER = "919414592216";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -35,15 +33,6 @@ const ProductDetails = () => {
 
   // 2. Derive loading state instead of manual booleans
   const loading = !product && !error;
-
-  const formatImageUrl = (rawUrl) => {
-    if (!rawUrl) return "/images/placeholder-instrument.jpg";
-    if (rawUrl.startsWith("http://") || rawUrl.startsWith("https://")) {
-      return rawUrl;
-    }
-    const cleanPath = rawUrl.replace("../", "").replace(/^\/+/, "");
-    return `${API_BASE_URL}/${cleanPath}`;
-  };
 
   // 3. Dual-mode data fetching (Instagram feed vs MongoDB database)
   useEffect(() => {
@@ -79,7 +68,7 @@ const ProductDetails = () => {
 
           const transformed = transformInstagramPostToProduct(targetPost);
 
-          // Add clean details attributes
+          // Standardize showroom specifications
           transformed.specifications = {
             "Sourced From": "Krishna Musicals Live Showroom Feed",
             "Workshop Availability": "Showroom Demo Unit (Pali Workshop)",
@@ -102,12 +91,18 @@ const ProductDetails = () => {
       };
     }
 
-    // B. Handle regular MongoDB products
+    // B. Handle regular MongoDB products (use relative path to avoid /api/api)
     axios
-      .get(`${API_BASE_URL}/api/products/${id}`)
+      .get(`/products/${id}`)
       .then((response) => {
         if (!isMounted) return;
-        const fetchedProduct = response.data?.data;
+
+        const payload = response.data;
+        const fetchedProduct =
+          payload?.data ||
+          payload?.product ||
+          (payload && !payload.success && payload._id ? payload : null);
+
         if (!fetchedProduct) {
           setError("Product details could not be found.");
         } else {
@@ -211,7 +206,7 @@ Namaste! I would like to check availability, acoustic sound samples, and deliver
   const images = Array.isArray(product.images) ? product.images : [];
   const hasImages = images.length > 0;
   const currentImageUrl = hasImages
-    ? formatImageUrl(images[activeImage]?.url)
+    ? getOptimizedImageUrl(images[activeImage]?.url, { width: 1200 })
     : null;
 
   const specifications = getParsedSpecifications();
@@ -288,26 +283,34 @@ Namaste! I would like to check availability, acoustic sound samples, and deliver
 
           {images.length > 1 && (
             <div className="product-thumbnails">
-              {images.map((image, index) => (
-                <button
-                  type="button"
-                  key={image.url || index}
-                  className={`thumbnail-wrapper ${
-                    activeImage === index ? "active" : ""
-                  }`}
-                  onClick={() => setActiveImage(index)}
-                  aria-label={`View photo ${index + 1}`}
-                >
-                  <img
-                    src={formatImageUrl(image.url)}
-                    alt={image.alt || `${product.name} thumbnail ${index + 1}`}
-                    onError={(e) => {
-                      e.currentTarget.src =
-                        "/images/placeholder-instrument.jpg";
-                    }}
-                  />
-                </button>
-              ))}
+              {images.map((image, index) => {
+                const thumbUrl = getOptimizedImageUrl(image.url, {
+                  width: 200,
+                });
+                return (
+                  <button
+                    type="button"
+                    key={image.url || index}
+                    className={`thumbnail-wrapper ${
+                      activeImage === index ? "active" : ""
+                    }`}
+                    onClick={() => setActiveImage(index)}
+                    aria-label={`View photo ${index + 1}`}
+                  >
+                    <img
+                      src={thumbUrl}
+                      alt={
+                        image.alt || `${product.name} thumbnail ${index + 1}`
+                      }
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.src =
+                          "/images/placeholder-instrument.jpg";
+                      }}
+                    />
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>
@@ -319,12 +322,15 @@ Namaste! I would like to check availability, acoustic sound samples, and deliver
             {product.isInstagram && (
               <span
                 style={{
-                  background: "#fef3c7",
-                  color: "#92400e",
-                  padding: "2px 8px",
-                  borderRadius: "12px",
+                  background: "rgba(200, 157, 92, 0.12)",
+                  color: "var(--gold-primary, #c89d5c)",
+                  padding: "3px 10px",
+                  borderRadius: "20px",
                   fontSize: "11px",
-                  fontWeight: "600",
+                  fontWeight: "700",
+                  letterSpacing: "0.5px",
+                  textTransform: "uppercase",
+                  border: "1px solid rgba(200, 157, 92, 0.35)",
                 }}
               >
                 📸 Instagram Showroom
@@ -401,7 +407,11 @@ Namaste! I would like to check availability, acoustic sound samples, and deliver
                     href={product.instagramUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ color: "#b58a3a", textDecoration: "underline" }}
+                    style={{
+                      color: "var(--gold-primary, #c89d5c)",
+                      textDecoration: "underline",
+                      fontWeight: "500",
+                    }}
                   >
                     View on Instagram ↗
                   </a>

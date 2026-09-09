@@ -1,33 +1,28 @@
-/* =========================================
-   PAGE BASE & DESIGN TOKENS
-========================================= */
-
 :root {
   --navy-primary: #0c1f34;
   --navy-dark: #081524;
   --gold-primary: #c89d5c;
   --gold-hover: #dfb36e;
-  --gold-subtle: rgba(200, 157, 92, 0.15);
   --cream-bg: #f8f3e8;
   --cream-surface: #faf6ed;
-  --cream-card: #f4ecdc;
-  --cream-border: #d9cdb9;
   --text-primary: #0c1f34;
   --text-muted: #6e695f;
-  --text-light: #ddd8cf;
+  --text-light: #e6e2d8;
 }
 
 .about-page {
   background-color: var(--cream-bg);
   color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow-x: hidden;
   width: 100%;
+  box-sizing: border-box;
 }
 
-/* =========================================
-   HERO BANNER
-========================================= */
+.about-page *,
+.about-page *::before,
+.about-page *::after {
+  box-sizing: border-box;
+}
 
 .about-hero {
   min-height: 420px;
@@ -67,7 +62,7 @@
   font-family: Georgia, serif;
   font-size: clamp(18px, 2.5vw, 22px);
   margin: 0 0 20px;
-  color: #d7d5d0;
+  color: var(--text-light);
   font-weight: 400;
 }
 
@@ -79,10 +74,6 @@
   letter-spacing: 3px;
   text-transform: uppercase;
 }
-
-/* =========================================
-   SECTION HEADINGS & LABELS
-========================================= */
 
 .about-section-label {
   display: flex;
@@ -108,16 +99,12 @@
 }
 
 .about-section-label.light {
-  color: #d9b86c;
+  color: var(--gold-hover);
 }
 
 .about-section-label.light span {
-  background-color: #d9b86c;
+  background-color: var(--gold-hover);
 }
-
-/* =========================================
-   INTRODUCTION & YEAR BADGE
-========================================= */
 
 .about-intro {
   max-width: 1250px;
@@ -162,15 +149,17 @@
 
 .about-year-card {
   min-height: 320px;
-  border: 1px solid var(--cream-border);
+  border: 1px solid rgba(200, 157, 92, 0.25);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
-  background-color: var(--cream-card);
+  background-color: var(--cream-surface);
   padding: 30px;
   text-align: center;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(12, 31, 52, 0.04);
 }
 
 .about-year-card::before,
@@ -199,7 +188,7 @@
 .about-year-card span {
   font-size: 12px;
   letter-spacing: 4px;
-  color: #777064;
+  color: var(--text-muted);
   font-weight: 600;
 }
 
@@ -216,13 +205,9 @@
   margin: 0;
   font-size: 13px;
   letter-spacing: 1px;
-  color: #777064;
+  color: var(--text-muted);
   text-transform: uppercase;
 }
-
-/* =========================================
-   HERITAGE STATS BANNER
-========================================= */
 
 .about-stats {
   background-color: var(--navy-primary);
@@ -260,10 +245,6 @@
   font-weight: 500;
 }
 
-/* =========================================
-   CRAFTSMANSHIP SHOWCASE
-========================================= */
-
 .about-craftsmanship {
   max-width: 1250px;
   margin: 0 auto;
@@ -276,17 +257,19 @@
 
 .about-craft-image {
   min-height: 480px;
-  background:
-    linear-gradient(
-      rgba(13, 31, 51, 0.65),
-      rgba(13, 31, 51, 0.65)
-    ),
-    url("/images/craftsmanship.jpg") center/cover no-repeat;
+  background-color: var(--navy-primary);
+  background-image: 
+    linear-gradient(rgba(12, 31, 52, 0.72), rgba(12, 31, 52, 0.72)),
+    url("/images/craftsmanship.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   padding: 30px;
+  border-radius: 8px;
 }
 
 .craft-image-content {
@@ -308,12 +291,10 @@
   color: #ffffff;
 }
 
-/* =========================================
-   SERVICES GRID & SVG ICONS
-========================================= */
-
 .about-services {
-  background-color: #f0e8d8;
+  background-color: var(--cream-surface);
+  border-top: 1px solid rgba(200, 157, 92, 0.15);
+  border-bottom: 1px solid rgba(200, 157, 92, 0.15);
   padding: 100px 40px;
 }
 
@@ -332,8 +313,9 @@
 }
 
 .about-service-card {
-  background-color: var(--cream-surface);
-  border: 1px solid #dfd4c2;
+  background-color: #ffffff;
+  border: 1px solid rgba(200, 157, 92, 0.22);
+  border-radius: 6px;
   padding: 35px;
   min-height: 240px;
   position: relative;
@@ -344,14 +326,14 @@
 
 .about-service-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 14px 28px rgba(12, 31, 52, 0.08);
+  box-shadow: 0 14px 28px rgba(12, 31, 52, 0.06);
 }
 
 .service-number {
   position: absolute;
   top: 24px;
   right: 24px;
-  color: #cfc4b3;
+  color: rgba(200, 157, 92, 0.4);
   font-size: 13px;
   font-weight: 700;
 }
@@ -384,15 +366,11 @@
 }
 
 .about-service-card p {
-  color: #716b61;
+  color: var(--text-muted);
   font-size: 14.5px;
   line-height: 1.65;
   margin: 0;
 }
-
-/* =========================================
-   FOUR GENERATIONS TIMELINE
-========================================= */
 
 .about-generations {
   background-color: var(--navy-primary);
@@ -417,7 +395,7 @@
 .generations-content > p {
   max-width: 680px;
   margin: 0 auto;
-  color: #d7d5d0;
+  color: var(--text-light);
   line-height: 1.8;
   font-size: 15.5px;
 }
@@ -444,7 +422,7 @@
 
 .generation-item p {
   margin: 0;
-  color: #d6d2ca;
+  color: var(--text-light);
   font-size: 12.5px;
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -477,10 +455,6 @@
   right: 0;
 }
 
-/* =========================================
-   WHY US (2x2 GRID)
-========================================= */
-
 .about-why {
   max-width: 1200px;
   margin: 0 auto;
@@ -490,16 +464,16 @@
 .why-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  border-bottom: 1px solid var(--cream-border);
+  border-bottom: 1px solid rgba(200, 157, 92, 0.2);
 }
 
 .why-item {
   padding: 36px 30px;
-  border-top: 1px solid var(--cream-border);
+  border-top: 1px solid rgba(200, 157, 92, 0.2);
 }
 
 .why-item:nth-child(odd) {
-  border-right: 1px solid var(--cream-border);
+  border-right: 1px solid rgba(200, 157, 92, 0.2);
 }
 
 .why-item strong {
@@ -519,15 +493,11 @@
 }
 
 .why-item p {
-  color: #716b61;
+  color: var(--text-muted);
   font-size: 14.5px;
   line-height: 1.7;
   margin: 0;
 }
-
-/* =========================================
-   CALL TO ACTION (CTA)
-========================================= */
 
 .about-cta {
   background-color: var(--navy-primary);
@@ -565,13 +535,13 @@
 .about-secondary-btn {
   text-decoration: none;
   padding: 14px 30px;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border-radius: 4px;
 }
 
 .about-primary-btn {
@@ -596,10 +566,6 @@
   color: var(--navy-primary);
   border-color: #ffffff;
 }
-
-/* =========================================
-   RESPONSIVE BREAKPOINTS
-========================================= */
 
 @media (max-width: 960px) {
   .about-intro {

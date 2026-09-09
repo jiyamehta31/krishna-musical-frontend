@@ -1,42 +1,43 @@
+// src/components/Auth/Signup.jsx
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import "./Signup.css";
+import API from "../../api/axios";
+import { useAuth } from "../../context/authContextDef";
+import "./Login.css";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  "https://krishna-musical-backend-1.onrender.com";
+export default function Signup() {
+  const navigate = useNavigate();
+  const {
+    isAuthenticated,
+    loading: authLoading,
+    user,
+    loginWithCredentials,
+  } = useAuth();
 
-const Signup = () => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
   });
 
-  // Step management: "form" -> "otp"
-  const [step, setStep] = useState("form");
+  const [step, setStep] = useState("signup"); // 'signup' | 'otp'
   const [otp, setOtp] = useState("");
-  const [registeredEmail, setRegisteredEmail] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const navigate = useNavigate();
-
-  // Redirect if already authenticated
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Create Account | Krishna Musicals";
 
-    const token = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
-
-    if (token && storedUser) {
-      navigate("/profile", { replace: true });
+    if (!authLoading && isAuthenticated) {
+      if (user?.role === "admin") {
+        navigate("/admin", { replace: true });
+      } else {
+        navigate("/profile", { replace: true });
+      }
     }
-  }, [navigate]);
+  }, [isAuthenticated, authLoading, user, navigate]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -45,7 +46,6 @@ const Signup = () => {
     }));
   };
 
-  // STEP 1: Submit Form & Trigger OTP Email
   const handleSignup = async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -55,8 +55,8 @@ const Signup = () => {
     const email = formData.email.trim().toLowerCase();
     const password = formData.password;
 
-    if (username.length < 3) {
-      setErrorMessage("Username must be at least 3 characters long.");
+    if (!username || !email || !password) {
+      setErrorMessage("Please fill in all required fields.");
       return;
     }
 
@@ -68,69 +68,72 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/auth/signup`, {
+      // Corrected from /auth/register to /auth/signup
+      const response = await API.post("/auth/signup", {
         username,
         email,
         password,
       });
 
-      if (response.data?.success) {
-        setRegisteredEmail(email);
-        setStep("otp");
-        setSuccessMessage(
-          "Verification code sent to your email. Check your inbox!",
-        );
-      } else {
-        throw new Error(response.data?.message || "Registration failed.");
+      // If backend issues a session immediately
+      if (response.data?.token && response.data?.user) {
+        loginWithCredentials(response.data.user, response.data.token);
+        navigate("/profile", { replace: true });
+        return;
       }
+
+      // If OTP email verification is enforced
+      setStep("otp");
+      setSuccessMessage(
+        response.data?.message ||
+          `Verification code sent to ${email}. Please check your inbox.`,
+      );
     } catch (error) {
-      console.error("Signup error:", error);
       const serverMsg =
         error.response?.data?.message ||
+        error.response?.data?.error ||
         error.message ||
-        "Registration failed. Please check your details or try a different email.";
+        "Registration failed. Please verify your details.";
       setErrorMessage(serverMsg);
     } finally {
       setLoading(false);
     }
   };
 
-  // STEP 2: Submit 6-digit OTP to Activate Account & Log In
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
 
     if (otp.trim().length !== 6) {
-      setErrorMessage("Please enter the complete 6-digit code.");
+      setErrorMessage("Please enter the complete 6-digit verification code.");
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}/api/auth/verify-email`,
-        {
-          email: registeredEmail,
-          otp: otp.trim(),
-        },
-      );
+      const response = await API.post("/auth/verify-email", {
+        email: formData.email.trim().toLowerCase(),
+        otp: otp.trim(),
+      });
 
-      const { token, user } = response.data;
+      const { token, user: verifiedUser } = response.data;
 
-      if (!token || !user) {
+      if (!token || !verifiedUser) {
         throw new Error(
-          "Activation succeeded but no session token was received.",
+          "Verification completed, but no session token was received.",
         );
       }
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
+      loginWithCredentials(verifiedUser, token);
 
-      navigate("/profile", { replace: true });
+      if (verifiedUser.role === "admin") {
+        navigate("/admin", { replace: true });
+      } else {
+        navigate("/profile", { replace: true });
+      }
     } catch (error) {
-      console.error("Verification error:", error);
       setErrorMessage(
         error.response?.data?.message ||
           "Invalid or expired verification code. Please try again.",
@@ -140,64 +143,66 @@ const Signup = () => {
     }
   };
 
-  // Re-request OTP code
   const handleResendOtp = async () => {
     setErrorMessage("");
     setSuccessMessage("");
     setLoading(true);
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/auth/resend-otp`, {
-        email: registeredEmail,
+      const response = await API.post("/auth/resend-otp", {
+        email: formData.email.trim().toLowerCase(),
       });
 
       setSuccessMessage(
-        response.data?.message || "A new 6-digit code was sent to your email.",
+        response.data?.message ||
+          "A fresh 6-digit verification code has been dispatched to your email.",
       );
     } catch (error) {
-      console.error("Resend error:", error);
       setErrorMessage(
         error.response?.data?.message ||
-          "Unable to resend OTP. Please try again later.",
+          "Failed to resend code. Please try again later.",
       );
     } finally {
       setLoading(false);
     }
   };
 
+  if (authLoading) {
+    return null;
+  }
+
   return (
-    <main className="signup-page">
-      <div className="signup-container">
-        <h1>{step === "form" ? "Create Account" : "Verify Email"}</h1>
-        <p className="signup-subtitle">
-          {step === "form"
-            ? "Join the Krishna Musicals community"
-            : `Enter the 6-digit code sent to ${registeredEmail}`}
+    <main className="login-page">
+      <div className="login-container">
+        <h1>{step === "signup" ? "Create Account" : "Verify Email"}</h1>
+        <p className="login-subtitle">
+          {step === "signup"
+            ? "Join Krishna Musicals for custom orders & workshop updates"
+            : `Enter the 6-digit code sent to ${formData.email}`}
         </p>
 
         {errorMessage && (
-          <div className="signup-error-banner" role="alert">
+          <div className="login-error-banner" role="alert">
             {errorMessage}
           </div>
         )}
 
         {successMessage && (
-          <div className="signup-success-banner" role="status">
+          <div className="login-success-banner" role="status">
             {successMessage}
           </div>
         )}
 
-        {/* STEP 1: Registration Form */}
-        {step === "form" && (
-          <form className="signup-form" onSubmit={handleSignup}>
+        {step === "signup" && (
+          <form className="login-form" onSubmit={handleSignup}>
             <div className="form-group">
-              <label htmlFor="signup-username">Full Name or Username *</label>
+              <label htmlFor="signup-username">Full Name / Username *</label>
               <input
                 id="signup-username"
                 type="text"
                 name="username"
-                autoComplete="username"
-                placeholder="e.g. Rahul Sharma"
+                autoComplete="name"
+                placeholder="e.g. Ramesh Sharma"
                 value={formData.username}
                 onChange={handleChange}
                 disabled={loading}
@@ -212,7 +217,7 @@ const Signup = () => {
                 type="email"
                 name="email"
                 autoComplete="email"
-                placeholder="name@example.com"
+                placeholder="you@example.com"
                 value={formData.email}
                 onChange={handleChange}
                 disabled={loading}
@@ -229,7 +234,7 @@ const Signup = () => {
                 type="password"
                 name="password"
                 autoComplete="new-password"
-                placeholder="Create a secure password"
+                placeholder="Create a strong password"
                 value={formData.password}
                 onChange={handleChange}
                 disabled={loading}
@@ -237,15 +242,14 @@ const Signup = () => {
               />
             </div>
 
-            <button type="submit" className="signup-button" disabled={loading}>
-              {loading ? "Sending Code..." : "Create Account"}
+            <button type="submit" className="login-button" disabled={loading}>
+              {loading ? "Creating Account..." : "Sign Up"}
             </button>
           </form>
         )}
 
-        {/* STEP 2: OTP Verification Form */}
         {step === "otp" && (
-          <form className="signup-form" onSubmit={handleVerifyOtp}>
+          <form className="login-form" onSubmit={handleVerifyOtp}>
             <div className="form-group">
               <label htmlFor="signup-otp">6-Digit Verification Code *</label>
               <input
@@ -269,8 +273,8 @@ const Signup = () => {
               />
             </div>
 
-            <button type="submit" className="signup-button" disabled={loading}>
-              {loading ? "Verifying..." : "Verify & Complete Signup"}
+            <button type="submit" className="login-button" disabled={loading}>
+              {loading ? "Verifying..." : "Verify & Complete"}
             </button>
 
             <div
@@ -284,7 +288,7 @@ const Signup = () => {
                 style={{
                   background: "none",
                   border: "none",
-                  color: "#c89d5c",
+                  color: "var(--gold-primary, #c89d5c)",
                   cursor: "pointer",
                   textDecoration: "underline",
                   fontSize: "14px",
@@ -297,11 +301,9 @@ const Signup = () => {
         )}
 
         <p className="auth-switch">
-          Already have an account? <Link to="/login">Login</Link>
+          Already have an account? <Link to="/login">Sign in</Link>
         </p>
       </div>
     </main>
   );
-};
-
-export default Signup;
+}

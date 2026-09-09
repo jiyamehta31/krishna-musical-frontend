@@ -1,25 +1,10 @@
-import { useEffect, useState } from "react";
-import { useNavigate, Navigate, Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Navigate, Link } from "react-router-dom";
+import { useAuth } from "../../context/authContextDef";
 import "./Profile.css";
 
 const Profile = () => {
-  const navigate = useNavigate();
-
-  // Safely parse user from localStorage
-  const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
-    if (!storedUser || storedUser === "undefined") return null;
-    try {
-      return JSON.parse(storedUser);
-    } catch (err) {
-      console.error("Corrupted user session:", err);
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-      return null;
-    }
-  });
-
-  const token = localStorage.getItem("token");
+  const { user, loading, isAuthenticated, isAdmin, logout } = useAuth();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -30,21 +15,20 @@ const Profile = () => {
     }
   }, [user]);
 
-  // Declarative, pure redirect during render phase
-  if (!token || !user) {
+  // 1. Wait for AuthProvider to finish its check - prevents early redirect flash
+  if (loading) {
+    return null;
+  }
+
+  // 2. If unauthenticated after check, do a single clean redirect
+  if (!isAuthenticated || !user) {
     return <Navigate to="/login" replace />;
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
-
-    // Clean client-side transition to login
-    navigate("/login", { replace: true });
-  };
-
-  const isAdmin = user.role === "admin";
+ const handleLogout = () => {
+   logout();
+   window.location.replace("/login");
+ };
 
   return (
     <main className="profile-page">
@@ -81,7 +65,6 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Quick link for administrators */}
         {isAdmin && (
           <div className="profile-admin-cta">
             <Link to="/admin" className="admin-portal-link">

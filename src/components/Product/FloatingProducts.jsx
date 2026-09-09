@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import "./FloatingProducts.css";
+import "./FloatingProducts.css"
+;
 
 const API_BASE_URL =
   import.meta.env.VITE_API_URL ||
   "https://krishna-musical-backend-1.onrender.com";
 
-const WHATSAPP_NUMBER = "918829906454";
+const WHATSAPP_NUMBER = "919414592216";
 
 const FloatingProducts = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -19,7 +20,7 @@ const FloatingProducts = () => {
   useEffect(() => {
     let isMounted = true;
     axios
-      .get(`${API_BASE_URL}/api/products?sort=rating`)
+      .get(`${API_BASE_URL}/products?sort=rating`)
       .then((res) => {
         if (!isMounted) return;
         const list = Array.isArray(res.data?.data)

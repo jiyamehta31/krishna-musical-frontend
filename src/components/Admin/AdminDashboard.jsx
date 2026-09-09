@@ -1,20 +1,12 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import API from "../../api/axios";
+import { useAuth } from "../../context/authContextDef";
 import "./AdminDashboard.css";
 
-const AdminDashboard = () => {
+export default function AdminDashboard() {
   const navigate = useNavigate();
-
-  // Read admin user session directly
-  const adminUser = useMemo(() => {
-    try {
-      const stored = localStorage.getItem("user");
-      return stored && stored !== "undefined" ? JSON.parse(stored) : null;
-    } catch {
-      return null;
-    }
-  }, []);
+  const { user, logout } = useAuth();
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,16 +18,17 @@ const AdminDashboard = () => {
 
     let isMounted = true;
 
-    // Axios interceptor configured in main.jsx automatically attaches Bearer token
-    axios
-      .get("/api/products")
+    API.get("/products")
       .then((res) => {
         if (!isMounted) return;
-        setProducts(Array.isArray(res.data?.data) ? res.data.data : []);
+        const list =
+          res.data?.data ||
+          res.data?.products ||
+          (Array.isArray(res.data) ? res.data : []);
+        setProducts(list);
       })
-      .catch((err) => {
+      .catch(() => {
         if (!isMounted) return;
-        console.error("Dashboard metric fetch failed:", err);
         setError("Unable to sync catalog metrics. Please check server status.");
       })
       .finally(() => {
@@ -47,7 +40,6 @@ const AdminDashboard = () => {
     };
   }, []);
 
-  // Compute live operational metrics
   const metrics = useMemo(() => {
     const total = products.length;
     const active = products.filter((p) => p.status !== "inactive").length;
@@ -66,22 +58,20 @@ const AdminDashboard = () => {
     };
   }, [products]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/admin/login", { replace: true });
-  };
+ const handleLogout = () => {
+   logout();
+   window.location.replace("/admin/login");
+ };
 
   return (
     <main className="admin-dashboard-page">
-      {/* Top Header Bar */}
       <header className="admin-header">
         <div className="admin-header-text">
           <span className="admin-pill">WORKSHOP MANAGEMENT</span>
           <h1>Inventory Dashboard</h1>
           <p>
-            Welcome back{adminUser?.username ? `, ${adminUser.username}` : ""}!
-            Monitor workshop stock, instrument pricing, and catalog visibility.
+            Welcome back{user?.username ? `, ${user.username}` : ""}! Monitor
+            workshop stock, instrument pricing, and catalog visibility.
           </p>
         </div>
 
@@ -110,7 +100,6 @@ const AdminDashboard = () => {
         </div>
       )}
 
-      {/* Primary KPI Metrics Grid */}
       <section className="admin-stats-grid">
         <div className="admin-stat-card">
           <span className="stat-label">Total Instruments</span>
@@ -141,7 +130,6 @@ const AdminDashboard = () => {
         </div>
       </section>
 
-      {/* Operational Shortcuts */}
       <section className="admin-quick-actions-section">
         <h2>Quick Actions</h2>
         <div className="admin-actions-grid">
@@ -195,7 +183,6 @@ const AdminDashboard = () => {
         </div>
       </section>
 
-      {/* Recent Inventory Snapshot */}
       <section className="admin-recent-section">
         <div className="recent-header">
           <h2>Recently Registered Instruments</h2>
@@ -271,6 +258,4 @@ const AdminDashboard = () => {
       </section>
     </main>
   );
-};
-
-export default AdminDashboard;
+}

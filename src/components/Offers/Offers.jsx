@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import "./Offers.css";
+import "./Offers.css"
+;
 
 const API_BASE_URL =
   import.meta.env.VITE_API_URL ||
   "https://krishna-musical-backend-1.onrender.com";
 
-const WHATSAPP_NUMBER = "918829906454";
+const WHATSAPP_NUMBER = "919414592216";
 
 const DEFAULT_OFFERS = [
   {

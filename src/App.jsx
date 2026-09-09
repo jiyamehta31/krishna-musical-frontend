@@ -6,8 +6,8 @@ import {
   useLocation,
 } from "react-router-dom";
 import { useEffect } from "react";
+import AuthProvider from "./context/AuthContext.jsx";
 
-// Client Pages
 import Home from "./components/Home/Home";
 import Products from "./components/Product/Products";
 import ProductDetails from "./components/Product/ProductDetails";
@@ -18,12 +18,10 @@ import Profile from "./components/Profile/Profile";
 import Login from "./components/Auth/Login";
 import Signup from "./components/Auth/Signup";
 
-// Client Persistent Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import WhatsappButton from "./components/WhatsappButton";
 
-// Admin Pages & Protection
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import AdminProducts from "./components/Admin/AdminProducts";
 import AdminLogin from "./components/Admin/AdminLogin";
@@ -32,31 +30,30 @@ import AddProduct from "./components/Admin/AddProduct";
 import EditProduct from "./components/Admin/EditProduct";
 import FloatingProducts from "./components/Product/FloatingProducts.jsx";
 
-// 1. Global Scroll Restoration Helper
 const ScrollToTop = () => {
-  const { pathname, search } = useLocation();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [pathname, search]);
+  }, [pathname]);
 
   return null;
 };
 
-// 2. Client-Facing Layout (Navbar + Content + Floating Widget + WhatsApp + Footer)
 const PublicLayout = () => {
   return (
-    <>
+    <div className="app">
       <Navbar />
-      <Outlet />
+      <div className="main-content">
+        <Outlet />
+      </div>
       <FloatingProducts />
       <WhatsappButton />
       <Footer />
-    </>
+    </div>
   );
 };
 
-// 3. 404 Not Found Page Component
 const NotFound = () => {
   return (
     <main
@@ -68,15 +65,16 @@ const NotFound = () => {
         justifyContent: "center",
         textAlign: "center",
         padding: "40px 20px",
-        background: "var(--cream, #f7f3eb)",
+        background: "var(--cream-bg, #f8f3e8)",
       }}
     >
       <h1
         style={{
-          fontFamily: "'Playfair Display', Georgia, serif",
+          fontFamily: "Georgia, serif",
           fontSize: "48px",
-          color: "var(--navy, #0f172a)",
+          color: "var(--navy-primary, #0c1f34)",
           margin: "0 0 12px",
+          fontWeight: 500,
         }}
       >
         404
@@ -84,15 +82,17 @@ const NotFound = () => {
       <h2
         style={{
           fontSize: "22px",
-          color: "var(--navy, #0f172a)",
+          color: "var(--navy-primary, #0c1f34)",
           margin: "0 0 16px",
+          fontFamily: "Georgia, serif",
+          fontWeight: 500,
         }}
       >
         Page Not Found
       </h2>
       <p
         style={{
-          color: "var(--text-muted, #64748b)",
+          color: "var(--text-muted, #6e695f)",
           maxWidth: "420px",
           lineHeight: "1.6",
           margin: "0 0 24px",
@@ -105,9 +105,9 @@ const NotFound = () => {
         href="/"
         style={{
           padding: "12px 24px",
-          background: "var(--navy, #0f172a)",
-          color: "var(--cream, #f7f3eb)",
-          borderRadius: "4px",
+          background: "var(--navy-primary, #0c1f34)",
+          color: "var(--cream-bg, #f8f3e8)",
+          borderRadius: "6px",
           textDecoration: "none",
           fontWeight: "600",
           fontSize: "14px",
@@ -121,47 +121,40 @@ const NotFound = () => {
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <Routes>
-        {/* =========================================
-            PUBLIC CLIENT STORE ROUTES
-        ========================================= */}
-        <Route element={<PublicLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/products/:id" element={<ProductDetails />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/offers" element={<Offers />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
+    <AuthProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <Routes>
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:id" element={<ProductDetails />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/offers" element={<Offers />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
 
-        {/* =========================================
-            ADMIN AUTH (STANDALONE CLEAN VIEW)
-        ========================================= */}
-        <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
 
-        {/* =========================================
-            PROTECTED ADMIN DASHBOARD ROUTES
-        ========================================= */}
-        <Route
-          element={
-            <ProtectedRoute>
-              <Outlet />
-            </ProtectedRoute>
-          }
-        >
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/products" element={<AdminProducts />} />
-          <Route path="/admin/products/add" element={<AddProduct />} />
-          <Route path="/admin/products/edit/:id" element={<EditProduct />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+          <Route
+            element={
+              <ProtectedRoute>
+                <Outlet />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/products" element={<AdminProducts />} />
+            <Route path="/admin/products/add" element={<AddProduct />} />
+            <Route path="/admin/products/edit/:id" element={<EditProduct />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 };
 

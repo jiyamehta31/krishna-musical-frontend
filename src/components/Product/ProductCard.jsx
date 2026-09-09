@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import "./ProductCard.css";
+import "./ProductCard.css"
+;
 
 const API_BASE_URL =
   import.meta.env.VITE_API_URL ||
@@ -15,14 +16,19 @@ const ProductCard = ({ product }) => {
       product.images.find((img) => img.isPrimary) || product.images[0];
     if (!primaryImg?.url) return null;
 
-    if (
-      primaryImg.url.startsWith("http://") ||
-      primaryImg.url.startsWith("https://")
-    ) {
-      return primaryImg.url;
+    const rawUrl = primaryImg.url;
+
+    // Direct Cloudinary or external HTTPS URL
+    if (rawUrl.startsWith("http://") || rawUrl.startsWith("https://")) {
+      // Apply Cloudinary on-the-fly transformation for thumbnail delivery speed
+      if (rawUrl.includes("res.cloudinary.com") && !rawUrl.includes("f_auto")) {
+        return rawUrl.replace("/upload/", "/upload/f_auto,q_auto,w_600/");
+      }
+      return rawUrl;
     }
 
-    const cleanPath = primaryImg.url.replace("../", "").replace(/^\/+/, "");
+    // Legacy relative local paths
+    const cleanPath = rawUrl.replace("../", "").replace(/^\/+/, "");
     return `${API_BASE_URL}/${cleanPath}`;
   };
 
@@ -34,11 +40,6 @@ const ProductCard = ({ product }) => {
 
   const handleCardClick = () => {
     navigate(`/products/${product._id}`);
-    // if (product.isInstagram && product.instagramUrl) {
-    //   window.open(product.instagramUrl, "_blank", "noopener,noreferrer");
-    //   return;
-    // }
-    navigate(`/products/${product._id}`);
   };
 
   return (
@@ -49,6 +50,7 @@ const ProductCard = ({ product }) => {
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
           handleCardClick();
         }
       }}
@@ -65,6 +67,12 @@ const ProductCard = ({ product }) => {
           />
         ) : (
           <div className="product-image-placeholder">No Image Available</div>
+        )}
+
+        {product.isInstagram && (
+          <span className="card-ig-badge" title="Live Instagram Showcase Item">
+            📸 Showroom
+          </span>
         )}
       </div>
 

@@ -1,16 +1,13 @@
-/* =====================================================
-   PRODUCT CARD COMPONENT
-===================================================== */
 
 .product-card {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: var(--white, #ffffff);
-  border: 1px solid rgba(181, 138, 58, 0.22);
+  background: #ffffff;
+  border: 1px solid rgba(200, 157, 92, 0.22);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 4px 15px rgba(12, 31, 52, 0.05);
   cursor: pointer;
   box-sizing: border-box;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
@@ -24,20 +21,19 @@
 
 .product-card:hover {
   transform: translateY(-5px);
-  border-color: rgba(181, 138, 58, 0.45);
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+  border-color: rgba(200, 157, 92, 0.45);
+  box-shadow: 0 12px 28px rgba(12, 31, 52, 0.1);
 }
 
 .product-card:focus-visible {
-  outline: 2px solid var(--gold, #b58a3a);
+  outline: 2px solid var(--gold-primary, #c89d5c);
   outline-offset: 2px;
 }
 
-/* =====================================================
-   PRODUCT IMAGE CONTAINER
-===================================================== */
+
 
 .product-image-container {
+  position: relative; /* REQUIRED: anchors .card-ig-badge within the photo frame */
   width: 100%;
   height: 240px;
   display: flex;
@@ -45,7 +41,7 @@
   justify-content: center;
   background: #ffffff;
   padding: 20px;
-  border-bottom: 1px solid rgba(181, 138, 58, 0.12);
+  border-bottom: 1px solid rgba(200, 157, 92, 0.12);
   overflow: hidden;
 }
 
@@ -61,7 +57,7 @@
 }
 
 .product-image-placeholder {
-  color: var(--text-muted, #64748b);
+  color: var(--text-muted, #6e695f);
   font-size: 12.5px;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -69,9 +65,23 @@
   text-align: center;
 }
 
-/* =====================================================
-   PRODUCT INFO & META
-===================================================== */
+/* Instagram Live Feed Tag */
+.card-ig-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(12, 31, 52, 0.85);
+  color: var(--gold-primary, #c89d5c);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+
 
 .product-info {
   padding: 20px;
@@ -91,7 +101,7 @@
 .product-category {
   font-size: 11px;
   font-weight: 700;
-  color: var(--gold-dark, #8f6b24);
+  color: var(--gold-primary, #c89d5c);
   text-transform: uppercase;
   letter-spacing: 1.2px;
   margin: 0;
@@ -99,24 +109,23 @@
 
 .product-brand {
   font-size: 12px;
-  color: var(--text-muted, #64748b);
-  background: #f8fafc;
+  color: var(--text-muted, #6e695f);
+  background: var(--cream-surface, #faf6ed);
   padding: 2px 8px;
   border-radius: 4px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(200, 157, 92, 0.2);
 }
 
 .product-title {
   margin: 0 0 8px;
-  color: var(--navy, #0f172a);
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  color: var(--navy-primary, #0c1f34);
+  font-family: Georgia, serif;
   font-size: 19px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.3;
 }
-/* =========================================
-   CARD RATING ROW
-========================================= */
+
+
 
 .product-card-rating {
   display: flex;
@@ -139,13 +148,13 @@
 }
 
 .product-card-rating .card-review-count {
-  color: #716b61;
+  color: var(--text-muted, #6e695f);
   font-size: 12px;
 }
 
 .product-description {
   margin: 0 0 18px;
-  color: var(--text-muted, #64748b);
+  color: var(--text-muted, #6e695f);
   font-size: 13.5px;
   line-height: 1.6;
   display: -webkit-box;
@@ -154,9 +163,6 @@
   overflow: hidden;
 }
 
-/* =====================================================
-   FOOTER: PRICE & ACTION
-===================================================== */
 
 .product-card-footer {
   margin-top: auto;
@@ -165,18 +171,18 @@
   justify-content: space-between;
   gap: 12px;
   padding-top: 14px;
-  border-top: 1px solid rgba(181, 138, 58, 0.12);
+  border-top: 1px solid rgba(200, 157, 92, 0.12);
 }
 
 .product-price {
-  color: var(--navy, #0f172a);
+  color: var(--navy-primary, #0c1f34);
   font-size: 17px;
   font-weight: 700;
   letter-spacing: -0.2px;
 }
 
 .product-price-inquire {
-  color: var(--gold-dark, #8f6b24);
+  color: var(--gold-primary, #c89d5c);
   font-size: 13px;
   font-style: italic;
   font-weight: 600;
@@ -186,7 +192,7 @@
   border: none;
   background: none;
   padding: 0;
-  color: var(--gold-dark, #8f6b24);
+  color: var(--gold-primary, #c89d5c);
   font-size: 13.5px;
   font-weight: 600;
   cursor: pointer;
@@ -196,7 +202,7 @@
 }
 
 .view-details:hover {
-  color: var(--navy, #0f172a);
+  color: var(--navy-primary, #0c1f34);
   transform: translateX(2px);
   text-decoration: none;
 }

@@ -7,14 +7,12 @@ import "./Products.css";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_URL ||
-  "https://krishna-musical-backend-1.onrender.com";
+  "https://krishna-musical-backend-1.onrender.com/api";
 
-// Behold.so JSON endpoint
 const INSTAGRAM_FEED_URL =
   import.meta.env.VITE_INSTAGRAM_FEED_URL ||
   "https://feeds.behold.so/xzK6rxt0HtOb3FvyCdHg";
 
-// Default catalog categories aligned with your Product model
 const DEFAULT_CATEGORIES = [
   "All",
   "Guitars",
@@ -23,7 +21,7 @@ const DEFAULT_CATEGORIES = [
   "Wind & Brass",
   "Indian Classical",
   "School Items",
-  "Other Instruments", // Auto-feed live Instagram items land here
+  "Other Instruments",
   "Accessories",
 ];
 
@@ -34,9 +32,38 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Derive directly from URL params - Single Source of Truth
   const selectedCategory = searchParams.get("category") || "All";
-  const searchTerm = searchParams.get("search") || "";
+  const urlSearch = searchParams.get("search") || "";
+
+  // 1. Local state + tracker for external URL changes
+  const [searchInput, setSearchInput] = useState(urlSearch);
+  const [prevUrlSearch, setPrevUrlSearch] = useState(urlSearch);
+
+  // Adjust state during render if URL changed externally (Back / Forward navigation)
+  if (urlSearch !== prevUrlSearch) {
+    setPrevUrlSearch(urlSearch);
+    setSearchInput(urlSearch);
+  }
+  // 2. Debounce updating the URL and use replace: true to avoid stack-filling
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const currentQuery = searchParams.get("search") || "";
+      const trimmed = searchInput.trim();
+
+      if (trimmed !== currentQuery) {
+        const newParams = new URLSearchParams(searchParams);
+        if (trimmed) {
+          newParams.set("search", trimmed);
+        } else {
+          newParams.delete("search");
+        }
+        // replace: true prevents pushing each character to the browser history
+        setSearchParams(newParams, { replace: true });
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchInput, searchParams, setSearchParams]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -44,25 +71,22 @@ const Products = () => {
 
     let isMounted = true;
 
-    // 1. Fetch backend database products via Axios
-    const catalogPromise = axios
-      .get(`${API_BASE_URL}/api/products`)
-      .then((res) => {
-        const rawProducts = Array.isArray(res.data?.data)
-          ? res.data.data
-          : Array.isArray(res.data?.products)
-            ? res.data.products
+    const fetchCatalog = axios.get(`${API_BASE_URL}/products`).then((res) => {
+      const raw = res.data;
+      const list = Array.isArray(raw)
+        ? raw
+        : Array.isArray(raw?.data)
+          ? raw.data
+          : Array.isArray(raw?.products)
+            ? raw.products
             : [];
-        return rawProducts.filter((item) => item.status !== "inactive");
-      });
+      return list.filter((item) => item.status !== "inactive");
+    });
 
-    // 2. Fetch Behold feed via native fetch() to bypass Axios defaults/interceptors
-    const instagramPromise = INSTAGRAM_FEED_URL
+    const fetchInstagram = INSTAGRAM_FEED_URL
       ? fetch(INSTAGRAM_FEED_URL)
           .then((res) => {
-            if (!res.ok) {
-              throw new Error(`Behold HTTP error: ${res.status}`);
-            }
+            if (!res.ok) throw new Error(`Behold HTTP error: ${res.status}`);
             return res.json();
           })
           .then((data) => {
@@ -71,45 +95,68 @@ const Products = () => {
               : Array.isArray(data?.posts)
                 ? data.posts
                 : [];
-            return rawPosts.map(transformInstagramPostToProduct);
+            return rawPosts;
           })
           .catch((err) => {
-            console.warn(
-              "Instagram feed temporarily unavailable:",
-              err.message,
-            );
+            console.warn("Instagram feed unavailable:", err.message);
             return [];
           })
       : Promise.resolve([]);
 
-    // Parallel fetch with resilient error boundaries
-    Promise.allSettled([catalogPromise, instagramPromise])
-      .then(([catalogResult, igResult]) => {
+    Promise.allSettled([fetchCatalog, fetchInstagram])
+      .then(([dbResult, igResult]) => {
         if (!isMounted) return;
 
-        let dbItems = [];
-        let igItems = [];
+        const dbProducts =
+          dbResult.status === "fulfilled" && Array.isArray(dbResult.value)
+            ? dbResult.value
+            : [];
 
-        if (catalogResult.status === "fulfilled") {
-          dbItems = catalogResult.value;
-        } else {
-          console.error("Catalog fetch failed:", catalogResult.reason);
-          setError("Failed to load instruments. Please check your connection.");
+        const syncedIds = new Set();
+        const syncedPermalinks = new Set();
+
+        dbProducts.forEach((p) => {
+          if (p.instagramId) {
+            syncedIds.add(String(p.instagramId).trim());
+          }
+          if (p.instagramUrl) {
+            syncedPermalinks.add(
+              String(p.instagramUrl).trim().replace(/\/+$/, ""),
+            );
+          }
+        });
+
+        let unSyncedIgProducts = [];
+
+        if (igResult.status === "fulfilled" && Array.isArray(igResult.value)) {
+          unSyncedIgProducts = igResult.value
+            .filter((post) => {
+              const cleanPostId = String(post.id).trim();
+              const cleanPermalink = String(post.permalink || "")
+                .trim()
+                .replace(/\/+$/, "");
+
+              const isDuplicate =
+                syncedIds.has(cleanPostId) ||
+                (cleanPermalink && syncedPermalinks.has(cleanPermalink));
+
+              return !isDuplicate;
+            })
+            .map((post) => transformInstagramPostToProduct(post));
         }
 
-        if (igResult.status === "fulfilled") {
-          igItems = igResult.value;
-        }
+        const combined = [...dbProducts, ...unSyncedIgProducts];
 
-        // Merge both streams
-        setProducts([...dbItems, ...igItems]);
-        setLoading(false);
+        setProducts(combined);
+        setError("");
       })
       .catch((err) => {
         if (!isMounted) return;
-        console.error("Unexpected catalog error:", err);
-        setError("Unable to display collection at this time.");
-        setLoading(false);
+        console.error("Failed to load catalog:", err);
+        setError("Unable to load instrument inventory. Please refresh.");
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
       });
 
     return () => {
@@ -124,38 +171,32 @@ const Products = () => {
     } else {
       newParams.set("category", category);
     }
+    // Clicking a distinct category is an intentional action, so we allow regular push navigation
     setSearchParams(newParams);
   };
 
-  const handleSearchChange = (value) => {
+  const handleClearSearch = () => {
+    setSearchInput("");
     const newParams = new URLSearchParams(searchParams);
-    if (!value.trim()) {
-      newParams.delete("search");
-    } else {
-      newParams.set("search", value.trim());
-    }
-    setSearchParams(newParams);
+    newParams.delete("search");
+    setSearchParams(newParams, { replace: true });
   };
 
   const handleResetFilters = () => {
-    setSearchParams(new URLSearchParams());
+    setSearchInput("");
+    setSearchParams(new URLSearchParams(), { replace: true });
   };
 
-  // Merge default categories with any dynamic categories present in products
   const categories = useMemo(() => {
     const fromProducts = products
       .map((item) => item.category?.trim())
       .filter(Boolean);
 
-    const combined = Array.from(
-      new Set([...DEFAULT_CATEGORIES, ...fromProducts]),
-    );
-    return combined;
+    return Array.from(new Set([...DEFAULT_CATEGORIES, ...fromProducts]));
   }, [products]);
 
-  // Filter products by category, name, brand, description, and subcategory
   const filteredProducts = useMemo(() => {
-    const cleanSearch = searchTerm.trim().toLowerCase();
+    const cleanSearch = searchInput.trim().toLowerCase();
 
     return products.filter((product) => {
       const matchesCategory =
@@ -181,11 +222,10 @@ const Products = () => {
 
       return matchesCategory && matchesSearch;
     });
-  }, [products, selectedCategory, searchTerm]);
+  }, [products, selectedCategory, searchInput]);
 
   return (
     <main className="products-page">
-      {/* Header */}
       <section className="products-header">
         <p className="section-label">OUR COLLECTION</p>
         <h1>Handcrafted &amp; Branded Instruments</h1>
@@ -195,20 +235,19 @@ const Products = () => {
         </p>
       </section>
 
-      {/* Filter Controls Bar */}
       <section className="products-controls">
         <div className="products-search">
           <input
             type="text"
             placeholder="Search by instrument, brand, or category..."
-            value={searchTerm}
-            onChange={(e) => handleSearchChange(e.target.value)}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
           />
-          {searchTerm && (
+          {searchInput && (
             <button
               type="button"
               className="search-clear-btn"
-              onClick={() => handleSearchChange("")}
+              onClick={handleClearSearch}
               aria-label="Clear search"
             >
               ×
@@ -246,7 +285,6 @@ const Products = () => {
         </div>
       </section>
 
-      {/* Results Metadata */}
       {!loading && !error && (
         <div className="catalog-meta-bar">
           <p className="results-count">
@@ -255,7 +293,7 @@ const Products = () => {
             {selectedCategory !== "All" && ` in "${selectedCategory}"`}
           </p>
 
-          {(selectedCategory !== "All" || searchTerm) && (
+          {(selectedCategory !== "All" || searchInput) && (
             <button
               type="button"
               className="clear-all-filters-btn"
@@ -267,7 +305,6 @@ const Products = () => {
         </div>
       )}
 
-      {/* Catalog Grid */}
       <section className="products-grid-section">
         {loading ? (
           <div className="products-message-card">
@@ -309,6 +346,6 @@ const Products = () => {
       </section>
     </main>
   );
-};
+};;
 
 export default Products;

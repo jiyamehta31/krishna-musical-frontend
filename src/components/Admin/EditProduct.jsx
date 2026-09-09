@@ -1,16 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import axios from "axios";
-import "./EditProduct.css";
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  "https://krishna-musical-backend-1.onrender.com";
+import API from "../../api/axios";
+import { getOptimizedImageUrl } from "../../utils/media";
+import "./EditProduct.css"
+;
 
 const MAX_IMAGES = 5;
 const MAX_FILE_SIZE_MB = 5;
 
-// Exact categories matching your Product.js enum & catalog
 const STANDARD_CATEGORIES = [
   "Harmonium",
   "Sitar",
@@ -36,31 +33,32 @@ const SPEC_PRESETS = [
   "Included Accessories",
 ];
 
-const EditProduct = () => {
+export default function EditProduct() {
   const { id } = useParams();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const errorRef = useRef(null); // Ref for error auto-scroll
 
   const [formData, setFormData] = useState({
     name: "",
     category: "",
+    subCategory: "",
     brand: "Krishna Musicals",
     description: "",
     price: "",
     stock: "1",
     status: "active",
+    instagramId: "",
+    instagramUrl: "",
+    isInstagram: false,
   });
 
-  // Dynamic specifications state: [{ key: string, value: string }]
   const [specs, setSpecs] = useState([]);
-
-  // Existing images fetched from server: [{ _id, url, isPrimary, alt }]
   const [existingImages, setExistingImages] = useState([]);
-  // New images selected in current session: [{ file, previewUrl, id }]
   const [newImages, setNewImages] = useState([]);
 
   const [coverSelection, setCoverSelection] = useState({
-    type: "existing", // "existing" | "new"
+    type: "existing",
     index: 0,
   });
 
@@ -69,27 +67,17 @@ const EditProduct = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const formatImageUrl = (url) => {
-    if (!url) return "/images/placeholder-instrument.jpg";
-    if (url.startsWith("http://") || url.startsWith("https://")) return url;
-    const cleanPath = url.replace("../", "").replace(/^\/+/, "");
-    return `${API_BASE_URL}/${cleanPath}`;
-  };
-
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Edit Instrument | Krishna Musicals Admin";
 
     let isMounted = true;
-    const token = localStorage.getItem("token");
 
-    axios
-      .get(`${API_BASE_URL}/api/products/${id}`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      })
+    API.get(`/products/${id}`)
       .then((response) => {
         if (!isMounted) return;
-        const product = response.data?.data;
+        const product =
+          response.data?.data || response.data?.product || response.data;
 
         if (!product) {
           setErrorMessage("Instrument details could not be found.");
@@ -100,15 +88,18 @@ const EditProduct = () => {
         setFormData({
           name: product.name || "",
           category: product.category || "",
+          subCategory: product.subCategory || "",
           brand: product.brand || "Krishna Musicals",
           description: product.description || "",
           price:
             product.price && product.price > 0 ? String(product.price) : "",
           stock: product.stock !== undefined ? String(product.stock) : "1",
           status: product.status || "active",
+          instagramId: product.instagramId || "",
+          instagramUrl: product.instagramUrl || "",
+          isInstagram: Boolean(product.isInstagram),
         });
 
-        // Parse and populate existing specifications
         let parsedSpecs = [];
         if (product.specifications) {
           let specObj = product.specifications;
@@ -151,7 +142,6 @@ const EditProduct = () => {
       })
       .catch((error) => {
         if (!isMounted) return;
-        console.error("Error fetching instrument:", error);
         setErrorMessage(
           error.response?.data?.message || "Failed to load instrument details.",
         );
@@ -163,13 +153,25 @@ const EditProduct = () => {
     };
   }, [id]);
 
+  // Auto-scroll to error and auto-dismiss after 7 seconds
+  useEffect(() => {
+    if (!errorMessage) return;
+
+    errorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    const timer = setTimeout(() => {
+      setErrorMessage("");
+    }, 7000);
+
+    return () => clearTimeout(timer);
+  }, [errorMessage]);
+
   useEffect(() => {
     return () => {
       newImages.forEach((img) => URL.revokeObjectURL(img.previewUrl));
     };
   }, [newImages]);
 
-  // Specification handlers
   const handleSpecChange = (index, field, val) => {
     const updated = [...specs];
     updated[index][field] = val;
@@ -282,7 +284,6 @@ const EditProduct = () => {
 
     setSubmitting(true);
 
-    // Convert specs array into key-value JSON
     const cleanSpecifications = {};
     specs.forEach((item) => {
       if (item.key.trim() && item.value.trim()) {
@@ -293,29 +294,33 @@ const EditProduct = () => {
     const data = new FormData();
     data.append("name", formData.name.trim());
     data.append("category", formData.category.trim());
+    data.append("subCategory", formData.subCategory.trim());
     data.append("brand", formData.brand.trim());
     data.append("description", formData.description.trim());
-    data.append("price", formData.price ? Number(formData.price) : 0);
+    data.append("price", formData.price !== "" ? Number(formData.price) : 0);
     data.append("stock", Number(formData.stock) || 0);
     data.append("status", formData.status);
     data.append("specifications", JSON.stringify(cleanSpecifications));
-
-    // Send retained images and cover selection metadata
     data.append("retainedImages", JSON.stringify(existingImages));
     data.append("coverType", coverSelection.type);
     data.append("coverIndex", coverSelection.index);
+
+    if (formData.instagramId.trim()) {
+      data.append("instagramId", formData.instagramId.trim());
+    }
+    if (formData.instagramUrl.trim()) {
+      data.append("instagramUrl", formData.instagramUrl.trim());
+    }
+    data.append("isInstagram", String(formData.isInstagram));
 
     newImages.forEach((imgObj) => {
       data.append("images", imgObj.file);
     });
 
-    const token = localStorage.getItem("token");
-
     try {
-      await axios.put(`${API_BASE_URL}/api/products/${id}`, data, {
+      await API.put(`/products/${id}`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
       });
 
@@ -324,7 +329,6 @@ const EditProduct = () => {
         navigate("/admin/products");
       }, 1200);
     } catch (error) {
-      console.error("Error updating instrument:", error);
       const serverMsg =
         error.response?.data?.message ||
         error.response?.data?.error ||
@@ -349,7 +353,6 @@ const EditProduct = () => {
   return (
     <main className="edit-product-page">
       <div className="edit-product-container">
-        {/* Navigation Breadcrumbs & Header */}
         <header className="edit-product-header">
           <div className="admin-breadcrumbs">
             <Link to="/admin">Dashboard</Link>
@@ -358,17 +361,44 @@ const EditProduct = () => {
             <span>/</span>
             <span>Edit</span>
           </div>
-          <h1>Edit Instrument</h1>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <h1>Edit Instrument</h1>
+            {formData.isInstagram && (
+              <span
+                style={{
+                  fontSize: "12px",
+                  padding: "4px 8px",
+                  borderRadius: "6px",
+                  background: "rgba(200, 157, 92, 0.15)",
+                  color: "var(--gold-primary, #c89d5c)",
+                  fontWeight: "700",
+                  border: "1px solid rgba(200, 157, 92, 0.35)",
+                }}
+              >
+                📸 Synced Instagram Post
+              </span>
+            )}
+          </div>
           <p>
             Modify specifications, stock availability, pricing, or photographs.
           </p>
         </header>
 
+        {/* Dynamic Flash Alert with Close Button and Ref */}
         {errorMessage && (
-          <div className="form-alert error-banner" role="alert">
-            {errorMessage}
+          <div ref={errorRef} className="form-alert error-banner" role="alert">
+            <span className="alert-text">{errorMessage}</span>
+            <button
+              type="button"
+              className="alert-dismiss-btn"
+              onClick={() => setErrorMessage("")}
+              aria-label="Dismiss message"
+            >
+              ✕
+            </button>
           </div>
         )}
+
         {successMessage && (
           <div className="form-alert success-banner" role="status">
             {successMessage}
@@ -376,7 +406,6 @@ const EditProduct = () => {
         )}
 
         <form className="edit-product-form" onSubmit={handleSubmit}>
-          {/* Basic Information */}
           <div className="form-card">
             <h2>Basic Information</h2>
 
@@ -395,7 +424,7 @@ const EditProduct = () => {
               />
             </div>
 
-            <div className="form-row">
+            <div className="form-row three-col">
               <div className="form-group">
                 <label htmlFor="edit-category">Category *</label>
                 <input
@@ -415,6 +444,20 @@ const EditProduct = () => {
                     <option key={cat} value={cat} />
                   ))}
                 </datalist>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="edit-subcategory">Sub-Category</label>
+                <input
+                  id="edit-subcategory"
+                  type="text"
+                  placeholder="e.g. Folding Harmonium, Concert Sitar"
+                  value={formData.subCategory}
+                  onChange={(e) =>
+                    setFormData({ ...formData, subCategory: e.target.value })
+                  }
+                  disabled={submitting}
+                />
               </div>
 
               <div className="form-group">
@@ -448,7 +491,51 @@ const EditProduct = () => {
             </div>
           </div>
 
-          {/* Technical Specifications */}
+          <div className="form-card">
+            <h2>Showroom &amp; Social Integration</h2>
+            <div className="form-row two-col">
+              <div className="form-group">
+                <label htmlFor="edit-instagram-id">Instagram Post ID</label>
+                <input
+                  id="edit-instagram-id"
+                  type="text"
+                  placeholder="e.g. 18023948572019483"
+                  value={formData.instagramId}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      instagramId: e.target.value,
+                      isInstagram: Boolean(
+                        e.target.value.trim() || formData.instagramUrl.trim(),
+                      ),
+                    })
+                  }
+                  disabled={submitting}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="edit-instagram-url">Instagram Post Link</label>
+                <input
+                  id="edit-instagram-url"
+                  type="url"
+                  placeholder="https://www.instagram.com/p/..."
+                  value={formData.instagramUrl}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      instagramUrl: e.target.value,
+                      isInstagram: Boolean(
+                        e.target.value.trim() || formData.instagramId.trim(),
+                      ),
+                    })
+                  }
+                  disabled={submitting}
+                />
+              </div>
+            </div>
+          </div>
+
           <div className="form-card">
             <div className="form-card-header">
               <h2>Technical Specifications</h2>
@@ -520,9 +607,8 @@ const EditProduct = () => {
             </div>
           </div>
 
-          {/* Inventory & Pricing */}
           <div className="form-card">
-            <h2>Inventory & Pricing</h2>
+            <h2>Inventory &amp; Pricing</h2>
 
             <div className="form-row three-col">
               <div className="form-group">
@@ -573,7 +659,6 @@ const EditProduct = () => {
             </div>
           </div>
 
-          {/* Photographs Management */}
           <div className="form-card">
             <div className="form-card-header">
               <h2>Instrument Photographs</h2>
@@ -589,7 +674,6 @@ const EditProduct = () => {
             </p>
 
             <div className="preview-grid">
-              {/* 1. Existing Saved Images */}
               {existingImages.map((img, index) => {
                 const isCover =
                   coverSelection.type === "existing" &&
@@ -601,7 +685,7 @@ const EditProduct = () => {
                     className={`preview-card ${isCover ? "is-cover" : ""}`}
                   >
                     <img
-                      src={formatImageUrl(img.url)}
+                      src={getOptimizedImageUrl(img.url, { width: 300 })}
                       alt={img.alt || `Saved image ${index + 1}`}
                       onError={(e) => {
                         e.currentTarget.src =
@@ -635,7 +719,6 @@ const EditProduct = () => {
                 );
               })}
 
-              {/* 2. Newly Queued Images */}
               {newImages.map((img, index) => {
                 const isCover =
                   coverSelection.type === "new" &&
@@ -650,7 +733,7 @@ const EditProduct = () => {
                       src={img.previewUrl}
                       alt={`New upload preview ${index + 1}`}
                     />
-                    <span className="new-badge">New</span>
+                    {/* <span className="new-badge">New</span> */}
                     <div className="preview-overlay">
                       {isCover ? (
                         <span className="cover-badge">★ Cover</span>
@@ -679,7 +762,6 @@ const EditProduct = () => {
               })}
             </div>
 
-            {/* Dropzone for Additional Uploads */}
             {totalImageCount < MAX_IMAGES && (
               <div className="upload-dropzone" style={{ marginTop: "20px" }}>
                 <input
@@ -709,7 +791,6 @@ const EditProduct = () => {
             )}
           </div>
 
-          {/* Action Buttons */}
           <div className="form-actions-bar">
             <button
               type="button"
@@ -727,6 +808,4 @@ const EditProduct = () => {
       </div>
     </main>
   );
-};
-
-export default EditProduct;
+}

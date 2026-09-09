@@ -1,7 +1,3 @@
-/* =========================================================
-   ADMIN LOGIN PAGE BASE & CENTERING
-========================================================= */
-
 .admin-login-page,
 .admin-login {
   min-height: 100vh;
@@ -9,7 +5,7 @@
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
-  background: var(--cream, #fbf7ee);
+  background: var(--cream-bg, #f8f3e8);
   box-sizing: border-box;
 }
 
@@ -19,24 +15,19 @@
   box-sizing: border-box;
 }
 
-/* =========================================================
-   ADMIN LOGIN CARD
-========================================================= */
-
 .admin-login-container,
 .login-container {
   position: relative;
   width: 100%;
   max-width: 440px;
-  background: var(--white, #ffffff);
+  background: #ffffff;
   padding: 44px 38px 36px;
   border-radius: 8px;
-  border: 1px solid rgba(195, 146, 50, 0.25);
-  box-shadow: 0 16px 36px rgba(7, 26, 51, 0.08);
+  border: 1px solid rgba(200, 157, 92, 0.25);
+  box-shadow: 0 16px 36px rgba(12, 31, 52, 0.08);
   overflow: hidden;
 }
 
-/* Heritage gold accent top border */
 .admin-login-container::before {
   content: "";
   position: absolute;
@@ -46,15 +37,11 @@
   height: 4px;
   background: linear-gradient(
     90deg,
-    var(--gold, #c39232),
-    #e2c686,
-    var(--gold, #c39232)
+    var(--gold-primary, #c89d5c),
+    #dfb36e,
+    var(--gold-primary, #c89d5c)
   );
 }
-
-/* =========================================================
-   HEADER & PORTAL BADGE
-========================================================= */
 
 .admin-login-header {
   text-align: center;
@@ -64,10 +51,10 @@
 .admin-badge {
   display: inline-block;
   padding: 3px 10px;
-  background: rgba(195, 146, 50, 0.12);
-  border: 1px solid rgba(195, 146, 50, 0.35);
+  background: rgba(200, 157, 92, 0.12);
+  border: 1px solid rgba(200, 157, 92, 0.35);
   border-radius: 20px;
-  color: var(--gold-dark, #9a6b1f);
+  color: var(--gold-primary, #c89d5c);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 1.5px;
@@ -77,31 +64,27 @@
 
 .admin-login-header h1 {
   margin: 0 0 6px;
-  color: var(--navy, #071a33);
-  font-family: var(--font-serif, "Playfair Display", Georgia, serif);
+  color: var(--navy-primary, #0c1f34);
+  font-family: Georgia, serif;
   font-size: 28px;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: -0.3px;
 }
 
 .admin-login-header p {
   margin: 0;
-  color: var(--text-muted, #665f55);
+  color: var(--text-muted, #6e695f);
   font-size: 13.5px;
   line-height: 1.5;
 }
-
-/* =========================================================
-   ERROR BANNER
-========================================================= */
 
 .login-error-banner {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  background-color: var(--danger-bg, #fef2f2);
+  background-color: #fef2f2;
   border: 1px solid #fecaca;
-  color: var(--danger, #b91c1c);
+  color: #b91c1c;
   padding: 12px 14px;
   border-radius: 6px;
   font-size: 13px;
@@ -117,10 +100,6 @@
   margin-top: 2px;
 }
 
-/* =========================================================
-   FORM & INPUT CONTROLS
-========================================================= */
-
 .admin-login-form {
   display: flex;
   flex-direction: column;
@@ -135,7 +114,7 @@
 }
 
 .form-group label {
-  color: var(--navy, #071a33);
+  color: var(--navy-primary, #0c1f34);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.2px;
@@ -148,7 +127,7 @@
   border: 1px solid #d1d5db;
   border-radius: 6px;
   background: #ffffff;
-  color: var(--text-dark, #111c2d);
+  color: var(--text-primary, #0c1f34);
   font-family: inherit;
   font-size: 14.5px;
   outline: none;
@@ -156,8 +135,8 @@
 }
 
 .admin-login-form input:focus {
-  border-color: var(--gold, #c39232);
-  box-shadow: 0 0 0 3px rgba(195, 146, 50, 0.2);
+  border-color: var(--gold-primary, #c89d5c);
+  box-shadow: 0 0 0 3px rgba(200, 157, 92, 0.2);
 }
 
 .admin-login-form input::placeholder {
@@ -172,32 +151,28 @@
   cursor: not-allowed;
 }
 
-/* =========================================================
-   SUBMIT ACTION
-========================================================= */
-
 .admin-submit-btn,
 .login-submit-btn {
   width: 100%;
   height: 46px;
   margin-top: 6px;
-  border: 1px solid var(--gold, #c39232);
+  border: 1px solid var(--gold-primary, #c89d5c);
   border-radius: 6px;
-  background: var(--gold, #c39232);
-  color: var(--navy, #071a33);
+  background: var(--gold-primary, #c89d5c);
+  color: var(--navy-primary, #0c1f34);
   font-family: inherit;
   font-size: 14.5px;
   font-weight: 700;
   letter-spacing: 0.3px;
   cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
 }
 
 .admin-submit-btn:hover:not(:disabled),
 .login-submit-btn:hover:not(:disabled) {
-  background: var(--gold-dark, #9a6b1f);
-  border-color: var(--gold-dark, #9a6b1f);
-  color: #ffffff;
+  background: var(--gold-hover, #dfb36e);
+  border-color: var(--gold-hover, #dfb36e);
+  color: var(--navy-primary, #0c1f34);
 }
 
 .admin-submit-btn:disabled,
@@ -206,19 +181,15 @@
   cursor: not-allowed;
 }
 
-/* =========================================================
-   FOOTER & RETURN LINK
-========================================================= */
-
 .admin-login-footer {
   margin-top: 24px;
   padding-top: 18px;
-  border-top: 1px solid rgba(195, 146, 50, 0.18);
+  border-top: 1px solid rgba(200, 157, 92, 0.18);
   text-align: center;
 }
 
 .back-store-link {
-  color: var(--text-muted, #665f55);
+  color: var(--text-muted, #6e695f);
   font-size: 13px;
   font-weight: 500;
   text-decoration: none;
@@ -226,13 +197,9 @@
 }
 
 .back-store-link:hover {
-  color: var(--navy, #071a33);
+  color: var(--navy-primary, #0c1f34);
   text-decoration: underline;
 }
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
 
 @media (max-width: 480px) {
   .admin-login-container,

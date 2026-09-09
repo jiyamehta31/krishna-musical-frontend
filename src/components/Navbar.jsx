@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import "./Navbar.css";
+import "./Navbar.css"
+;
 
-const WHATSAPP_PRIMARY = "918829906454";
+const WHATSAPP_PRIMARY = "919414592216";
 
 const CATEGORIES = [
   { name: "All Instruments", path: "/products" },
@@ -66,7 +67,7 @@ const Navbar = () => {
             <span className="top-icon">📞</span>
             <a href="tel:+919414592216">+91 94145 92216</a>
             <span className="top-divider">|</span>
-            <a href="tel:+918829906454">+91 88299 06454</a>
+            <a href="tel:+918209053038">+91 82090 53038</a>
           </div>
 
           <a

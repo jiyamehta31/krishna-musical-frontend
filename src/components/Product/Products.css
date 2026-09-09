@@ -1,11 +1,7 @@
-/* =====================================================
-   PRODUCTS PAGE BASE & WRAPPER
-===================================================== */
-
 .products-page {
   min-height: 100vh;
   padding-bottom: 90px;
-  background: var(--cream, #f7f3eb);
+  background-color: var(--cream-bg, #f8f3e8);
   box-sizing: border-box;
 }
 
@@ -14,10 +10,6 @@
 .products-page *::after {
   box-sizing: border-box;
 }
-
-/* =====================================================
-   HEADER
-===================================================== */
 
 .products-header {
   width: 90%;
@@ -29,7 +21,7 @@
 
 .products-header .section-label {
   margin: 0 0 12px;
-  color: var(--gold-dark, #8f6b24);
+  color: var(--gold-primary, #c89d5c);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 2.5px;
@@ -38,23 +30,20 @@
 
 .products-header h1 {
   margin: 0 0 16px;
-  color: var(--navy, #0f172a);
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  color: var(--navy-primary, #0c1f34);
+  font-family: Georgia, serif;
   font-size: clamp(32px, 4.5vw, 46px);
+  font-weight: 500;
   line-height: 1.2;
 }
 
 .products-header p:not(.section-label) {
   margin: 0 auto;
   max-width: 620px;
-  color: var(--text-muted, #64748b);
+  color: var(--text-muted, #6e695f);
   line-height: 1.7;
   font-size: 15.5px;
 }
-
-/* =====================================================
-   CONTROLS: SEARCH & CATEGORY FILTERS
-===================================================== */
 
 .products-controls {
   width: 90%;
@@ -66,7 +55,6 @@
   gap: 22px;
 }
 
-/* Search Bar with Clear Button */
 .products-search {
   position: relative;
   width: 100%;
@@ -77,24 +65,24 @@
   width: 100%;
   height: 48px;
   padding: 0 42px 0 18px;
-  border: 1px solid rgba(181, 138, 58, 0.35);
+  border: 1px solid rgba(200, 157, 92, 0.35);
   border-radius: 6px;
-  background: var(--white, #ffffff);
-  color: var(--text-dark, #1e293b);
+  background: #ffffff;
+  color: var(--text-primary, #0c1f34);
   font-family: inherit;
   font-size: 14.5px;
   outline: none;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 2px 8px rgba(12, 31, 52, 0.04);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .products-search input:focus {
-  border-color: var(--gold, #b58a3a);
-  box-shadow: 0 0 0 3px rgba(181, 138, 58, 0.18);
+  border-color: var(--gold-primary, #c89d5c);
+  box-shadow: 0 0 0 3px rgba(200, 157, 92, 0.18);
 }
 
 .products-search input::placeholder {
-  color: #94a3b8;
+  color: #9ca3af;
   font-size: 14px;
 }
 
@@ -120,10 +108,9 @@
 
 .search-clear-btn:hover {
   background: #cbd5e1;
-  color: var(--navy, #0f172a);
+  color: var(--navy-primary, #0c1f34);
 }
 
-/* Category Filter Pills */
 .category-filters {
   display: flex;
   justify-content: center;
@@ -133,10 +120,10 @@
 
 .category-pill {
   padding: 8px 18px;
-  border: 1px solid rgba(181, 138, 58, 0.35);
+  border: 1px solid rgba(200, 157, 92, 0.35);
   border-radius: 20px;
-  background: var(--white, #ffffff);
-  color: var(--navy, #0f172a);
+  background: #ffffff;
+  color: var(--navy-primary, #0c1f34);
   font-family: inherit;
   font-size: 13.5px;
   font-weight: 500;
@@ -145,22 +132,18 @@
 }
 
 .category-pill:hover {
-  border-color: var(--gold, #b58a3a);
-  color: var(--gold-dark, #8f6b24);
+  border-color: var(--gold-primary, #c89d5c);
+  color: var(--gold-primary, #c89d5c);
   transform: translateY(-1px);
 }
 
 .category-pill.active {
-  background: var(--navy, #0f172a);
-  border-color: var(--navy, #0f172a);
-  color: var(--cream, #f7f3eb);
+  background: var(--navy-primary, #0c1f34);
+  border-color: var(--navy-primary, #0c1f34);
+  color: var(--cream-bg, #f8f3e8);
   font-weight: 600;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+  box-shadow: 0 4px 12px rgba(12, 31, 52, 0.15);
 }
-
-/* =====================================================
-   CATALOG METADATA BAR
-===================================================== */
 
 .catalog-meta-bar {
   width: 90%;
@@ -172,24 +155,24 @@
   flex-wrap: wrap;
   gap: 12px;
   padding-bottom: 14px;
-  border-bottom: 1px solid rgba(181, 138, 58, 0.2);
+  border-bottom: 1px solid rgba(200, 157, 92, 0.2);
 }
 
 .results-count {
   margin: 0;
-  color: var(--text-muted, #64748b);
+  color: var(--text-muted, #6e695f);
   font-size: 13.5px;
 }
 
 .results-count strong {
-  color: var(--navy, #0f172a);
+  color: var(--navy-primary, #0c1f34);
 }
 
 .clear-all-filters-btn {
   background: none;
   border: none;
   padding: 0;
-  color: var(--gold-dark, #8f6b24);
+  color: var(--gold-primary, #c89d5c);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -199,12 +182,8 @@
 }
 
 .clear-all-filters-btn:hover {
-  color: var(--navy, #0f172a);
+  color: var(--navy-primary, #0c1f34);
 }
-
-/* =====================================================
-   GRID & EMPTY/ERROR STATES
-===================================================== */
 
 .products-grid-section {
   width: 90%;
@@ -219,21 +198,21 @@
   align-items: stretch;
 }
 
-/* Centered Status Message Cards */
 .products-message-card {
   padding: 60px 20px;
-  background: var(--white, #ffffff);
-  border: 1px dashed rgba(181, 138, 58, 0.35);
+  background: #ffffff;
+  border: 1px dashed rgba(200, 157, 92, 0.35);
   border-radius: 8px;
   text-align: center;
-  color: var(--text-muted, #64748b);
+  color: var(--text-muted, #6e695f);
 }
 
 .products-message-card h3 {
   margin: 0 0 10px;
-  color: var(--navy, #0f172a);
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  color: var(--navy-primary, #0c1f34);
+  font-family: Georgia, serif;
   font-size: 22px;
+  font-weight: 500;
 }
 
 .products-message-card p {
@@ -248,8 +227,8 @@
   padding: 10px 22px;
   border: none;
   border-radius: 4px;
-  background: var(--navy, #0f172a);
-  color: var(--cream, #f7f3eb);
+  background: var(--navy-primary, #0c1f34);
+  color: var(--cream-bg, #f8f3e8);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -258,8 +237,8 @@
 
 .reset-catalog-btn:hover,
 .retry-fetch-btn:hover {
-  background: var(--gold, #b58a3a);
-  color: var(--navy, #0f172a);
+  background: var(--gold-primary, #c89d5c);
+  color: var(--navy-primary, #0c1f34);
 }
 
 .products-message-card.error {
@@ -270,10 +249,6 @@
 .products-message-card.error p {
   color: #b91c1c;
 }
-
-/* =====================================================
-   RESPONSIVE
-===================================================== */
 
 @media (max-width: 960px) {
   .products-grid {
